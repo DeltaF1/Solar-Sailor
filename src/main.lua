@@ -10,13 +10,16 @@ req = require("project")
 	for _, v in ipairs(libraries) do
 		print("Importing library \""..v.."\"")
 		libs[v]=require(v)
+		if v == "class" then
+			Class = libs["class"]
+		end
 	end
 
 	control = libs["control"]
 	--loveframes = libs["loveframes"]
 	--UI = require("ui.UI")
 	--Theme = require("theme")
-	Class = libs["class"]
+	
 --LIBRARIES End
 
 --STATES Start
