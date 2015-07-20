@@ -1,13 +1,7 @@
 local game = {}
 
-
-
 INITIAL_STATE = "game"
 
-return game
-
-Class = require "class"
-require "vmath"
 function game.load()
 
 end
@@ -15,8 +9,6 @@ end
 function game.update()
 
 end
-
-
 
 function gravity(affectedByGravity, gravityAffectors, dt)
 	for i, affected in ipairs(affectedByGravity) do
@@ -42,3 +34,5 @@ function Planet:draw()
 	love.graphics.setColor(math.random(0, 255), math.random(0, 255), math.random(0, 255))
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
 end
+
+return game
