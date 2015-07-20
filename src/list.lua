@@ -1,13 +1,12 @@
-List = {}
+List = Class{}
 
-function List:new(items)
-	local o={["type"]="List"}
-	setmetatable(o, self)
-	self.__index = self
-	o.items=items or {}
-	return o
+function List:init(items)
+	
+	self.items=items or {}
+
 end
 
+--[[
 function List.__index(self, index)
 	
 	if type(index) == 'number' then
@@ -18,6 +17,7 @@ function List.__index(self, index)
 	end
 	
 end
+]]--
 
 function List.__len(self)
 	
