@@ -66,7 +66,7 @@ req = require("project")
 
 	for _, v in ipairs(modules) do
 		table.insert(stateOrder, v)
-		require(v)
+		states[v] = require(v)
 	end
 
 
