@@ -32,7 +32,7 @@ end
 
 function List:remove(item)
 
-	for i, _ in ipairs(self.items) do
+	for i = #self.items, 1, -1 do
 		if self.items[i]==item then
 			table.remove(self.items, i)
 			
