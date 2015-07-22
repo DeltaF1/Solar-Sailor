@@ -90,18 +90,21 @@ function game:update(dt)
 end
 
 function game:draw()
-	sun:draw()
-	player:draw()
-	self.asteroids:draw()
 	self.planets:draw()
+	sun:draw()
+	
+	self.asteroids:draw()
+	
+	player:draw()
 end
 
 function game:mousepressed(x, y, button)
 	if button == "l" then
-		self.asteroids:add(Asteroid(Vector2(x,y)))
+		self.asteroids:add(Asteroid(Vector2(x,y), Vector2:rand()*100))
 	elseif button == "r" then
 		local r = math.random(50,150)
-		self.planets:add(Planet(Vector2(x,y), r, r/200))
+		local g = math.random(10000,1000000)
+		self.planets:add(Planet(Vector2(x,y), r, g))
 	end
 end
 
@@ -113,8 +116,8 @@ function gravity(affectedByGravity, gravityAffectors, dt)
 			assert(affector.pos, "affector has no pos!")
 			delta = affector.pos - affected.pos
 			dis = delta:len() * delta:len()
-			falloff = (dis / affector.radius)
-			netForce = netForce + (delta:norm() * affector.gravityForce * falloff)
+			--falloff = (affector.radius / dis)
+			netForce = netForce + ((delta:norm() * affector.gravityForce)/dis)*dt*100
 		end
 		affected:applyForce(netForce)
 	end
