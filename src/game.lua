@@ -75,6 +75,8 @@ function game:load()
 end
 
 function game:update(dt)
+	-- FPS limiter
+	  dt = math.min(dt, 0.07)
 	if love.keyboard.isDown("a") then
 		player.rot = player.rot + dt
 	elseif love.keyboard.isDown("d") then
