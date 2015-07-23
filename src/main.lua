@@ -145,6 +145,10 @@ function DelLerper(l)
 	
 end
 
+function EndLerp(...)
+	DelLerper(...)
+end
+
 function ClearLerpers()
 	lerpers[STATE] = List:new()
 end

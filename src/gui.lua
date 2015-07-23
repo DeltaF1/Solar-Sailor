@@ -333,6 +333,10 @@ function Button:setState(state)
 		self.text = self.texts[state] or self.texts["default"]
 	end
 	
+	local callbackName = "on" + state[1]:capitalize()+s(2,#s)
+	if self[callbackName] then
+		self[callbackName](self)
+	end
 end
 
 function Button:update()
