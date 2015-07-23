@@ -54,6 +54,51 @@ function Gui:init(pos, scale, options)
 	
 end
 
+function Gui:setState(state)
+	state = state or "default"
+	if state == self.state then
+		--No change, return
+		return
+	end
+	self.state = state
+	
+	if self.colours then
+		self.colour = self.colours[state] or self.colours["default"]
+	end
+	
+	if self.images then
+		self.image = self.images[state] or self.images["default"]
+	end
+	
+	if self.texts then
+		self.text = self.texts[state] or self.texts["default"]
+	end
+	
+	local callbackName = "on" + state:capitalize()
+	if self[callbackName] then
+		self[callbackName](self)
+	end
+end
+
+function Gui:mousehover(x, y)
+	
+	if self.rect:contains(Vector2:new(x,y)) then
+
+		if (not self.down) then
+			self:setState("over")
+		end
+	else
+
+		self:setState()
+		self.down = false
+		
+	end
+end
+
+function Gui:update()
+	self.rect = Rect:new(self.pos.x, self.pos.y, self.scale.x, self.scale.y)
+end
+
 function Gui:centerX()
 	if self.parent then
 		self.parent:centerX(self)
@@ -139,6 +184,7 @@ function Frame:center(element)
 end
 
 function Frame:update(dt)
+	Gui.update(self)
 	for i, child in ipairs(self.children.items) do
 		child.pos = self.pos + child.rPos
 	end
@@ -317,46 +363,11 @@ function Button:draw()
 	--]]
 end
 
-function Button:setState(state)
-	
-	state = state or "default"
-	
-	if self.colours then
-		self.colour = self.colours[state] or self.colours["default"]
-	end
-	
-	if self.images then
-		self.image = self.images[state] or self.images["default"]
-	end
-	
-	if self.texts then
-		self.text = self.texts[state] or self.texts["default"]
-	end
-	
-	local callbackName = "on" + state[1]:capitalize()+s(2,#s)
-	if self[callbackName] then
-		self[callbackName](self)
-	end
-end
 
-function Button:update()
-	self.rect = Rect:new(self.pos.x, self.pos.y, self.scale.x, self.scale.y)
-end
 
-function Button:mousehover(x, y)
-	
-	if self.rect:contains(Vector2:new(x,y)) then
-		if (not self.down) then
-			
 
-			self:setState("over")
-		end
-	else
 
-		self:setState()
-		self.down = false
-	end
-end
+
 
 function Button:mousepressed(x, y, button)
 	

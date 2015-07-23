@@ -100,7 +100,7 @@ function RegTimer(length, f, args, loop)
 	if(timers[STATE]) then
 		timers[STATE]:add(_t)
 	else
-		timers[STATE] = List:new({_t})
+		timers[STATE] = List({_t})
 	end
 	
 	return _t
@@ -113,7 +113,7 @@ function DelTimer(t)
 end
 
 function ClearTimers()
-	timers[STATE] = List:new()
+	timers[STATE] = List()
 end
 
 --TIMERS End
@@ -125,11 +125,11 @@ lerpers = {}
 function RegLerper(...)
 	
 	_l = Lerper:new(...)
-	print("Starting lerper with path "+_l.path)
+	--print("Starting lerper with path "+_l.path)
 	if lerpers[STATE] then
 		lerpers[STATE]:add(_l)
 	else
-		lerpers[STATE] = List:new({_l})
+		lerpers[STATE] = List({_l})
 	end
 	
 	return _l
@@ -150,7 +150,7 @@ function EndLerp(...)
 end
 
 function ClearLerpers()
-	lerpers[STATE] = List:new()
+	lerpers[STATE] = List()
 end
 
 
