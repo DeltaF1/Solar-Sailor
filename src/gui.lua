@@ -95,6 +95,33 @@ function Gui:mousehover(x, y)
 	end
 end
 
+function Gui:mousepressed(x, y, button)
+	if self.rect:contains(Vector2:new(x,y)) then
+		self:setState("down")
+		self.down = true
+	else
+		self:setState()
+	end
+end
+
+function Gui:mousereleased(x,y,button)
+	if self.down then
+		self:setState("over")
+		
+		if self.sound then
+			self.sound:stop()
+			self.sound:play()
+		end
+		
+		if self.onClick then
+			self.onClick(self, x,y,button)
+		end
+	else
+		--We released outside the button
+		self:setState()
+	end
+end
+
 function Gui:update()
 	self.rect = Rect:new(self.pos.x, self.pos.y, self.scale.x, self.scale.y)
 end
@@ -282,7 +309,9 @@ function Button:init(pos, scale, options)
 	
 	self.rect = Rect:new(self.pos.x, self.pos.y, self.scale.x, self.scale.y)
 	
-	self:setState("default")
+	self.state = nil
+	self:setState()
+	self:setState()
 
 end
 
@@ -362,54 +391,3 @@ function Button:draw()
 	end
 	--]]
 end
-
-
-
-
-
-
-
-function Button:mousepressed(x, y, button)
-	
-	if self.rect:contains(Vector2:new(x,y)) then
-		
-
-		self:setState("down")
-		self.down = true
-		--play sound
-		
-		
-	
-	else
-		
-
-		self:setState()
-	end
-	
-end
-
-function Button:mousereleased(x,y,button)
-	
-	if self.down then
-
-		self:setState("over")
-		--buttonClick:stop()
-		--buttonClick:play()
-		
-		if self.sound then
-			self.sound:stop()
-			self.sound:play()
-		end
-		
-		if self.onClick then
-			self.onClick(self, x,y,button)
-		end
-	else
-		--We released outside the button
-
-		self:setState()
-	end
-	
-end
-
-
