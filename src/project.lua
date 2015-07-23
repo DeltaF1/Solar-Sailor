@@ -4,7 +4,7 @@ local t = {
 
 	libs = {"class", "utils", "Tserial", "vmath", "list", "timer", "lerper", "control","TLfres","gui"},
 
-	states = {"game"}
+	states = {"game","menu"}
 }
 
 return t

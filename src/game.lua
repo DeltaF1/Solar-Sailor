@@ -52,7 +52,7 @@ function player:update(dt)
 	dis = self.pos - sun.pos
 	theta = math.atan2(dis.y, dis.x) - self.rot
 	
-	falloff = 1 --/ math.pow((dis:len() - sun.radius), 1)
+	falloff = 10 --/ math.pow((dis:len() - sun.radius), 1)
 	
 	self:applyForce(self.dir:norm() * math.cos(theta) * falloff)
 	
@@ -77,6 +77,7 @@ end
 function game:update(dt)
 	-- FPS limiter
 	  dt = math.min(dt, 0.07)
+	  
 	if love.keyboard.isDown("a") then
 		player.rot = player.rot + dt
 	elseif love.keyboard.isDown("d") then

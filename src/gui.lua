@@ -38,6 +38,9 @@ Class = libs["class"]
 
 Gui = Class{}
 
+Gui.pos = Vector2()
+Gui.scale = Vector2()
+
 Gui.defaultOptions = {}
 
 function Gui:init(pos, scale, options)
@@ -70,6 +73,7 @@ end
 function Gui:center()
 	self:centerX()
 	self:centerY()
+	return self
 end
 
 
@@ -89,40 +93,49 @@ function Frame:init(pos, scale, options)
 	
 	self.colours = self.options.colours
 	
-	self.children = List:new(self.options.children)
+	self.children = List(self.options.children)
+end
+
+function Frame:add(e, r)
+	return self:addElement(e,r)
 end
 
 function Frame:addElement(element, rPos)
 	self.children:add(element)
 	element.parent = self
 	element.rPos = rPos or element.pos - self.pos
+	return element
 end
 
 function Frame:removeElement(element)
 	self.children:remove(element)
+	return element
 end
 
 function Frame:centerX(element)
 	if not element then
 		self.pos.x = (love.window.getWidth()/2) - (self.scale.x/2)
-		return
+		return self
+	else
+		element.rPos.x = (self.scale.x/2) - (element.scale.x/2)
+		return element
 	end
-	element.rPos.x = (self.scale.x/2) - (element.scale.x/2)
-	
 end
 
 function Frame:centerY(element)
 	if not element then
 		self.pos.y = (love.window.getHeight()/2) - (self.scale.y/2)
-		return
+		return self
+	else
+		element.rPos.y = (self.scale.y/2) - (element.scale.y/2)
+		return element
 	end
-	element.rPos.y = (self.scale.y/2) - (element.scale.y/2)
-
 end
 
 function Frame:center(element)
 	self:centerX(element)
 	self:centerY(element)
+	return element
 end
 
 function Frame:update(dt)
@@ -177,6 +190,7 @@ function Label:updateScale()
 	self.scale = Vector2(self.font:getWidth(self.text), self.font:getHeight())
 end
 
+-- Slows stuff down, remove it ?
 function Label:update()
 	self:updateScale()
 end
