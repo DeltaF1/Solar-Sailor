@@ -199,6 +199,7 @@ end
 -- Button class
 ----------------
 -- Has a .onClick callback, called when mouse is released over button
+
 Button = Class{__includes=Gui}
 
 Button.defaultOptions = 
