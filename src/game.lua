@@ -74,6 +74,9 @@ end
 function game:load()
 	self.asteroids = List()
 	self.planets = List()
+	self.sectors = {}
+	self.secSize = 10
+	self.orbitSize = 100
 	
 	testButton = Button(Vector2(), Vector2(200,50), {onClick = function() EndState("menu") end, texts = {default="END"}})
 	
@@ -98,6 +101,21 @@ function game:update(dt)
 	
 	player:update(dt)
 	self.asteroids:update(dt)
+	
+	dir = player.pos - sun.pos
+	dis = dir:len()
+	
+	local sector = math.floor(dis / (self.secSize * self.orbitSize))
+	if not self.sectors[sector] then
+		print("Generating sector " + sector)
+		for o = math.floor(dis/self.orbitSize),
+		  math.floor(dis/self.orbitSize) + (self.secSize * self.orbitSize),
+		  self.orbitSize do
+			self.planets:add(Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
+		end
+		
+		self.sectors[sector] = true
+	end
 	
 	self.camera:lookAt(player.pos.x, player.pos.y)
 end
