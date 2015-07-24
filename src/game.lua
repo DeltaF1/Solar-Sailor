@@ -108,9 +108,10 @@ function game:update(dt)
 	local sector = math.floor(dis / (self.secSize * self.orbitSize))
 	if not self.sectors[sector] then
 		print("Generating sector " + sector)
-		for o = math.floor(dis/self.orbitSize),
-		  math.floor(dis/self.orbitSize) + (self.secSize * self.orbitSize),
-		  self.orbitSize do
+		local min, max = sector*(self.secSize*self.orbitSize),(sector+1)*(self.secSize*self.orbitSize)
+		print("Generating from "+min+" to "+max+" distance from the sun")
+		for o = min,max,self.orbitSize do
+			
 			self.planets:add(Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
 		end
 		
@@ -136,6 +137,12 @@ function game:draw()
 end
 
 function game:mousepressed(x, y, button)
+	if button == "wu" then
+		self.camera:zoom(2)
+	elseif button == "wd" then
+		self.camera:zoom(0.5)
+	end
+
 	local x,y = self.camera:mousepos()
 	if button == "l" then
 		self.asteroids:add(Asteroid(Vector2(x,y), Vector2:rand()*100))

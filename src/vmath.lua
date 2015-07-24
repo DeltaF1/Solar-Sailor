@@ -83,8 +83,12 @@ end
 setmetatable(Vector2, {__call = function(vec,...) return vec:new(...) end})
 
 function Vector2:rand()
-	local theta = math.random(0, 2*math.pi)
-	return Vector2(math.cos(theta), math.sin(theta))
+	--math.randomseed(os.time())
+	--local theta = math.random(0, 2*math.pi)
+	--return Vector2(math.cos(theta), math.sin(theta))
+	local x = (math.random() * 2) - 1
+	local y = randomSelect({-1,1}) * math.sqrt((1 - (x*x)))
+	return Vector2(x, y)
 end
 
 function Vector2:clone()
