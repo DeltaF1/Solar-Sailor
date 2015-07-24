@@ -1,3 +1,5 @@
+local camera = libs["camera"]
+
 local game = {}
 
 INITIAL_STATE = "game"
@@ -72,6 +74,12 @@ end
 function game:load()
 	self.asteroids = List()
 	self.planets = List()
+	
+	testButton = Button(Vector2(), Vector2(200,50), {onClick = function() EndState("menu") end, texts = {default="END"}})
+	
+	self.gui = List{testButton}
+	
+	self.camera = camera()
 end
 
 function game:update(dt)
@@ -90,18 +98,27 @@ function game:update(dt)
 	
 	player:update(dt)
 	self.asteroids:update(dt)
+	
+	self.camera:lookAt(player.pos.x, player.pos.y)
 end
 
 function game:draw()
+	self.camera:attach()
+	
 	self.planets:draw()
 	sun:draw()
 	
 	self.asteroids:draw()
 	
 	player:draw()
+	self.camera:detach()
+	
+	-- Draw gui
+	self.gui:draw()
 end
 
 function game:mousepressed(x, y, button)
+	local x,y = self.camera:mousepos()
 	if button == "l" then
 		self.asteroids:add(Asteroid(Vector2(x,y), Vector2:rand()*100))
 	elseif button == "r" then

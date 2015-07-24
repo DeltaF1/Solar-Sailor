@@ -2,7 +2,7 @@
 
 local t = {
 
-	libs = {"class", "strong", "utils", "Tserial", "vmath", "list", "timer", "lerper", "control","TLfres","gui"},
+	libs = {"class", "strong", "utils", "Tserial", "vmath", "list", "timer", "lerper", "control","TLfres","camera","gui"},
 
 	states = {"game","menu"}
 }

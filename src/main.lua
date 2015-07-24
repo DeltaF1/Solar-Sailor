@@ -202,8 +202,11 @@ function love.update(dt)
 		states[STATE]:update(dt)
 	end
 	
+	
+	
 	if states[STATE].gui then
-		states[STATE].gui:mousehover(love.mouse.getX(), love.mouse.getY())
+		local x,y = love.mouse.getPosition()
+		states[STATE].gui:mousehover(x,y)
 	end
 	
 	--loveframes.update(dt)
@@ -261,7 +264,7 @@ function love.keyreleased(key)
 end
 
 function love.mousepressed(x,y,button)
-	
+
 	control.mousepressed(x,y,button)
 	
 	if states[STATE].gui then
@@ -276,7 +279,7 @@ function love.mousepressed(x,y,button)
 end
 
 function love.mousereleased(x,y,button)
-	
+
 	if states[STATE].gui then
 		states[STATE].gui:mousereleased(x,y,button)
 	end
