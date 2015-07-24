@@ -46,6 +46,7 @@ Gui.defaultOptions = {}
 function Gui:init(pos, scale, options)
 	self.pos=pos or self.pos
 	self.scale=scale or self.scale
+	self.z = 0
 	
 	options = options or {}
 	
@@ -55,12 +56,12 @@ function Gui:init(pos, scale, options)
 end
 
 function Gui:setState(state)
-	state = state or "default"
+	local state = state or "default"
 	if state == self.state then
 		--No change, return
 		return
 	end
-	self.state = state
+	
 	
 	if self.colours then
 		self.colour = self.colours[state] or self.colours["default"]
@@ -78,6 +79,8 @@ function Gui:setState(state)
 	if self[callbackName] then
 		self[callbackName](self)
 	end
+	
+	self.state = state
 end
 
 function Gui:mousehover(x, y)
@@ -132,6 +135,7 @@ function Gui:centerX()
 	else
 		self.pos.x = (love.window.getWidth()/2) - (self.scale.x/2)
 	end
+	return self
 end
 
 function Gui:centerY()
@@ -140,6 +144,7 @@ function Gui:centerY()
 	else
 		self.pos.y = (love.window.getHeight()/2) - (self.scale.y/2)
 	end
+	return self
 end
 
 function Gui:center()
@@ -308,11 +313,6 @@ function Button:init(pos, scale, options)
 	end
 	
 	self.rect = Rect:new(self.pos.x, self.pos.y, self.scale.x, self.scale.y)
-	
-	self.state = nil
-	self:setState()
-	self:setState()
-
 end
 
 --[[
