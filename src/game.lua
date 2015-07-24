@@ -105,18 +105,24 @@ function game:update(dt)
 	dir = player.pos - sun.pos
 	dis = dir:len()
 	
-	local sector = math.floor(dis / (self.secSize * self.orbitSize))
-	if not self.sectors[sector] then
-		print("Generating sector " + sector)
-		local min, max = sector*(self.secSize*self.orbitSize),(sector+1)*(self.secSize*self.orbitSize)
-		print("Generating from "+min+" to "+max+" distance from the sun")
-		for o = min,max,self.orbitSize do
+	local sec = math.floor(dis / (self.secSize * self.orbitSize))
+	local drawDistance = 10
+	
+	for i = 0, drawDistance do
+		local sector = sec + i
+		if not self.sectors[sector] then
+			print("Generating sector " + sector)
+			local min, max = sector*(self.secSize*self.orbitSize),(sector+1)*(self.secSize*self.orbitSize)
+			print("Generating from "+min+" to "+max+" distance from the sun")
+			for o = min,max,self.orbitSize do
+				
+				self.planets:add(Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
+			end
 			
-			self.planets:add(Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
+			self.sectors[sector] = true
 		end
-		
-		self.sectors[sector] = true
 	end
+	
 	
 	self.camera:lookAt(player.pos.x, player.pos.y)
 end
