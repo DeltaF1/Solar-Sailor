@@ -1,4 +1,4 @@
-local camera = libs["camera"]
+local camera = libs["gamera"]
 
 local game = {}
 
@@ -73,7 +73,7 @@ end
 
 function game:load()
 	self.asteroids = List()
-	self.planets = List()
+	self.planets = {}
 	self.sectors = {}
 	self.secSize = 10
 	self.orbitSize = 100
@@ -82,7 +82,31 @@ function game:load()
 	
 	self.gui = List{testButton}
 	
-	self.camera = camera()
+	self.camSize = 300000
+	self.camera = camera.new(0,0,1,1)
+	self:updateCamera()
+end
+
+function game:updateCamera()
+	local w_l,w_t, w_w,w_h = self.camera:getWorld()
+
+	local v_l,v_t, v_w,v_h = self.camera:getVisible()
+
+	local buffer = 50
+	
+	if (v_l - w_l <= buffer) or (v_t - w_t <= buffer) or ( (w_l + w_w) - (v_l + v_w) <= buffer) or ( (w_t + w_h) - (v_t + v_h) <= buffer) then
+		self.camera:setWorld(player.pos.x - self.camSize, player.pos.y - self.camSize, 2 * self.camSize, 2 * self.camSize)
+	end
+	
+end
+
+function game:drawPlanets(l,t,w,h)
+	for i, planet in ipairs(self.planets) do
+		if planet.pos.x < l+w+planet.radius and planet.pos.x > l - planet.radius and
+		  planet.pos.y < t + h + planet.radius and planet.pos.y > t - planet.radius then
+		  planet:draw()
+		end
+	end
 end
 
 function game:update(dt)
@@ -97,11 +121,12 @@ function game:update(dt)
 	
 	local affected = {player, unpack(self.asteroids.items)}
 	
-	gravity(affected, self.planets.items, dt)
+	gravity(affected, self.planets, dt)
 	
 	player:update(dt)
 	self.asteroids:update(dt)
 	
+	-- Planet generation
 	dir = player.pos - sun.pos
 	dis = dir:len()
 	
@@ -116,46 +141,51 @@ function game:update(dt)
 			print("Generating from "+min+" to "+max+" distance from the sun")
 			for o = min,max,self.orbitSize do
 				
-				self.planets:add(Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
+				table.insert(self.planets, (Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000))))
 			end
 			
 			self.sectors[sector] = true
 		end
 	end
 	
-	
-	self.camera:lookAt(player.pos.x, player.pos.y)
+	-- Camera
+	self:updateCamera()
+	self.camera:setPosition(player.pos.x, player.pos.y)
 end
 
 function game:draw()
-	self.camera:attach()
+	self.camera:draw(function(l,t,w,h)
 	
-	self.planets:draw()
+	self:drawPlanets(l,t,w,h)
 	sun:draw()
 	
 	self.asteroids:draw()
 	
 	player:draw()
-	self.camera:detach()
+	end)
 	
 	-- Draw gui
 	self.gui:draw()
+	
+	love.graphics.print("FPS:"+fps, 0, 50)
+	love.graphics.print("#asteroids:"+#self.asteroids.items, 0, 75)
+	love.graphics.print("#planets:"+#self.planets, 0, 100)
 end
 
 function game:mousepressed(x, y, button)
 	if button == "wu" then
-		self.camera:zoom(2)
+		self.camera:setScale(self.camera:getScale()*2)
 	elseif button == "wd" then
-		self.camera:zoom(0.5)
+		self.camera:setScale(self.camera:getScale()/2)
 	end
 
-	local x,y = self.camera:mousepos()
+	local x,y = self.camera:toWorld(x,y)
 	if button == "l" then
 		self.asteroids:add(Asteroid(Vector2(x,y), Vector2:rand()*100))
 	elseif button == "r" then
 		local r = math.random(50,150)
 		local g = math.random(10000,1000000)
-		self.planets:add(Planet(Vector2(x,y), r, g))
+		table.insert(self.planets, (Planet(Vector2(x,y), r, g)))
 	end
 end
 
@@ -163,15 +193,17 @@ function gravity(affectedByGravity, gravityAffectors, dt)
 	for i, affected in ipairs(affectedByGravity) do
 		netForce = Vector2(0,0)
 		for x, affector in ipairs(gravityAffectors) do
-			assert(affected.pos, "affected has no pos!")
-			assert(affector.pos, "affector has no pos!")
 			delta = affector.pos - affected.pos
-			dis = delta:len() * delta:len()
+			dis = delta:len()
+			if dis < 1000 then
+				dis = dis * dis
 			--falloff = (affector.radius / dis)
-			netForce = netForce + ((delta:norm() * affector.gravityForce)/dis)*dt*100
+				netForce = netForce + ((delta:norm() * affector.gravityForce)/dis)*dt*100
+			end
 		end
 		affected:applyForce(netForce)
 	end
+	fps = 1/dt
 end
 
 Planet = Class{}
@@ -184,6 +216,7 @@ function Planet:init(pos, radius, gravityForce)
 end
 
 function Planet:draw()
+
 	love.graphics.setColor(self.colour)
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
 end
