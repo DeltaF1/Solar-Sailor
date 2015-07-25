@@ -101,10 +101,12 @@ function game:updateCamera()
 end
 
 function game:drawPlanets(l,t,w,h)
+	planetsDrawn = 0
 	for i, planet in ipairs(self.planets) do
 		if planet.pos.x < l+w+planet.radius and planet.pos.x > l - planet.radius and
 		  planet.pos.y < t + h + planet.radius and planet.pos.y > t - planet.radius then
 		  planet:draw()
+		  planetsDrawn = planetsDrawn + 1
 		end
 	end
 end
@@ -120,8 +122,8 @@ function game:update(dt)
 	end
 	
 	local affected = {player, unpack(self.asteroids.items)}
-	
-	gravity(affected, self.planets, dt)
+	--affected = {player}
+	self:gravity(affected, dt)
 	
 	player:update(dt)
 	self.asteroids:update(dt)
@@ -137,14 +139,16 @@ function game:update(dt)
 		local sector = sec + i
 		if not self.sectors[sector] then
 			print("Generating sector " + sector)
+			self.sectors[sector] = {}
 			local min, max = sector*(self.secSize*self.orbitSize),(sector+1)*(self.secSize*self.orbitSize)
 			print("Generating from "+min+" to "+max+" distance from the sun")
 			for o = min,max,self.orbitSize do
-				
-				table.insert(self.planets, (Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000))))
+				local p = (Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
+				table.insert(self.planets, p)
+				table.insert(self.sectors[sector], p)
 			end
 			
-			self.sectors[sector] = true
+			--self.sectors[sector] = true
 		end
 	end
 	
@@ -170,6 +174,7 @@ function game:draw()
 	love.graphics.print("FPS:"+fps, 0, 50)
 	love.graphics.print("#asteroids:"+#self.asteroids.items, 0, 75)
 	love.graphics.print("#planets:"+#self.planets, 0, 100)
+	love.graphics.print("#planetsDrawn:"+planetsDrawn, 0, 115)
 end
 
 function game:mousepressed(x, y, button)
@@ -189,9 +194,21 @@ function game:mousepressed(x, y, button)
 	end
 end
 
-function gravity(affectedByGravity, gravityAffectors, dt)
+function game:gravity(affectedByGravity, dt)
+	sector = -1
 	for i, affected in ipairs(affectedByGravity) do
 		netForce = Vector2(0,0)
+		dis = (affected.pos - sun.pos):len()
+		local sec = math.floor(dis / (self.secSize * self.orbitSize))
+		
+		--if sec ~= sector then
+			gravityAffectors = {}
+			for i = -1, 1 do
+				table.merge(gravityAffectors, self.sectors[sec+i] or {})
+			end
+			sector = sec
+		--end
+		
 		for x, affector in ipairs(gravityAffectors) do
 			delta = affector.pos - affected.pos
 			dis = delta:len()

@@ -240,3 +240,7 @@ function update(table1, table2, create, recurse)
 		end
 	end
 end
+
+function table.merge(a,b)
+	table.foreach(b,function(i,v)table.insert(a,v)end)
+end
