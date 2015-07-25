@@ -36,6 +36,7 @@ end
 sun = {
 	pos = Vector2(50,100),
 	radius = 100,
+	gravityForce = 1000000
 }
 
 function sun:draw()
@@ -54,11 +55,15 @@ function player:update(dt)
 	dis = self.pos - sun.pos
 	theta = math.atan2(dis.y, dis.x) - self.rot
 	
-	falloff = 10 --/ math.pow((dis:len() - sun.radius), 1)
+	falloff = 1 / math.pow((dis:len() - sun.radius), 1)
 	
 	self:applyForce(self.dir:norm() * math.cos(theta) * falloff)
 	
 	Entity.update(self, dt)
+	
+	if player.vel:len() > 400 then
+		player.vel = player.vel:norm() * 400
+	end
 end
 
 
@@ -115,15 +120,15 @@ function game:update(dt)
 	-- FPS limiter
 	  dt = math.min(dt, 0.07)
 	  
-	if love.keyboard.isDown("a") then
+	if love.keyboard.isDown("d") then
 		player.rot = player.rot + dt
-	elseif love.keyboard.isDown("d") then
+	elseif love.keyboard.isDown("a") then
 		player.rot = player.rot - dt
 	end
 	
 	local affected = {player, unpack(self.asteroids.items)}
 	--affected = {player}
-	self:gravity(affected, dt)
+	self:gravity(affected, {sun}, dt)
 	
 	player:update(dt)
 	self.asteroids:update(dt)
@@ -140,7 +145,7 @@ function game:update(dt)
 		if not self.sectors[sector] then
 			print("Generating sector " + sector)
 			self.sectors[sector] = {}
-			local min, max = sector*(self.secSize*self.orbitSize),(sector+1)*(self.secSize*self.orbitSize)
+			local min, max = sector*(self.secSize*self.orbitSize),((sector+1)*((self.secSize)*self.orbitSize))-self.orbitSize
 			print("Generating from "+min+" to "+max+" distance from the sun")
 			for o = min,max,self.orbitSize do
 				local p = (Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
@@ -174,7 +179,8 @@ function game:draw()
 	love.graphics.print("FPS:"+fps, 0, 50)
 	love.graphics.print("#asteroids:"+#self.asteroids.items, 0, 75)
 	love.graphics.print("#planets:"+#self.planets, 0, 100)
-	love.graphics.print("#planetsDrawn:"+planetsDrawn, 0, 115)
+	love.graphics.print("#planetsDrawn:"+planetsDrawn, 0, 125)
+	love.graphics.print("speed:"+player.vel:len(), 0, 150)
 end
 
 function game:mousepressed(x, y, button)
@@ -194,20 +200,21 @@ function game:mousepressed(x, y, button)
 	end
 end
 
-function game:gravity(affectedByGravity, dt)
+function game:gravity(affectedByGravity, constantAffectors, dt)
 	sector = -1
 	for i, affected in ipairs(affectedByGravity) do
 		netForce = Vector2(0,0)
 		dis = (affected.pos - sun.pos):len()
 		local sec = math.floor(dis / (self.secSize * self.orbitSize))
 		
-		--if sec ~= sector then
+		if sec ~= sector then
 			gravityAffectors = {}
+			table.merge(gravityAffectors, constantAffectors)
 			for i = -1, 1 do
 				table.merge(gravityAffectors, self.sectors[sec+i] or {})
 			end
 			sector = sec
-		--end
+		end
 		
 		for x, affector in ipairs(gravityAffectors) do
 			delta = affector.pos - affected.pos
