@@ -34,7 +34,7 @@ function Asteroid:draw()
 end
 
 sun = {
-	pos = Vector2(50,100),
+	pos = Vector2(),
 	radius = 100,
 	gravityForce = 1000000
 }
@@ -56,8 +56,10 @@ function player:update(dt)
 	theta = math.atan2(dis.y, dis.x) - self.rot
 	
 	falloff = 1 / math.pow((dis:len() - sun.radius), 1)
-	
-	self:applyForce(self.dir:norm() * math.cos(theta) * falloff)
+	falloff=1
+	angleFalloff = math.cos(theta)
+	angleFalloff = 1
+	self:applyForce(self.dir:norm() * falloff * angleFalloff)
 	
 	Entity.update(self, dt)
 	
@@ -79,7 +81,7 @@ end
 function game:load()
 	self.asteroids = List()
 	self.planets = {}
-	self.sectors = {}
+	self.sectors = {[0]={}}
 	self.secSize = 10
 	self.orbitSize = 100
 	
@@ -137,29 +139,35 @@ function game:update(dt)
 	dir = player.pos - sun.pos
 	dis = dir:len()
 	
-	local sec = math.floor(dis / (self.secSize * self.orbitSize))
+	local sec = self:sector(dis)
 	local drawDistance = 10
 	
-	for i = 0, drawDistance do
+	for i = -drawDistance, drawDistance do
 		local sector = sec + i
-		if not self.sectors[sector] then
-			print("Generating sector " + sector)
-			self.sectors[sector] = {}
-			local min, max = sector*(self.secSize*self.orbitSize),((sector+1)*((self.secSize)*self.orbitSize))-self.orbitSize
-			print("Generating from "+min+" to "+max+" distance from the sun")
-			for o = min,max,self.orbitSize do
-				local p = (Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
-				table.insert(self.planets, p)
-				table.insert(self.sectors[sector], p)
+		if sector >= 0 then
+			if not self.sectors[sector] then
+				print("Generating sector " + sector)
+				self.sectors[sector] = {}
+				local min, max = sector*(self.secSize*self.orbitSize),((sector+1)*((self.secSize)*self.orbitSize))-self.orbitSize
+				print("Generating from "+min+" to "+max+" distance from the sun")
+				for o = min,max,self.orbitSize do
+					local p = (Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
+					table.insert(self.planets, p)
+					table.insert(self.sectors[sector], p)
+				end
+				
+				--self.sectors[sector] = true
 			end
-			
-			--self.sectors[sector] = true
 		end
 	end
 	
 	-- Camera
 	self:updateCamera()
 	self.camera:setPosition(player.pos.x, player.pos.y)
+end
+
+function game:sector(dis)
+	return math.floor(dis / (self.secSize * self.orbitSize))
 end
 
 function game:draw()
@@ -196,7 +204,10 @@ function game:mousepressed(x, y, button)
 	elseif button == "r" then
 		local r = math.random(50,150)
 		local g = math.random(10000,1000000)
-		table.insert(self.planets, (Planet(Vector2(x,y), r, g)))
+		local v = Vector2(x,y)
+		local p = (Planet(v, r, g))
+		table.insert(self.planets, p)
+		table.insert(self.sectors[self:sector((v-sun.pos):len())], p)
 	end
 end
 
@@ -204,8 +215,8 @@ function game:gravity(affectedByGravity, constantAffectors, dt)
 	sector = -1
 	for i, affected in ipairs(affectedByGravity) do
 		netForce = Vector2(0,0)
-		dis = (affected.pos - sun.pos):len()
-		local sec = math.floor(dis / (self.secSize * self.orbitSize))
+		local dis = (affected.pos - sun.pos):len()
+		local sec = self:sector(dis)
 		
 		if sec ~= sector then
 			gravityAffectors = {}

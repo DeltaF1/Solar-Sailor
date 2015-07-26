@@ -232,18 +232,6 @@ function love.keypressed(key, isRepeat)
 		end
 	end
 	
-	if key == "m" then
-		--mute 
-		if not MUSIC_MUTED then
-			MENUMUSIC:setVolume(0)
-			GAMEMUSIC:setVolume(0)
-		else
-			MENUMUSIC:setVolume(1)
-			GAMEMUSIC:setVolume(1)
-		end
-		MUSIC_MUTED = not MUSIC_MUTED
-	end
-	
 	control.keypressed(key, isRepeat)
 	
 	if states[STATE].keypressed then

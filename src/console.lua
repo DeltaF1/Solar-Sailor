@@ -1,6 +1,4 @@
-console = {}
-
-
+local console = {}
 
 function console:load()
 	console.prompt = ">"
@@ -165,4 +163,4 @@ function console:textinput(t)
 	end
 end
 
-RegState("console", console)
+return console
