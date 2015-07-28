@@ -244,3 +244,7 @@ end
 function table.merge(a,b)
 	table.foreach(b,function(i,v)table.insert(a,v)end)
 end
+
+function math.randomf(min, max)
+	return min + math.random() * (max - min)
+end

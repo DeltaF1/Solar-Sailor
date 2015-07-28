@@ -87,6 +87,8 @@ function game:load()
 	self.secSize = 10
 	self.orbitSize = 100
 	
+	quests = {}
+	
 	testButton = Button(Vector2(), Vector2(200,50), {onClick = function() EndState("menu") end, texts = {default="END"}})
 	
 	self.gui = List{testButton}
@@ -120,6 +122,15 @@ function game:drawPlanets(l,t,w,h)
 	end
 end
 
+function game:addQuestPlanet(origin, distance, name)
+	local dir = origin.pos - sun.pos
+	local angle = math.atan2(dir.y, dir.x)
+	
+	local sector = self:sector(dir:len()) + distance
+	if not quests[sector] then quests[sector] = {} end
+	table.insert(quests[sector], {angle=angle, name=name}) -- Extra quest data goes here?
+end
+
 function game:generateSector(sector)
 	if sector >= 0 then
 		if not self.sectors[sector] then
@@ -128,11 +139,31 @@ function game:generateSector(sector)
 			local min, max = sector*(self.secSize*self.orbitSize),((sector+1)*((self.secSize)*self.orbitSize))-self.orbitSize
 			print("Generating from "+min+" to "+max+" distance from the sun")
 			for o = min,max,self.orbitSize do
-				local p = (Planet{pos=Vector2:rand()*o, radius=math.random(50,60), gravityForce=math.random(10000,1000000)})
+				local pos = Vector2:rand()*o
+				local name = nil
+				local colour = nil
+				if quests[sector] then
+					local angle = math.atan2(pos.y, pos.x)
+					for i, quest in ipairs(quests[sector]) do
+						if angle > quest.angle - QUEST_OFF and angle < quest.angle + QUEST_OFF then
+							table.remove(quests[sector], i)
+							name = quest.name
+							colour = {20,20,20} -- Debug
+							break
+						end
+					end
+				end
+				
+				local p = (Planet{pos=pos, radius=math.random(50,60), gravityForce=math.random(10000,1000000), name=name, colour=colour})
 				table.insert(self.planets, p)
 				table.insert(self.sectors[sector], p)
 			end
-			
+			if quests[sector] then
+				for _, q in ipairs(quests[sector]) do
+					table.insert(quests[sector+1], q)
+				end
+				quests[sector] = nil
+			end
 			--self.sectors[sector] = true
 		end
 	end
@@ -256,6 +287,7 @@ function Planet:init(arg)
 	self.gravityForce = arg.gravityForce
 	self.colour = arg.colour or {math.random(0, 255), math.random(0, 255), math.random(0, 255)}
 	self.name = arg.name or markov.generate(planet_chain, math.random(4,9))
+	self.quest = arg.quest
 end
 
 function Planet:draw()
