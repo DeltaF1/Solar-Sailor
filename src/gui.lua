@@ -268,11 +268,6 @@ function Label:updateScale()
 	self.scale = Vector2(self.font:getWidth(self.text), self.font:getHeight())
 end
 
--- Slows stuff down, remove it ?
-function Label:update()
-	self:updateScale()
-end
-
 
 -- Button class
 ----------------

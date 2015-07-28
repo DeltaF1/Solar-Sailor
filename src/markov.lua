@@ -37,6 +37,10 @@ local function get_suffix(chain, prefix)
 end
 
 local function feed(chain, text)
+  if not chain.__depth then
+	chain.__depth = markov.depth
+  end
+  assert(markov.depth == chain.__depth, "Tried to feed a chain with the wrong chain length! Try changing markov.depth")
   for word in text:gmatch("%w+") do
     word = string.rep(" ", markov.depth)..word
     for i = 1, (#word)-(markov.depth-1) do
@@ -59,7 +63,7 @@ local function feed(chain, text)
 end
 
 local function generate(chain, length)
-  prefix = string.rep(" ", markov.depth)
+  prefix = string.rep(" ", chain.__depth)
   name = ""
   suffix = ""
   for i = 1,length do

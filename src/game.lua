@@ -46,7 +46,7 @@ function sun:draw()
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
 end
 
-player = Entity(Vector2(200,200))
+player = Entity(Vector2.rand()*500)
 player.dir = Vector2()
 player.rot = 0
 
@@ -96,7 +96,7 @@ end
 function game:load()
 	self.asteroids = List()
 	self.planets = {}
-	self.sectors = {[0]={}}
+	self.sectors = {[0]={},[1] = {}}
 	self.secSize = 10
 	self.orbitSize = 100
 	
@@ -262,15 +262,26 @@ function game:mousepressed(x, y, button)
 	end
 
 	local x,y = self.camera:toWorld(x,y)
+	local v = Vector2(x,y)
 	if button == "l" then
-		self.asteroids:add(Asteroid(Vector2(x,y), Vector2:rand()*100))
+		self.asteroids:add(Asteroid(v, Vector2:rand()*100))
 	elseif button == "r" then
 		local r = math.random(50,150)
 		local g = math.random(10000,1000000)
-		local v = Vector2(x,y)
 		local p = (Planet{pos=v, radius=r, gravityForce=g})
 		table.insert(self.planets, p)
 		table.insert(self.sectors[self:sector((v-sun.pos):len())], p)
+	elseif button == "x1" then
+		local sec = self:sector((v-sun.pos):len())
+		if self.sectors[sec] then
+			for _, planet in ipairs(self.sectors[sec]) do
+			
+				if (v - planet.pos):len() <= planet.radius then
+					EndState("planet", planet)
+					break
+				end
+			end
+		end
 	end
 end
 
