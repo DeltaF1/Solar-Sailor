@@ -52,8 +52,16 @@ player.rot = 0
 
 
 function player:update(dt)
+
+	if love.keyboard.isDown("d") then
+		self.rot = self.rot + dt
+	elseif love.keyboard.isDown("a") then
+		self.rot = self.rot - dt
+	end
+	
 	self.dir = Vector2(math.cos(self.rot), math.sin(self.rot))
 	
+	--[[
 	dis = self.pos - sun.pos
 	theta = math.atan2(dis.y, dis.x) - self.rot
 	
@@ -62,11 +70,16 @@ function player:update(dt)
 	angleFalloff = math.cos(theta)
 	angleFalloff = 1
 	self:applyForce(self.dir:norm() * falloff * angleFalloff)
+	--]]
+	
+	if love.keyboard.isDown(" ") then
+		self:applyForce(self.dir:norm() * 100)
+	end
 	
 	Entity.update(self, dt)
 	
-	if player.vel:len() > 400 then
-		player.vel = player.vel:norm() * 400
+	if self.vel:len() > 400 then
+		self.vel = self.vel:norm() * 400
 	end
 end
 
@@ -88,6 +101,7 @@ function game:load()
 	self.orbitSize = 100
 	
 	quests = {}
+	QUEST_OFF = math.rad(15)
 	
 	testButton = Button(Vector2(), Vector2(200,50), {onClick = function() EndState("menu") end, texts = {default="END"}})
 	
@@ -142,23 +156,38 @@ function game:generateSector(sector)
 				local pos = Vector2:rand()*o
 				local name = nil
 				local colour = nil
+				local quest = nil
 				if quests[sector] then
 					local angle = math.atan2(pos.y, pos.x)
-					for i, quest in ipairs(quests[sector]) do
-						if angle > quest.angle - QUEST_OFF and angle < quest.angle + QUEST_OFF then
+					for i, planet in ipairs(quests[sector]) do
+						if angle > planet.angle - QUEST_OFF and angle < planet.angle + QUEST_OFF then
 							table.remove(quests[sector], i)
-							name = quest.name
-							colour = {20,20,20} -- Debug
+							name = planet.name
+							colour = {0,255,0} -- Debug
+							quest = planet.quest
 							break
 						end
 					end
+				else
+					if math.random() < 0.1 then
+						quest = {send={name=markov.generate(planet_chain, math.random(4,9)).." RECEIVE",resource="fuel"}}
+						colour = {255,0,0}
+						name=markov.generate(planet_chain, math.random(4,9)).." SEND"
+						
+					end
 				end
 				
-				local p = (Planet{pos=pos, radius=math.random(50,60), gravityForce=math.random(10000,1000000), name=name, colour=colour})
+				local p = (Planet{pos=pos, radius=math.random(50,60), gravityForce=math.random(10000,1000000), name=name, colour=colour, quest=quest})
 				table.insert(self.planets, p)
 				table.insert(self.sectors[sector], p)
+				if p.quest then
+					if p.quest.send then
+						self:addQuestPlanet(p, 7, p.quest.send.name)
+					end
+				end
 			end
 			if quests[sector] then
+				if not quests[sector+1] then quests[sector+1] = {} end
 				for _, q in ipairs(quests[sector]) do
 					table.insert(quests[sector+1], q)
 				end
@@ -173,11 +202,7 @@ function game:update(dt)
 	-- FPS limiter
 	  dt = math.min(dt, 0.07)
 	  
-	if love.keyboard.isDown("d") then
-		player.rot = player.rot + dt
-	elseif love.keyboard.isDown("a") then
-		player.rot = player.rot - dt
-	end
+	
 	
 	local affected = {player, unpack(self.asteroids.items)}
 	--affected = {player}
@@ -191,7 +216,7 @@ function game:update(dt)
 	dis = dir:len()
 	
 	local sec = self:sector(dis)
-	local drawDistance = 10
+	local drawDistance = 4
 	
 	for i = -drawDistance, drawDistance do
 		local sector = sec + i
