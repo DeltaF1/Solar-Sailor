@@ -1,4 +1,6 @@
 local camera = libs["gamera"]
+local markov = require "markov"
+planet_chain = require "planets_chain"
 
 local game = {}
 
@@ -118,6 +120,24 @@ function game:drawPlanets(l,t,w,h)
 	end
 end
 
+function game:generateSector(sector)
+	if sector >= 0 then
+		if not self.sectors[sector] then
+			print("Generating sector " + sector)
+			self.sectors[sector] = {}
+			local min, max = sector*(self.secSize*self.orbitSize),((sector+1)*((self.secSize)*self.orbitSize))-self.orbitSize
+			print("Generating from "+min+" to "+max+" distance from the sun")
+			for o = min,max,self.orbitSize do
+				local p = (Planet{pos=Vector2:rand()*o, radius=math.random(50,60), gravityForce=math.random(10000,1000000)})
+				table.insert(self.planets, p)
+				table.insert(self.sectors[sector], p)
+			end
+			
+			--self.sectors[sector] = true
+		end
+	end
+end
+
 function game:update(dt)
 	-- FPS limiter
 	  dt = math.min(dt, 0.07)
@@ -144,21 +164,8 @@ function game:update(dt)
 	
 	for i = -drawDistance, drawDistance do
 		local sector = sec + i
-		if sector >= 0 then
-			if not self.sectors[sector] then
-				print("Generating sector " + sector)
-				self.sectors[sector] = {}
-				local min, max = sector*(self.secSize*self.orbitSize),((sector+1)*((self.secSize)*self.orbitSize))-self.orbitSize
-				print("Generating from "+min+" to "+max+" distance from the sun")
-				for o = min,max,self.orbitSize do
-					local p = (Planet(Vector2:rand()*o, math.random(50,60), math.random(10000,1000000)))
-					table.insert(self.planets, p)
-					table.insert(self.sectors[sector], p)
-				end
-				
-				--self.sectors[sector] = true
-			end
-		end
+		self:generateSector(sector)
+		
 	end
 	
 	-- Camera
@@ -205,7 +212,7 @@ function game:mousepressed(x, y, button)
 		local r = math.random(50,150)
 		local g = math.random(10000,1000000)
 		local v = Vector2(x,y)
-		local p = (Planet(v, r, g))
+		local p = (Planet{pos=v, radius=r, gravityForce=g})
 		table.insert(self.planets, p)
 		table.insert(self.sectors[self:sector((v-sun.pos):len())], p)
 	end
@@ -243,17 +250,20 @@ end
 
 Planet = Class{}
 
-function Planet:init(pos, radius, gravityForce)
-	self.pos = pos
-	self.radius = radius
-	self.gravityForce = gravityForce
-	self.colour = {math.random(0, 255), math.random(0, 255), math.random(0, 255)}
+function Planet:init(arg)
+	self.pos = arg.pos or Vector2()
+	self.radius = arg.radius or 50
+	self.gravityForce = arg.gravityForce
+	self.colour = arg.colour or {math.random(0, 255), math.random(0, 255), math.random(0, 255)}
+	self.name = arg.name or markov.generate(planet_chain, math.random(4,9))
 end
 
 function Planet:draw()
-
 	love.graphics.setColor(self.colour)
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
+	
+	love.graphics.setColor(255,255,255)
+	love.graphics.print(self.name, self.pos.x, self.pos.y - (self.radius+25))
 end
 
 return game
