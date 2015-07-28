@@ -285,6 +285,15 @@ function game:mousepressed(x, y, button)
 	end
 end
 
+function circleCollision(a, b)
+	
+	local x = ((a.radius * b.pos.x) + (b.radius * a.pos.x)) / (a.radius + b.radius)
+	local y = ((a.radius * b.pos.y) + (b.radius * a.pos.y)) / (a.radius + b.radius)
+	
+	return Vector2:new(x,y) -- + a.pos
+	
+end
+
 function game:gravity(affectedByGravity, constantAffectors, dt)
 	sector = -1
 	for i, affected in ipairs(affectedByGravity) do

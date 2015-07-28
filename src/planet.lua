@@ -22,9 +22,32 @@ function planet:update(dt)
 	self.gui:update(dt)
 end
 
+
+
 function planet:onStart(p)
 	print("starting state planet!")
 	self.gui = List{self.frame}
+	-- Show its name
+	if not p.quest then
+		-- Some flavor text?
+		-- Exit button
+	elseif p.quest.send then
+		-- 'send' flavor text
+		-- List current weight etc.
+		-- show resource being loaded
+		-- Accept and Decline buttons
+	elseif p.quest.receive then
+		-- 'receive' flavor text
+		-- List curent weight etc.
+		-- Show people being added
+		-- Exit button
+	elseif p.quest.people then
+		-- 'stranded' flavor text
+		-- List curent weight etc.
+		-- Show people being added
+		-- Exit button
+	end
+	
 	l = self.frame:add(Label(p.name)):center()
 	l:setText(p.name)
 	self.gui:add(l)
