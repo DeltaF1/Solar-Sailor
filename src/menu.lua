@@ -6,7 +6,10 @@ function menu:load()
 	
 	--self.camera = 
 	
-	self.frame = Frame(Vector2(), Vector2(800,600))
+	width = love.graphics.getWidth()
+	height = love.graphics.getHeight()
+	
+	self.frame = Frame(Vector2(), Vector2(width,height))
 	
 	local startbutton = self.frame:add(Button(Vector2(), Vector2(200,50), {onClick = function() EndState("game") end}))
 	  :center()

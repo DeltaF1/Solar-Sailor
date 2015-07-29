@@ -268,6 +268,40 @@ function Label:updateScale()
 	self.scale = Vector2(self.font:getWidth(self.text), self.font:getHeight())
 end
 
+-- TextBox class
+----------------
+-- displays large amounts of text, wrapped to scale
+
+TextBox = Class{__includes=Gui}
+
+TextBox.defaultOptions = 
+{
+	font = love.graphics.newFont(12),
+	colours = {
+		default={255,255,255}
+	},
+	backgrounds = {
+		default = {0,0,0,0}
+	},
+}
+
+function TextBox:init(text, pos, scale, options)
+	Gui.init(self, pos, scale, options)
+	
+	self.text = text
+	
+	self.font = self.options.font
+end
+
+function TextBox:setText(t)
+	self.text = t
+end
+
+function TextBox:draw()
+	love.graphics.setColor(self.options.colours.default)
+	love.graphics.setFont(self.font)
+	love.graphics.printf(self.text, self.pos.x, self.pos.y, self.scale.x)
+end
 
 -- Button class
 ----------------

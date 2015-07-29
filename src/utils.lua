@@ -239,6 +239,7 @@ function update(table1, table2, create, recurse)
 			table1[k] = v
 		end
 	end
+	return table1
 end
 
 function table.merge(a,b)
