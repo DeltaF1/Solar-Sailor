@@ -31,6 +31,8 @@ function planet:onStart(p)
 	if not p.quest then
 		-- Some flavor text?
 		-- Exit button
+		s = string.replace("A desolate world, {name} is bereft of life.", {name=p.name})
+		flavorLabel = self.gui:add(self.frame:add(Label(s, Vector2())):centerX())
 	elseif p.quest.send then
 		-- 'send' flavor text
 		-- List current weight etc.

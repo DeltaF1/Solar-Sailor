@@ -248,3 +248,12 @@ end
 function math.randomf(min, max)
 	return min + math.random() * (max - min)
 end
+
+function string.replace(s, t, sep)
+	sep = sep or {"{", "}"}
+	f = function(str)
+        return t[str:sub(2,#str-1)]
+    end
+
+	return s:gsub("("..sep[1].."%a+"..sep[2]..")", f):gsub("\\"..sep[2], sep[2])
+end
