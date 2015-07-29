@@ -4,7 +4,13 @@ function planet:load()
 	self.width = love.graphics.getWidth()
 	self.height = love.graphics.getHeight()
 	
-	self.frame = Frame(Vector2(), Vector2(200,400))
+	self.frame = Frame(Vector2(), Vector2(200,400),
+	{
+		colours={
+			default = {}
+			}
+	}
+	)
 	self.frame:center()
 	
 	self.gui = List{self.frame}
