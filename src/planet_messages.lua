@@ -2,8 +2,9 @@ local messages = {}
 
 
 messages.adj = {" lush", " beautiful", " harsh"}
+messages.noun = {"alien life", "strange wonders"}
 
-messages.desc = {"{name} is a{adj} world, full of {noun}.","A desolate world, {name} is bereft of life.",}
+messages.desc = {"{name} is a{adj} world, full of {noun}.","A{adj} world, {name} is famous for its {noun}",}
 
 messages.send = {"The planet {name} is in desperate need of some {resource}!"}
 

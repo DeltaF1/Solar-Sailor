@@ -23,6 +23,13 @@ function Entity:update(dt)
 	self.accel = self.netForce -- Divide by mass?
 	
 	self.vel = self.vel + self.accel * dt
+	
+	if self.maxVel then
+		if self.vel:len() > self.maxVel then
+			self.vel = self.vel:norm()*self.maxVel
+		end
+	end
+	
 	self.pos = self.pos + self.vel * dt
 	
 	self.netForce = Vector2()
@@ -51,6 +58,8 @@ player.dir = Vector2()
 player.rot = 0
 
 player.rotSpeed = 4
+
+player.maxVel = 400
 
 weights = {fuel=100, passengers=0.1}
 
@@ -85,10 +94,6 @@ function player:update(dt)
 	end
 	
 	Entity.update(self, dt)
-	
-	if self.vel:len() > 400 then
-		self.vel = self.vel:norm() * 400
-	end
 end
 
 function player:setWeight(w)
@@ -184,6 +189,7 @@ function game:addQuestPlanet(origin, distance)
 	if not quests[sector] then quests[sector] = {} end
 	q=copy(origin.quest.send)
 	q.origin = origin.name
+	q.quantity = - q.quantity
 	table.insert(quests[sector], {angle=angle, name=q.name, quest={receive=q}}) -- Extra quest data goes here?
 end
 

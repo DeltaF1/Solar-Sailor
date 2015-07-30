@@ -76,6 +76,9 @@ function planet:load()
 	self.nameLabel = self.frame:add(planetLabel("planet"), Vector2(10,10))
 	self.descLabel = self.frame:add(planetLabel("desc"), Vector2(10, 40))
 	self.descLabel.font = love.graphics.newFont(12)
+	
+	self.sectorLabel = self.frame:add(planetLabel("Sector: "), Vector2(400, 10))
+	
 	self.acceptButton = self.frame:add(planetButton(nil, nil, {texts={default="Accept"}}), Vector2(25, 530))
 	self.acceptButton.onClick = function()
 		-- Do questy stuff
@@ -101,10 +104,10 @@ function planet:load()
 	local textborder = 10
 	self.messageText = self.messageFrame:add(planetTextBox(("test "*30), nil, Vector2(self.messageFrame.scale.x-textborder, self.messageFrame.scale.y-textborder))):center()
 	
-	self.manifestFrame = self.frame:add(Frame(Vector2(), Vector2(self.frame.scale.x-(2*offX), 130)), Vector2(offX, 260))
+	self.manifestFrame = self.frame:add(Frame(Vector2(), Vector2(self.frame.scale.x-(2*offX), 190)), Vector2(offX, 260))
 	self.manifestFrame.colours.default = planetButton.defaultOptions.colours.default
 	
-	self.manifestText = self.manifestFrame:add(planetTextBox("test "*30, nil, Vector2(self.manifestFrame.scale.x-textborder,
+	self.manifestText = self.manifestFrame:add(planetTextBox(("test "*30), nil, Vector2(self.manifestFrame.scale.x-textborder,
 	self.manifestFrame.scale.y-textborder))):center()
 	
 	
@@ -130,11 +133,13 @@ function planet:onStart(p)
 	self.gui = List{self.frame}
 	self.gui:add(self.frame.children)
 	self.gui:add(self.messageFrame.children)
+	self.gui:add(self.manifestFrame.children)
 	--self.gui:add(self.manifestFrame.children)
 	
 	self.nameLabel:setText(p.name)
+	self.sectorLabel:setText("Sector: "+states["game"]:sector((p.pos-sun.pos):len()))
 	
-	local s = p.desc or string.replace(randomSelect(messages.desc), {name=p.name})
+	local s = p.desc or string.replace(randomSelect(messages.desc), {name=p.name,adj=randomSelect(messages.adj),noun=randomSelect(messages.noun)})
 	self.descLabel:setText(s)
 	p.desc = s
 	local s = ""
@@ -146,7 +151,7 @@ function planet:onStart(p)
 		s = "NO DATA"
 		
 		self.acceptButton.onClick = function() EndState("game") end
-		
+		self.manifestText:setText("")
 	elseif p.quest.send then
 		-- 'send' flavor text
 		-- List current weight etc.
@@ -185,6 +190,10 @@ function planet:onStart(p)
 		s = p.text or randomSelect(messages[q])
 
 		s = string.replace(s, p.quest[q])
+		
+		quantity = p.quest[q].quantity
+		
+		self.manifestText:setText(p.quest[q].resource+(quantity > 0 and "+" or "-" )+math.abs(quantity))
 	end
 	
 	self.messageText:setText(s)
