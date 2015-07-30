@@ -50,6 +50,12 @@ player = Entity(Vector2.rand()*500)
 player.dir = Vector2()
 player.rot = 0
 
+weights = {fuel=100, passengers=0.1}
+
+player.resources = {fuel=10, passengers=0}
+
+-- Tracking quests for HUD?
+player.quests = {}
 
 function player:update(dt)
 
@@ -83,6 +89,22 @@ function player:update(dt)
 	end
 end
 
+function player:changeResource(resource, qt)
+	val = self.resources[resource]
+	if val + qt < 0 then
+		return false
+	end
+	self.resources[resource] = self.resources[resource] + qt
+	
+	self:updateWeight()
+end
+
+function player:updateWeight()
+	self.weight = 0
+	for k, v in self.resources do	
+		self.weight = self.weight + (v * weights[k])	
+	end
+end
 
 function player:draw()
 	love.graphics.setColor(255,255,255)
@@ -136,13 +158,15 @@ function game:drawPlanets(l,t,w,h)
 	end
 end
 
-function game:addQuestPlanet(origin, distance, name)
+function game:addQuestPlanet(origin, distance)
 	local dir = origin.pos - sun.pos
 	local angle = math.atan2(dir.y, dir.x)
 	
 	local sector = self:sector(dir:len()) + distance
 	if not quests[sector] then quests[sector] = {} end
-	table.insert(quests[sector], {angle=angle, name=name}) -- Extra quest data goes here?
+	q=copy(origin.quest.send)
+	q.origin = origin.name
+	table.insert(quests[sector], {angle=angle, name=q.name, quest={receive=q}}) -- Extra quest data goes here?
 end
 
 function game:generateSector(sector)
@@ -170,9 +194,9 @@ function game:generateSector(sector)
 					end
 				else
 					if math.random() < 0.1 then
-						quest = {send={name=markov.generate(planet_chain, math.random(4,9)).." RECEIVE",resource="fuel"}}
+						quest = {send={name=markov.generate(planet_chain, math.random(4,9)),resource="fuel",quantity=math.random(1,4)}}
 						colour = {255,0,0}
-						name=markov.generate(planet_chain, math.random(4,9)).." SEND"
+						--name=markov.generate(planet_chain, math.random(4,9))
 						
 					end
 				end
@@ -182,7 +206,7 @@ function game:generateSector(sector)
 				table.insert(self.sectors[sector], p)
 				if p.quest then
 					if p.quest.send then
-						self:addQuestPlanet(p, 7, p.quest.send.name)
+						
 					end
 				end
 			end

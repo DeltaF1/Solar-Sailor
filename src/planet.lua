@@ -75,6 +75,7 @@ function planet:load()
 	
 	self.nameLabel = self.frame:add(planetLabel("planet"), Vector2(10,10))
 	self.descLabel = self.frame:add(planetLabel("desc"), Vector2(10, 40))
+	self.descLabel.font = love.graphics.newFont(12)
 	self.acceptButton = self.frame:add(planetButton(nil, nil, {texts={default="Accept"}}), Vector2(25, 530))
 	self.acceptButton.onClick = function()
 		-- Do questy stuff
@@ -115,6 +116,8 @@ function planet:update(dt)
 	self.gui:update(dt)
 end
 
+messages = require "planet_messages"
+
 function planet:onStart(p)
 	print("starting state planet!")
 	self.gui = List{self.frame}
@@ -123,33 +126,61 @@ function planet:onStart(p)
 	--self.gui:add(self.manifestFrame.children)
 	
 	self.nameLabel:setText(p.name)
-	-- Show its name
+	
+	self.descLabel:setText(string.replace(randomSelect(messages.desc), {name=p.name}))
+	local s = ""
+	local q = nil
+	
 	if not p.quest then
 		-- Some flavor text?
 		-- Exit button
-		 self.descLabel:setText(string.replace("A desolate world, {name} is bereft of life.", {name=p.name}))
+		s = "NO DATA"
+		
+		self.acceptButton.onClick = function() EndState("game") end
 		
 	elseif p.quest.send then
 		-- 'send' flavor text
 		-- List current weight etc.
 		-- show resource being loaded
 		-- Accept and Decline buttons
-		self.messageText:setText(
-			string.replace("The planet [{name}](colour: 255,0,0)[ ](colour)is in desperate need of some [{resource}](colour: 0,100,255)[!](colour)",
-			p.quest.send
-			)
-		)
+		q = "send"
+		
+		self.acceptButton.onClick = function()
+			states["game"]:addQuestPlanet(p, 7)
+			-- Add resource and people, change manifest
+			p.quest = nil
+			EndState("game")
+		end
 	elseif p.quest.receive then
 		-- 'receive' flavor text
 		-- List curent weight etc.
 		-- Show people being added
 		-- Exit button
-	elseif p.quest.people then
+		
+		q = "receive"
+		
+		self.acceptButton.onClick = function()
+			-- player.quests:remove(p)
+			-- take resources, add people, change manifest
+			p.quest = nil
+			EndState("game")
+		end
+	elseif p.quest.survivors then
 		-- 'stranded' flavor text
 		-- List curent weight etc.
 		-- Show people being added
 		-- Exit button
+		q = "survivors"
 	end
+	if q then
+		s = randomSelect(messages[q])
+
+		s = string.replace(s, p.quest[q])
+	end
+	
+	self.messageText:setText(s)
+	
+	-- update manifest
 end
 
 function planet:keypressed(key)
