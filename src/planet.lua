@@ -101,6 +101,13 @@ function planet:load()
 	local textborder = 10
 	self.messageText = self.messageFrame:add(planetTextBox(("test "*30), nil, Vector2(self.messageFrame.scale.x-textborder, self.messageFrame.scale.y-textborder))):center()
 	
+	self.manifestFrame = self.frame:add(Frame(Vector2(), Vector2(self.frame.scale.x-(2*offX), 130)), Vector2(offX, 260))
+	self.manifestFrame.colours.default = planetButton.defaultOptions.colours.default
+	
+	self.manifestText = self.manifestFrame:add(planetTextBox("test "*30, nil, Vector2(self.manifestFrame.scale.x-textborder,
+	self.manifestFrame.scale.y-textborder))):center()
+	
+	
 	self.gui = List{self.frame}
 end
 
@@ -127,7 +134,9 @@ function planet:onStart(p)
 	
 	self.nameLabel:setText(p.name)
 	
-	self.descLabel:setText(string.replace(randomSelect(messages.desc), {name=p.name}))
+	local s = p.desc or string.replace(randomSelect(messages.desc), {name=p.name})
+	self.descLabel:setText(s)
+	p.desc = s
 	local s = ""
 	local q = nil
 	
@@ -173,13 +182,14 @@ function planet:onStart(p)
 		q = "survivors"
 	end
 	if q then
-		s = randomSelect(messages[q])
+		s = p.text or randomSelect(messages[q])
 
 		s = string.replace(s, p.quest[q])
 	end
 	
 	self.messageText:setText(s)
 	
+	p.text = s
 	-- update manifest
 end
 

@@ -1,6 +1,9 @@
 local messages = {}
 
-messages.desc = {"{name} is a barren world, bereft of life.","A desolate world, {name} is bereft of life.",}
+
+messages.adj = {" lush", " beautiful", " harsh"}
+
+messages.desc = {"{name} is a{adj} world, full of {noun}.","A desolate world, {name} is bereft of life.",}
 
 messages.send = {"The planet {name} is in desperate need of some {resource}!"}
 
@@ -9,7 +12,8 @@ messages.receive = {"We on {name} thank you for the much needed {resource} from 
 messages.survivors = {"Thank god you came by, we thought we were going to die with {name}!"}
 
 local colours = {
-	name = {200,20,0}
+	name = {255,20,0},
+	resource = {0,255,50}
 }
 
 f = function(str)

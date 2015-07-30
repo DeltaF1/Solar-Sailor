@@ -50,6 +50,8 @@ player = Entity(Vector2.rand()*500)
 player.dir = Vector2()
 player.rot = 0
 
+player.rotSpeed = 4
+
 weights = {fuel=100, passengers=0.1}
 
 player.resources = {fuel=10, passengers=0}
@@ -60,9 +62,9 @@ player.quests = {}
 function player:update(dt)
 
 	if love.keyboard.isDown("d") then
-		self.rot = self.rot + dt
+		self.rot = self.rot + (dt * self.rotSpeed)
 	elseif love.keyboard.isDown("a") then
-		self.rot = self.rot - dt
+		self.rot = self.rot - (dt * self.rotSpeed)
 	end
 	
 	self.dir = Vector2(math.cos(self.rot), math.sin(self.rot))
@@ -89,6 +91,20 @@ function player:update(dt)
 	end
 end
 
+function player:setWeight(w)
+	self.weight = w or self:getWeight()
+end
+
+function player:getWeight(t)
+	local t = t or self.resources
+	
+	local w = 0
+	
+	for k,v in pairs(t) do
+		w = w + (weights[k] * v)
+	end
+end
+
 function player:changeResource(resource, qt)
 	val = self.resources[resource]
 	if val + qt < 0 then
@@ -96,7 +112,7 @@ function player:changeResource(resource, qt)
 	end
 	self.resources[resource] = self.resources[resource] + qt
 	
-	self:updateWeight()
+	self:setWeight()
 end
 
 function player:updateWeight()
@@ -121,6 +137,8 @@ function game:load()
 	self.sectors = {[0]={},[1] = {}}
 	self.secSize = 10
 	self.orbitSize = 100
+	
+	sunSpeed = 10
 	
 	quests = {}
 	QUEST_OFF = math.rad(15)
@@ -224,9 +242,8 @@ end
 
 function game:update(dt)
 	-- FPS limiter
-	  dt = math.min(dt, 0.07)
-	  
-	
+	dt = math.min(dt, 0.07)
+	sun.radius = sun.radius + sunSpeed * dt
 	
 	local affected = {player, unpack(self.asteroids.items)}
 	--affected = {player}
@@ -276,6 +293,12 @@ function game:draw()
 	love.graphics.print("#planets:"+#self.planets, 0, 100)
 	love.graphics.print("#planetsDrawn:"+planetsDrawn, 0, 125)
 	love.graphics.print("speed:"+player.vel:len(), 0, 150)
+	
+	local i = 1
+	for k,v in pairs(player.resources) do
+		love.graphics.print(k..": "..v, 0, 150+(i*25))
+		i = i + 1
+	end
 end
 
 function game:mousepressed(x, y, button)
