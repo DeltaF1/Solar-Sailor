@@ -282,7 +282,7 @@ function game:generateSector(sector)
 		end
 	end
 end
-
+dubgdraw = false
 function game:update(dt)
 	-- FPS limiter
 	dt = math.min(dt, 0.07)
@@ -414,6 +414,16 @@ function game:gravity(affectedByGravity, constantAffectors, dt)
 		end
 		affected:applyForce(netForce)
 	end
+	local dis = (player.pos - sun.pos):len()
+	local sec = self:sector(dis)
+	if sec ~= sector then
+		gravityAffectors = {}
+		table.merge(gravityAffectors, constantAffectors)
+		for i = -1, 1 do
+			table.merge(gravityAffectors, self.sectors[sec+i] or {})
+		end
+			sector = sec
+	end
 	game:collisions(affectedByGravity, gravityAffectors)
 	fps = 1/dt
 end
@@ -435,7 +445,7 @@ function game:collisions(colliders1, colliders2)
 					if(collider2.onCollide) then
 						collider2:onCollide(collider1)
 					end
-					print("COLLISION")
+					love.window.setTitle("Collided")
 				end
 			end
 		end
