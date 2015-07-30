@@ -83,6 +83,21 @@ function planet:load()
 	self.acceptButton.onClick = function()
 		-- Do questy stuff
 		-- p.quest = nil
+		
+		local p = self.planet
+		
+		if self.q then
+			if p.quest.send then
+				states["game"]:addQuestPlanet(p, 7)
+			end
+		
+			if p.quest.send or p.quest.receive then
+				player:addResources(p.quest[self.q].resource, p.quest[self.q].quantity)
+			end
+		end
+		
+		p.quest = nil
+		
 		EndState("game")
 	end
 	
@@ -129,6 +144,7 @@ end
 messages = require "planet_messages"
 
 function planet:onStart(p)
+	self.planet = p
 	print("starting state planet!")
 	self.gui = List{self.frame}
 	self.gui:add(self.frame.children)
@@ -150,7 +166,6 @@ function planet:onStart(p)
 		-- Exit button
 		s = "NO DATA"
 		
-		self.acceptButton.onClick = function() EndState("game") end
 		self.manifestText:setText("")
 	elseif p.quest.send then
 		-- 'send' flavor text
@@ -159,12 +174,7 @@ function planet:onStart(p)
 		-- Accept and Decline buttons
 		q = "send"
 		
-		self.acceptButton.onClick = function()
-			states["game"]:addQuestPlanet(p, 7)
-			-- Add resource and people, change manifest
-			p.quest = nil
-			EndState("game")
-		end
+
 	elseif p.quest.receive then
 		-- 'receive' flavor text
 		-- List curent weight etc.
@@ -173,12 +183,6 @@ function planet:onStart(p)
 		
 		q = "receive"
 		
-		self.acceptButton.onClick = function()
-			-- player.quests:remove(p)
-			-- take resources, add people, change manifest
-			p.quest = nil
-			EndState("game")
-		end
 	elseif p.quest.survivors then
 		-- 'stranded' flavor text
 		-- List curent weight etc.
@@ -200,6 +204,8 @@ function planet:onStart(p)
 	
 	p.text = s
 	-- update manifest
+	
+	self.q = q
 end
 
 function planet:keypressed(key)

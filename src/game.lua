@@ -108,23 +108,19 @@ function player:getWeight(t)
 	for k,v in pairs(t) do
 		w = w + (weights[k] * v)
 	end
+	
+	return w
 end
 
-function player:changeResource(resource, qt)
+function player:addResources(resource, qt)
 	val = self.resources[resource]
 	if val + qt < 0 then
+		error("Not enough resources to take away "..qt.." of "..resource)
 		return false
 	end
 	self.resources[resource] = self.resources[resource] + qt
 	
 	self:setWeight()
-end
-
-function player:updateWeight()
-	self.weight = 0
-	for k, v in self.resources do	
-		self.weight = self.weight + (v * weights[k])	
-	end
 end
 
 function player:draw()
@@ -143,7 +139,9 @@ function game:load()
 	self.secSize = 10
 	self.orbitSize = 100
 	
-	sunSpeed = 10
+	player:setWeight()
+	
+	sunSpeed = 40
 	
 	quests = {}
 	QUEST_OFF = math.rad(15)
@@ -305,6 +303,7 @@ function game:draw()
 		love.graphics.print(k..": "..v, 0, 150+(i*25))
 		i = i + 1
 	end
+	love.graphics.print("Weight: "..player.weight, 0,  150+(i*25))
 end
 
 function game:mousepressed(x, y, button)
