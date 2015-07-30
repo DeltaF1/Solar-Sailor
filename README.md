@@ -6,7 +6,24 @@ Solar Sailor is a game made by [DeltaF1](http://twitter.com/starhoppergames) and
 jam of July 2015, theme "Solar". It's set in space. Yup.
 
 ## TODO
-- [x] GUI sysyem
-- [x] Gravity
-- [ ] Planet generation
-- [ ] Planet rendering
+- [x] Planet generation
+- [x] Planet rendering
+- [ ] Quests
+  - [ ] resources / weight
+  - [ ] HUD marker
+  - [x] Send/receive
+  - [ ] "Survivors"
+- [ ] Physics
+  - [x] Gravity
+  - [ ] Collision
+  - [ ] Asteroid spawning
+  - [ ] Planet destruction
+  - [ ] Fuel consumption
+  - [ ] take weight into accuont with thrusting
+- [ ] Graphics
+  - [x] GUI system
+  - [ ] Planet HUD Markers
+  - [ ] Ship's manifest
+- [ ] Menus
+  - [ ] Ship naming screen
+  - [ ]Our own splash
