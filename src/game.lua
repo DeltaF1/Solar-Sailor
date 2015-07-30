@@ -49,7 +49,7 @@ function Asteroid:draw()
 end
 
 function Asteroid:onCollide(obj)
-
+	asteroids:remove(self)
 end
 
 Planet = Class{}
