@@ -67,6 +67,8 @@ player.rotSpeed = 4
 
 player.maxVel = 400
 
+player.radius = 5
+
 weights = {fuel=100, passengers=0.1}
 
 player.resources = {fuel=10, passengers=0}
