@@ -336,6 +336,8 @@ function game:mousepressed(x, y, button)
 	end
 end
 
+
+--[[
 function circleCollision(a, b)
 	
 	local x = ((a.radius * b.pos.x) + (b.radius * a.pos.x)) / (a.radius + b.radius)
@@ -344,7 +346,7 @@ function circleCollision(a, b)
 	return Vector2:new(x,y) -- + a.pos
 	
 end
-
+]]
 function game:gravity(affectedByGravity, constantAffectors, dt)
 	sector = -1
 	for i, affected in ipairs(affectedByGravity) do
@@ -372,9 +374,29 @@ function game:gravity(affectedByGravity, constantAffectors, dt)
 		end
 		affected:applyForce(netForce)
 	end
+	game:collisions(affectedByGravity, gravityAffectors)
 	fps = 1/dt
 end
 
+function game:collisions(colliders1, colliders2)
+	table.merge(colliders1, colliders2)
+	for i, collider1 in ipairs(colliders1) do
+		for x, collider2 in ipairs(colliders1) do
+			if collider2 ~= collider1 then
+				local dis = (collider1.pos - collider2.pos):len()
+				if dis <= collider1.radius - collider2.radius then
+					if(collider1.onCollide) then
+						collider1.onCollide()
+					end
+					if(collider2.onCollide) then
+						collider2.onCollide()
+					end
+					love.graphics.print("COLLISION")
+				end
+			end
+		end
+	end
+end
 Planet = Class{}
 
 function Planet:init(arg)
