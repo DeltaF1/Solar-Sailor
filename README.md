@@ -9,21 +9,21 @@ jam of July 2015, theme "Solar". It's set in space. Yup.
 - [x] Planet generation
 - [x] Planet rendering
 - [ ] Quests
-  - [ ] resources / weight
+  - [x] resources / weight
   - [ ] HUD marker
   - [x] Send/receive
   - [ ] "Survivors"
 - [ ] Physics
   - [x] Gravity
-  - [ ] Collision
+  - [x] Collision
   - [ ] Asteroid spawning
   - [ ] Planet destruction
   - [ ] Fuel consumption
-  - [ ] take weight into accuont with thrusting
+  - [ ] take weight into account with thrusting
 - [ ] Graphics
   - [x] GUI system
   - [ ] Planet HUD Markers
   - [ ] Ship's manifest
 - [ ] Menus
   - [ ] Ship naming screen
-  - [ ]Our own splash
+  - [ ] Our own splash
