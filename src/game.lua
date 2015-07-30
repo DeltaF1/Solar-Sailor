@@ -37,9 +37,15 @@ end
 
 Asteroid = Class{__includes = Entity}
 
+function Asteroid:init(pos, vel, accel)
+	Entity.init(self, pos, vel, accel)
+	
+	self.radius = 10
+end
+
 function Asteroid:draw()
 	love.graphics.setColor(100,100,100)
-	love.graphics.circle("fill", self.pos.x, self.pos.y, 10, 8)
+	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 8)
 end
 
 sun = {
@@ -391,7 +397,7 @@ function game:collisions(colliders1, colliders2)
 					if(collider2.onCollide) then
 						collider2.onCollide()
 					end
-					love.graphics.print("COLLISION")
+					print("COLLISION")
 				end
 			end
 		end
