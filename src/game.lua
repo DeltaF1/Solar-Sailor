@@ -48,6 +48,35 @@ function Asteroid:draw()
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 8)
 end
 
+function Asteroid:onCollide(obj)
+
+end
+
+Planet = Class{}
+
+function Planet:init(arg)
+	self.pos = arg.pos or Vector2()
+	self.radius = arg.radius or 50
+	self.gravityForce = arg.gravityForce
+	self.colour = arg.colour or {math.random(0, 255), math.random(0, 255), math.random(0, 255)}
+	self.name = arg.name or markov.generate(planet_chain, math.random(4,9))
+	self.quest = arg.quest
+end
+
+function Planet:draw()
+	love.graphics.setColor(self.colour)
+	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
+	
+	love.graphics.setColor(255,255,255)
+	love.graphics.print(self.name, self.pos.x, self.pos.y - (self.radius+25))
+end
+
+function onCollide(obj)
+	if obj == player then
+		EndState("planet", self)
+	end
+end
+
 sun = {
 	pos = Vector2(),
 	radius = 100,
@@ -411,24 +440,6 @@ function game:collisions(colliders1, colliders2)
 			end
 		end
 	end
-end
-Planet = Class{}
-
-function Planet:init(arg)
-	self.pos = arg.pos or Vector2()
-	self.radius = arg.radius or 50
-	self.gravityForce = arg.gravityForce
-	self.colour = arg.colour or {math.random(0, 255), math.random(0, 255), math.random(0, 255)}
-	self.name = arg.name or markov.generate(planet_chain, math.random(4,9))
-	self.quest = arg.quest
-end
-
-function Planet:draw()
-	love.graphics.setColor(self.colour)
-	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
-	
-	love.graphics.setColor(255,255,255)
-	love.graphics.print(self.name, self.pos.x, self.pos.y - (self.radius+25))
 end
 
 return game
