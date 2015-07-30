@@ -115,7 +115,6 @@ end
 function player:addResources(resource, qt)
 	val = self.resources[resource]
 	if val + qt < 0 then
-		error("Not enough resources to take away "..qt.." of "..resource)
 		return false
 	end
 	self.resources[resource] = self.resources[resource] + qt
