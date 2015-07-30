@@ -145,6 +145,7 @@ function game:load()
 	self.sectors = {[0]={},[1] = {}}
 	self.secSize = 10
 	self.orbitSize = 100
+	self.densityFactor = 10
 	
 	player:setWeight()
 	
@@ -206,36 +207,38 @@ function game:generateSector(sector)
 			local min, max = sector*(self.secSize*self.orbitSize),((sector+1)*((self.secSize)*self.orbitSize))-self.orbitSize
 			print("Generating from "+min+" to "+max+" distance from the sun")
 			for o = min,max,self.orbitSize do
-				local pos = Vector2:rand()*o
-				local name = nil
-				local colour = nil
-				local quest = nil
-				if quests[sector] then
-					local angle = math.atan2(pos.y, pos.x)
-					for i, planet in ipairs(quests[sector]) do
-						if angle > planet.angle - QUEST_OFF and angle < planet.angle + QUEST_OFF then
-							table.remove(quests[sector], i)
-							name = planet.name
-							colour = {0,255,0} -- Debug
-							quest = planet.quest
-							break
+				for i = 1, math.floor(sector/self.densityFactor)+1 do
+					local pos = Vector2:rand()*o
+					local name = nil
+					local colour = nil
+					local quest = nil
+					if quests[sector] then
+						local angle = math.atan2(pos.y, pos.x)
+						for i, planet in ipairs(quests[sector]) do
+							if angle > planet.angle - QUEST_OFF and angle < planet.angle + QUEST_OFF then
+								table.remove(quests[sector], i)
+								name = planet.name
+								colour = {0,255,0} -- Debug
+								quest = planet.quest
+								break
+							end
+						end
+					else
+						if math.random() < 0.1 then
+							quest = {send={name=markov.generate(planet_chain, math.random(4,9)),resource="fuel",quantity=math.random(1,4)}}
+							colour = {255,0,0}
+							--name=markov.generate(planet_chain, math.random(4,9))
+							
 						end
 					end
-				else
-					if math.random() < 0.1 then
-						quest = {send={name=markov.generate(planet_chain, math.random(4,9)),resource="fuel",quantity=math.random(1,4)}}
-						colour = {255,0,0}
-						--name=markov.generate(planet_chain, math.random(4,9))
-						
-					end
-				end
-				
-				local p = (Planet{pos=pos, radius=math.random(50,60), gravityForce=math.random(10000,1000000), name=name, colour=colour, quest=quest})
-				table.insert(self.planets, p)
-				table.insert(self.sectors[sector], p)
-				if p.quest then
-					if p.quest.send then
-						
+					
+					local p = (Planet{pos=pos, radius=math.random(50,60), gravityForce=math.random(10000,1000000), name=name, colour=colour, quest=quest})
+					table.insert(self.planets, p)
+					table.insert(self.sectors[sector], p)
+					if p.quest then
+						if p.quest.send then
+							
+						end
 					end
 				end
 			end
