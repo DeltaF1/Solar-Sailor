@@ -392,6 +392,10 @@ function game:collisions(colliders1, colliders2)
 		for x, collider2 in ipairs(colliders1) do
 			if collider2 ~= collider1 then
 				local dis = (collider1.pos - collider2.pos):len()
+				if collider1.radius == nil or collider2.radius == nil then
+					print("No Radius")
+					return
+				end
 				if dis <= collider1.radius - collider2.radius then
 					if(collider1.onCollide) then
 						collider1.onCollide()
