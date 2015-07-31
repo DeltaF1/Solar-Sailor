@@ -20,7 +20,7 @@ function Entity:applyForce(f)
 end
 
 function Entity:update(dt)
-	self.accel = self.netForce -- Divide by mass?
+	self.accel = self.netForce / (self.mass or 1) -- Divide by mass?
 	
 	self.vel = self.vel + self.accel * dt
 	
@@ -49,7 +49,9 @@ function Asteroid:draw()
 end
 
 function Asteroid:onCollide(obj)
-	game.asteroids:remove(self)
+	if getmetatable(obj) ~= Asteroid then
+		game.asteroids:remove(self)
+	end
 end
 
 Planet = Class{}
@@ -119,6 +121,9 @@ weights = {fuel=100, passengers=0.1}
 
 player.resources = {fuel=10, passengers=0}
 
+player.burnRate = 10
+player.burnDt = 0
+
 -- Tracking quests for HUD?
 player.quests = {}
 
@@ -145,6 +150,12 @@ function player:update(dt)
 	
 	if love.keyboard.isDown(" ") then
 		self:applyForce(self.dir:norm() * 100)
+		self.burnDt = self.burnDt + dt
+		if self.burnDt >= self.burnRate then
+			if self:addResources("fuel", -0.1) then
+				self.burnDt = 0
+			end
+		end
 	end
 	
 	Entity.update(self, dt)
@@ -152,6 +163,7 @@ end
 
 function player:setWeight(w)
 	self.weight = w or self:getWeight()
+	self.mass = self.weight / 1000
 end
 
 function player:getWeight(t)
@@ -174,6 +186,7 @@ function player:addResources(resource, qt)
 	self.resources[resource] = self.resources[resource] + qt
 	
 	self:setWeight()
+	return true
 end
 
 function player:draw()
