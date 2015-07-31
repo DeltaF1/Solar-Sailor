@@ -51,7 +51,7 @@ function planetTextBox:setText(text)
 end
 
 function planetTextBox:update(dt)
-	TextBox.update(self, dt)
+	Gui.update(self, dt)
 	self.text:update(dt)
 end
 
@@ -98,14 +98,14 @@ function planet:load()
 		
 		p.quest = nil
 		
-		EndState("game")
+		EndState("game",self.planet)
 	end
 	
 	self.declineButton = self.frame:add(planetButton(nil, nil, {texts={default="Decline"}}), Vector2(25, 530))
 	self.declineButton.onClick = function()
 		-- Do questy stuff
 		-- p.quest = nil
-		EndState("game")
+		EndState("game",self.planet)
 	end
 	
 	local offX = 50
@@ -144,13 +144,14 @@ end
 messages = require "planet_messages"
 
 function planet:onStart(p)
+	print("got "..Tserial.pack(p, tostring).." as an argument")
 	self.planet = p
 	print("starting state planet!")
+	print("planet.name = "..self.planet.name)
 	self.gui = List{self.frame}
 	self.gui:add(self.frame.children)
 	self.gui:add(self.messageFrame.children)
 	self.gui:add(self.manifestFrame.children)
-	--self.gui:add(self.manifestFrame.children)
 	
 	self.nameLabel:setText(p.name)
 	self.sectorLabel:setText("Sector: "+states["game"]:sector((p.pos-sun.pos):len()))
@@ -166,7 +167,7 @@ function planet:onStart(p)
 		-- Exit button
 		s = "NO DATA"
 		
-		self.manifestText:setText("")
+		self.manifestText:setText(" ")
 	elseif p.quest.send then
 		-- 'send' flavor text
 		-- List current weight etc.

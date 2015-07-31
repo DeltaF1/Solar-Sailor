@@ -84,7 +84,9 @@ function Gui:setState(state)
 end
 
 function Gui:mousehover(x, y)
-	
+	if not self.rect then
+		print(libs.ser(getmetatable(self)))
+	end
 	if self.rect:contains(Vector2:new(x,y)) then
 
 		if (not self.down) then

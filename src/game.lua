@@ -72,6 +72,7 @@ function Planet:draw()
 end
 
 function Planet:onCollide(obj)
+
 	if obj == player then
 		EndState("planet", self)
 	end
@@ -190,6 +191,14 @@ function game:load()
 	self.camSize = 300000
 	self.camera = camera.new(0,0,1,1)
 	self:updateCamera()
+end
+
+function game:onStart(p)
+	if p then
+		delta = p.pos - player.pos
+		player.pos = p.pos + delta:norm()*(p.radius+(player.radius*2)+10)
+		player.vel = delta:norm()*150*player.vel:len()
+	end
 end
 
 function game:updateCamera()
