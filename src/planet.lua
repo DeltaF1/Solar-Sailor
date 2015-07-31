@@ -71,7 +71,13 @@ function planet:load()
 			}
 	}
 	)
+	local _update = self.frame.update
+	function self.frame:update(dt)
+		_update(self, dt)
+		print("Updated Main Frame!")
+	end
 	self.frame:center()
+	self.frame.name = "Main Frame"
 	
 	self.nameLabel = self.frame:add(planetLabel("planet"), Vector2(10,10))
 	self.descLabel = self.frame:add(planetLabel("desc"), Vector2(10, 40))
@@ -82,7 +88,6 @@ function planet:load()
 	self.acceptButton = self.frame:add(planetButton(nil, nil, {texts={default="Accept"}}), Vector2(25, 530))
 	self.acceptButton.onClick = function()
 		-- Do questy stuff
-		-- p.quest = nil
 		
 		local p = self.planet
 		
@@ -116,11 +121,15 @@ function planet:load()
 	self.messageFrame = self.frame:add(Frame(Vector2(), Vector2(self.frame.scale.x-(2*offX), 160)), Vector2(offX, 80))
 	self.messageFrame.colours.default = planetButton.defaultOptions.colours.default
 	
+	self.messageFrame.name = "Message Frame"
+	
 	local textborder = 10
 	self.messageText = self.messageFrame:add(planetTextBox(("test "*30), nil, Vector2(self.messageFrame.scale.x-textborder, self.messageFrame.scale.y-textborder))):center()
 	
 	self.manifestFrame = self.frame:add(Frame(Vector2(), Vector2(self.frame.scale.x-(2*offX), 190)), Vector2(offX, 260))
 	self.manifestFrame.colours.default = planetButton.defaultOptions.colours.default
+	
+	self.manifestFrame.name = "Manifest Frame"
 	
 	self.manifestText = self.manifestFrame:add(planetTextBox(("test "*30), nil, Vector2(self.manifestFrame.scale.x-textborder,
 	self.manifestFrame.scale.y-textborder))):center()
@@ -138,6 +147,7 @@ function planet:draw()
 end
 
 function planet:update(dt)
+	print("Updating planet state")
 	self.gui:update(dt)
 end
 

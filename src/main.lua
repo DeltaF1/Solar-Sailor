@@ -186,27 +186,23 @@ function love.load()
 end
 
 function love.update(dt)
-	
+	local _state = STATE
 	--main updating
-	if(timers[STATE]) then
-		timers[STATE]:update(dt)
+	if(timers[_state]) then
+		timers[_state]:update(dt)
 	end
 	
-	if lerpers[STATE] then
-		lerpers[STATE]:update(dt)
+	if lerpers[_state] then
+		lerpers[_state]:update(dt)
 	end
 	
-	
-	
-	if states[STATE].update then
-		states[STATE]:update(dt)
+	if states[_state].update then
+		states[_state]:update(dt)
 	end
 	
-	
-	
-	if states[STATE].gui then
+	if states[_state].gui then
 		local x,y = love.mouse.getPosition()
-		states[STATE].gui:mousehover(x,y)
+		states[_state].gui:mousehover(x,y)
 	end
 	
 	--loveframes.update(dt)

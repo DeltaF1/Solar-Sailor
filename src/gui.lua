@@ -85,7 +85,7 @@ end
 
 function Gui:mousehover(x, y)
 	if not self.rect then
-		print(libs.ser(getmetatable(self)))
+		print(self.name)
 	end
 	if self.rect:contains(Vector2:new(x,y)) then
 

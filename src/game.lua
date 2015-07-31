@@ -176,6 +176,10 @@ function game:load()
 	self.secSize = 10
 	self.orbitSize = 100
 	self.densityFactor = 10
+	self.radarRadius = 1500
+	self.marker = love.graphics.newImage("assets/img/marker.png")
+	
+	center = Vector2(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
 	
 	player:setWeight()
 	
@@ -221,6 +225,9 @@ function game:drawPlanets(l,t,w,h)
 		  planet.pos.y < t + h + planet.radius and planet.pos.y > t - planet.radius then
 		  planet:draw()
 		  planetsDrawn = planetsDrawn + 1
+		  planet.drawn = true
+		else
+			planet.drawn = false
 		end
 	end
 end
@@ -339,9 +346,33 @@ function game:draw()
 	player:draw()
 	end)
 	
+	-- Draw radar HUD
+	local seen = {}
+	local sector = self:sector((player.pos-sun.pos):len())
+	for i = -3, 3 do
+		local planets = self.sectors[sector+i]
+		if planets then
+			for k, planet in ipairs(planets) do
+				delta = planet.pos - player.pos
+				if delta:len() <= self.radarRadius then
+					table.insert(seen, planet)
+				end
+			end
+		end
+	end
+	
+	for k, planet in ipairs(seen) do
+		if not planet.drawn then
+			local dir = planet.pos - player.pos
+			local pos = center+(dir:norm()*200)
+			love.graphics.draw(self.marker, pos.x, pos.y, math.atan2(dir.y, dir.x))
+		end
+	end
+	
 	-- Draw gui
 	self.gui:draw()
 	
+	-- Draw debug
 	love.graphics.print("FPS:"+fps, 0, 50)
 	love.graphics.print("#asteroids:"+#self.asteroids.items, 0, 75)
 	love.graphics.print("#planets:"+#self.planets, 0, 100)
