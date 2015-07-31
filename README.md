@@ -18,12 +18,12 @@ jam of July 2015, theme "Solar". It's set in space. Yup.
   - [x] Collision
   - [ ] Asteroid spawning
   - [x] Planet destruction
-  - [ ] Fuel consumption
-  - [ ] take weight into account with thrusting
+  - [x] Fuel consumption
+  - [x] take weight into account with thrusting
 - [ ] Graphics
   - [x] GUI system
   - [x] Planet HUD Markers
-  - [ ] Ship's manifest
+  - [x] Ship's manifest (still needs some formatting)
 - [ ] Menus
   - [ ] Ship naming screen
   - [ ] Our own splash
