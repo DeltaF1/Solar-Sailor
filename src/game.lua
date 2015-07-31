@@ -206,6 +206,7 @@ function game:load()
 	self.orbitSize = 100
 	self.densityFactor = 10
 	
+	self.genDistance = 6
 	self.renderDistance = 5
 	
 	self.radarRadius = 5000
@@ -280,6 +281,7 @@ function game:addQuestPlanet(origin, distance)
 	while self.sectors[sector] do
 		sector = sector + 1
 	end
+	
 	if not quests[sector] then quests[sector] = {} end
 	
 	q=copy(origin.quest.send)
@@ -370,9 +372,8 @@ function game:update(dt)
 	dis = dir:len()
 	
 	local sec = self:sector(dis)
-	local drawDistance = 4
 	
-	for i = -drawDistance, drawDistance do
+	for i = -self.genDistance, genDistance do
 		local sector = sec + i
 		self:generateSector(sector)
 		
