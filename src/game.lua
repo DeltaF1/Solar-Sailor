@@ -49,7 +49,7 @@ function Asteroid:draw()
 end
 
 function Asteroid:onCollide(obj)
-	asteroids:remove(self)
+	game.asteroids:remove(self)
 end
 
 Planet = Class{}
@@ -71,7 +71,7 @@ function Planet:draw()
 	love.graphics.print(self.name, self.pos.x, self.pos.y - (self.radius+25))
 end
 
-function onCollide(obj)
+function Planet:onCollide(obj)
 	if obj == player then
 		EndState("planet", self)
 	end
