@@ -1,6 +1,7 @@
 local camera = libs["gamera"]
 local markov = require "markov"
 planet_chain = require "planets_chain"
+name_chain = require "names_chain"
 
 local game = {}
 
@@ -98,6 +99,16 @@ function game:removePlanet(p)
 	table.remove2(t, p)
 	
 	table.remove2(player.quests, p)
+	
+	-- Add to death toll
+	if p.quest then
+		if p.quest.receive then
+			game.death[p.name] = p.quest.receive.passengers
+		elseif p.quest.survivors then
+			game.death[p.name] = p.quest.survivors.passengers
+		end
+	end
+	print(Tserial.pack(game.death))
 end
 
 function sun:onCollide(obj)
@@ -105,6 +116,18 @@ function sun:onCollide(obj)
 		print("Collided with planet")
 		game:removePlanet(obj)
 	end
+end
+
+function game:eulogy()
+	local s = ""
+	for k, v in pairs(self.death) do
+		s = s ..k..":".."\n"
+		for i = 1,v do
+			s = s.."  "..markov.generate(name_chain, math.random(5,11)).."\n"
+		end
+	end
+	
+	return s
 end
 
 player = Entity(Vector2.rand()*500)
@@ -196,7 +219,11 @@ function player:draw()
 	love.graphics.point(self.pos.x, self.pos.y)
 end
 
-
+function player:onCollide(obj)
+	if obj == sun then
+		--EndState("death")
+	end
+end
 
 function game:load()
 	self.asteroids = List()
@@ -211,6 +238,8 @@ function game:load()
 	
 	self.radarRadius = 5000
 	self.marker = love.graphics.newImage("assets/img/marker.png")
+	
+	self.death = {}
 	
 	center = Vector2(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
 	
@@ -227,7 +256,12 @@ function game:load()
 	
 	self.camSize = 300000
 	self.camera = camera.new(0,0,1,1)
+	
+	
+	
 	self:updateCamera()
+	
+	self.camera:setScale(self.camera:getScale()*(1/2))
 end
 
 function game:onStart(p)
@@ -322,9 +356,9 @@ function game:generateSector(sector)
 								colour = {255,0,0}
 								--name=markov.generate(planet_chain, math.random(4,9))
 								
-							elseif math.random() < 0.2 then
+							elseif math.random() < 0.4 then
 								quest = {survivors = {passengers = math.random(10,50)}}
-								colour = {0,255,255}
+								--colour = {0,255,255}
 							end
 						end
 					
@@ -333,9 +367,10 @@ function game:generateSector(sector)
 					table.insert(self.sectors[sector], p)
 					if p.quest then
 						if p.quest.send then
-							
+							p.quest.send.passengers = math.random(0, 11)
 						elseif p.quest.receive then
 							table.insert(player.quests, p)
+							p.quest.receive.passengers = math.random(10,20)
 						elseif p.quest.survivors then
 							p.quest.survivors.name = p.name
 						end
@@ -373,7 +408,7 @@ function game:update(dt)
 	
 	local sec = self:sector(dis)
 	
-	for i = -self.genDistance, genDistance do
+	for i = -self.genDistance, self.genDistance do
 		local sector = sec + i
 		self:generateSector(sector)
 		
@@ -489,6 +524,11 @@ function game:mousepressed(x, y, button)
 	end
 end
 
+function game:keypressed(key)
+	if key == "e" then
+		print(self:eulogy())
+	end
+end
 
 --[[
 function circleCollision(a, b)
@@ -535,8 +575,11 @@ function game:gravity(affectedByGravity, constantAffectors, dt)
 		for i = -1, 1 do
 			table.merge(gravityAffectors, self.sectors[sec+i] or {})
 		end
-			sector = sec
+		sector = sec
 	end
+	
+	table.merge(gravityAffectors, self.sectors[self:sector(sun.radius)]or {})
+	
 	game:collisions(affectedByGravity, gravityAffectors)
 	fps = 1/dt
 end

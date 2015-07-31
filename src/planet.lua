@@ -203,6 +203,10 @@ function planet:onStart(p)
 		-- Exit button
 		q = "survivors"
 	end
+	
+	local manifestString =  ""
+	local manifest = {}
+	
 	if q then
 		s = p.text or (messages.get(q))
 		
@@ -215,12 +219,22 @@ function planet:onStart(p)
 		
 		if p.quest then
 			quantity = p.quest[q].quantity
-			
+					
 			if quantity then
-				self.manifestText:setText(p.quest[q].resource+(quantity > 0 and "+" or "-" )+math.abs(quantity))
+				manifest[p.quest[q].resource]=(quantity > 0 and "+" or "-" )+math.abs(quantity)
 			end
+			manifest["passengers"] = "+"+p.quest[q].passengers
 		end
+		
 	end
+	
+	for k,v in pairs(player.resources) do
+		manifestString = manifestString..k..": "..v
+		if manifest[k] then manifestString = manifestString .. manifest[k] end
+		manifestString = manifestString.."@n"
+	end
+	
+	self.manifestText:setText(manifestString)
 	
 	self.messageText:setText(s)
 	
