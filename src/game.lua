@@ -197,7 +197,7 @@ function game:onStart(p)
 	if p then
 		delta = p.pos - player.pos
 		player.pos = p.pos + delta:norm()*(p.radius+(player.radius*2)+10)
-		player.vel = delta:norm()*150*player.vel:len()
+		--player.vel = delta:norm()*150*player.vel:len()
 	end
 end
 
@@ -261,14 +261,16 @@ function game:generateSector(sector)
 								break
 							end
 						end
-					else
-						if math.random() < 0.1 then
-							quest = {send={name=markov.generate(planet_chain, math.random(4,9)),resource="fuel",quantity=math.random(1,4)}}
-							colour = {255,0,0}
-							--name=markov.generate(planet_chain, math.random(4,9))
-							
-						end
+						
 					end
+					if not name then
+							if math.random() < 0.1 then
+								quest = {send={name=markov.generate(planet_chain, math.random(4,9)),resource="fuel",quantity=math.random(1,4)}}
+								colour = {255,0,0}
+								--name=markov.generate(planet_chain, math.random(4,9))
+								
+							end
+						end
 					
 					local p = (Planet{pos=pos, radius=math.random(50,60), gravityForce=math.random(10000,1000000), name=name, colour=colour, quest=quest})
 					table.insert(self.planets, p)
