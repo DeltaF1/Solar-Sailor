@@ -1,20 +1,36 @@
 local messages = {}
 
 
-messages.adj = {" lush", " beautiful", " harsh"}
-messages.noun = {"alien life", "strange wonders"}
+messages.replaces = {
+	adj = {"lush", "beautiful", "harsh"},
+	noun = {"alien life", "strange wonders", "breathtaking landscapes"},
+	posverbed = {"renowned", "applauded", "recognized", "celebrated"},
+	god = {"God", "Allah", "the Lord","Jehova"},
+}
 
-messages.desc = {"{name} is a{adj} world, full of {noun}.","A{adj} world, {name} is famous for its {noun}",}
+messages.desc = {"{name} is a {adj} world, full of {noun}.","A {adj} world, {name} is famous for its {noun}","{name} is {posverbed} the galaxy over for its {noun}."}
 
-messages.send = {"The planet {name} is in desperate need of some {resource}!"}
+function messages.get(category)
+	local s = randomSelect(messages[category])
+	local t = {}
+	for k, v in pairs(messages.replaces) do
+		t[k] = randomSelect(v)
+	end
+	return string.replace(s, t)
+end
 
-messages.receive = {"We on {name} thank you for the much needed {resource} from {origin}"}
+messages.send = {"The planet {name} is in desperate need of some {resource}!","We've just received word from {name} that they need some {resource}. If they don't get some quick, they might not make it."}
 
-messages.survivors = {"Thank god you came by, we thought we were going to die with {name}!"}
+messages.receive = {"We on {name} thank you for the much needed {resource} from {origin}","It's a good thing our message made it through to {origin}, we had almost given up","{origin} sent this? Never thought we'd be depending on them for survival..."}
+
+messages.survivors = {"Thank {god} you came by, we thought we were going to die with {name}!","Most of us decided to stay on {name} till the end, but ", "After sending several messages on the IGSO-3398 standard hailing frequencies, a hoarse voice answers. \"Hello? Thank {god} {name} won't be our grave.\""}
+
+messages.none = {"You hear nothing but the dull hiss of the subspace radio.", "The main broadcast station seems to be sending out an evacuation message on loop. No one responds to your hailing.","The only sign of life on {name} is the twisted hulk of a space station in orbit."}
 
 local colours = {
 	name = {255,20,0},
-	resource = {0,255,50}
+	resource = {0,50,200},
+	origin = {0,200,50}
 }
 
 f = function(str)
@@ -28,7 +44,10 @@ f = function(str)
 	end
 end
 
-for _, name in ipairs({"send", "receive", "survivors"}) do
+--local toBeColoured = {"send", "receive", "survivors","none"}
+toBeColoured = {"send"}
+
+for _, name in ipairs(toBeColoured) do
 	
 	for i, msg in ipairs(messages[name]) do
 		messages[name][i] = "["..msg:gsub("({%a+})", f).."](colour)" 

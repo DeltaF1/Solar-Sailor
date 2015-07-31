@@ -91,7 +91,7 @@ function planet:load()
 		
 		local p = self.planet
 		
-		if self.q then
+		if self.q and p.quest then
 			if p.quest.send then
 				states["game"]:addQuestPlanet(p, 7)
 			end
@@ -99,6 +99,8 @@ function planet:load()
 			if p.quest.send or p.quest.receive then
 				player:addResources(p.quest[self.q].resource, p.quest[self.q].quantity)
 			end
+			
+			player:addResources("passengers", p.quest[self.q].passengers or 0)
 		end
 		
 		p.quest = nil
@@ -166,7 +168,7 @@ function planet:onStart(p)
 	self.nameLabel:setText(p.name)
 	self.sectorLabel:setText("Sector: "+states["game"]:sector((p.pos-sun.pos):len()))
 	
-	local s = p.desc or string.replace(randomSelect(messages.desc), {name=p.name,adj=randomSelect(messages.adj),noun=randomSelect(messages.noun)})
+	local s = p.desc or string.replace(messages.get "desc", {name=p.name})
 	self.descLabel:setText(s)
 	p.desc = s
 	local s = ""
@@ -175,9 +177,9 @@ function planet:onStart(p)
 	if not p.quest then
 		-- Some flavor text?
 		-- Exit button
-		s = "NO DATA"
+		q = "none"
 		
-		self.manifestText:setText(" ")
+		self.manifestText:setText("")
 	elseif p.quest.send then
 		-- 'send' flavor text
 		-- List current weight etc.
@@ -202,13 +204,22 @@ function planet:onStart(p)
 		q = "survivors"
 	end
 	if q then
-		s = p.text or randomSelect(messages[q])
-
-		s = string.replace(s, p.quest[q])
+		s = p.text or (messages.get(q))
 		
-		quantity = p.quest[q].quantity
+		if p.quest then 
+			t = p.quest[q]
+		else
+			t = {name=p.name}
+		end
+		s = string.replace(s, t)
 		
-		self.manifestText:setText(p.quest[q].resource+(quantity > 0 and "+" or "-" )+math.abs(quantity))
+		if p.quest then
+			quantity = p.quest[q].quantity
+			
+			if quantity then
+				self.manifestText:setText(p.quest[q].resource+(quantity > 0 and "+" or "-" )+math.abs(quantity))
+			end
+		end
 	end
 	
 	self.messageText:setText(s)

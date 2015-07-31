@@ -259,7 +259,7 @@ function string.replace(s, t, sep)
 	return s:gsub("("..sep[1].."%a+"..sep[2]..")", f):gsub("\\"..sep[2], sep[2])
 end
 
-function remove(t, rem)
+function table.remove2(t, rem)
 	for i = #t, 1, -1 do
 		if t[i] == rem or contains(rem, t[i]) then
 			table.remove(t, i)

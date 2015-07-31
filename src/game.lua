@@ -40,7 +40,7 @@ Asteroid = Class{__includes = Entity}
 function Asteroid:init(pos, vel, accel)
 	Entity.init(self, pos, vel, accel)
 	
-	self.radius = 10
+	self.radius = 20
 end
 
 function Asteroid:draw()
@@ -89,6 +89,22 @@ function sun:draw()
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
 end
 
+function game:removePlanet(p)
+	table.remove2(self.planets, p)
+	
+	local t = self.sectors[self:sector((p.pos-sun.pos):len())]
+	table.remove2(t, p)
+	
+	table.remove2(player.quests, p)
+end
+
+function sun:onCollide(obj)
+	if getmetatable(obj) == Planet then
+		print("Collided with planet")
+		game:removePlanet(obj)
+	end
+end
+
 player = Entity(Vector2.rand()*500)
 player.dir = Vector2()
 player.rot = 0
@@ -97,7 +113,7 @@ player.rotSpeed = 4
 
 player.maxVel = 400
 
-player.radius = 5
+player.radius = 10
 
 weights = {fuel=100, passengers=0.1}
 
@@ -176,7 +192,7 @@ function game:load()
 	self.secSize = 10
 	self.orbitSize = 100
 	self.densityFactor = 10
-	self.radarRadius = 1500
+	self.radarRadius = 5000
 	self.marker = love.graphics.newImage("assets/img/marker.png")
 	
 	center = Vector2(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
@@ -276,6 +292,9 @@ function game:generateSector(sector)
 								colour = {255,0,0}
 								--name=markov.generate(planet_chain, math.random(4,9))
 								
+							elseif math.random() < 0.2 then
+								quest = {survivors = {passengers = math.random(10,50)}}
+								colour = {0,255,255}
 							end
 						end
 					
@@ -285,7 +304,12 @@ function game:generateSector(sector)
 					if p.quest then
 						if p.quest.send then
 							
+						elseif p.quest.receive then
+							table.insert(player.quests, p)
+						elseif p.quest.survivors then
+							p.quest.survivors.name = p.name
 						end
+						
 					end
 				end
 			end
@@ -361,10 +385,28 @@ function game:draw()
 		end
 	end
 	
+	table.merge(seen, player.quests)
+	
 	for k, planet in ipairs(seen) do
 		if not planet.drawn then
+
+			
+			
+			
 			local dir = planet.pos - player.pos
+			local dis = dir:len()
 			local pos = center+(dir:norm()*200)
+			local a = remap(dis, self.radarRadius, 500, 100, 255, true)
+			local r,g,b = 255,255,255
+			
+			if planet.quest then
+				if planet.quest.send then
+					g,b = 0,0
+				elseif planet.quest.receive then
+					r,b = 0,0
+				end
+			end
+			love.graphics.setColor(r,g,b,a)
 			love.graphics.draw(self.marker, pos.x, pos.y, math.atan2(dir.y, dir.x))
 		end
 	end
