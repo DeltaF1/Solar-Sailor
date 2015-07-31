@@ -8,7 +8,7 @@ messages.replaces = {
 	god = {"God", "Allah", "the Lord","Jehova"},
 }
 
-messages.desc = {"{name} is a {adj} world, full of {noun}.","A {adj} world, {name} is famous for its {noun}","{name} is {posverbed} the galaxy over for its {noun}."}
+
 
 function messages.get(category)
 	local s = randomSelect(messages[category])
@@ -18,14 +18,36 @@ function messages.get(category)
 	end
 	return string.replace(s, t)
 end
+messages.desc =
+{
+	"{name} is a {adj} world, full of {noun}.",
+	"A {adj} world, {name} is famous for its {noun}",
+	"{name} is {posverbed} the galaxy over for its {noun}."
+}
 
-messages.send = {"The planet {name} is in desperate need of some {resource}!","We've just received word from {name} that they need some {resource}. If they don't get some quick, they might not make it."}
+messages.send =
+{
+	"The planet {name} is in desperate need of some {resource}!",
+	"We've just received word from {name} that they need some {resource}. If they don't get some quick, they might not make it."
+}
 
-messages.receive = {"We on {name} thank you for the much needed {resource} from {origin}","It's a good thing our message made it through to {origin}, we had almost given up","{origin} sent this? Never thought we'd be depending on them for survival..."}
+messages.receive =
+{
+	"We on {name} thank you for the much needed {resource} from {origin}",
+	"It's a good thing our message made it through to {origin}, we had almost given up",
+	"{origin} sent this? Never thought we'd be depending on them for survival..."
+}
 
-messages.survivors = {"Thank {god} you came by, we thought we were going to die with {name}!","Most of us decided to stay on {name} till the end, but a few of us have families to take care of.", "After sending several messages on the IGSO-3398 standard hailing frequencies, a hoarse voice answers. \"Hello? Thank {god} {name} won't be our grave.\"",""}
+messages.survivors =
+{
+	"Thank {god} you came by, we thought we were going to die with {name}!",
+	"Most of us decided to stay on {name} till the end, but a few of us have decided to explore life elsewhere in the galaxy. Do you have room for a few more?",
+	"After sending several messages on the IGSO-3398 standard hailing frequencies, a hoarse voice answers. \"Hello? Thank {god} {name} won't be our grave.\"",
+	""
+}
 
-messages.none = {
+messages.none =
+{
 	"You hear nothing but the dull hiss of the subspace radio.", "The main broadcast station seems to be sending out an evacuation message on loop. No one responds to your hailing.",
 	"The only sign of life on {name} is the twisted hulk of a space station in orbit.",
 	"{name} doesn't seem to be emitting any radio signals. If there are people on the ground, they aren't hailing you."
