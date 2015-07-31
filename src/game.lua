@@ -522,7 +522,7 @@ function game:collisions(colliders1, colliders2)
 					print("No Radius")
 					return
 				end
-				if dis <= collider1.radius - collider2.radius then
+				if dis <= collider1.radius + collider2.radius then
 					if(collider1.onCollide) then
 						collider1:onCollide(collider2)
 					end
