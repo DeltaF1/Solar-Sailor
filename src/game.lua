@@ -205,6 +205,9 @@ function game:load()
 	self.secSize = 10
 	self.orbitSize = 100
 	self.densityFactor = 10
+	
+	self.renderDistance = 5
+	
 	self.radarRadius = 5000
 	self.marker = love.graphics.newImage("assets/img/marker.png")
 	
@@ -249,7 +252,14 @@ end
 
 function game:drawPlanets(l,t,w,h)
 	planetsDrawn = 0
-	for i, planet in ipairs(self.planets) do
+	
+	local planets = {}
+	local sector = self:sector((player.pos - sun.pos):len()) 
+	for i = -self.renderDistance, self.renderDistance do
+		table.merge(planets, self.sectors[sector+i] or {})
+	end
+	
+	for i, planet in ipairs(planets) do
 		if planet.pos.x < l+w+planet.radius and planet.pos.x > l - planet.radius and
 		  planet.pos.y < t + h + planet.radius and planet.pos.y > t - planet.radius then
 		  planet:draw()
@@ -266,7 +276,12 @@ function game:addQuestPlanet(origin, distance)
 	local angle = math.atan2(dir.y, dir.x)
 	
 	local sector = self:sector(dir:len()) + distance
+	-- Make sure it's not generated already
+	while self.sectors[sector] do
+		sector = sector + 1
+	end
 	if not quests[sector] then quests[sector] = {} end
+	
 	q=copy(origin.quest.send)
 	q.origin = origin.name
 	q.quantity = - q.quantity
@@ -527,8 +542,10 @@ end
 
 function game:collisions(colliders1, colliders2)
 	table.merge(colliders1, colliders2)
-	for i, collider1 in ipairs(colliders1) do
-		for x, collider2 in ipairs(colliders1) do
+	for i = 1,#colliders1-1 do
+		collider1 = colliders1[i]
+		for j = i+1, #colliders1 do
+			collider2 = colliders1[j]
 			if collider2 ~= collider1 then
 				local dis = (collider1.pos - collider2.pos):len()
 				if collider1.radius == nil or collider2.radius == nil then
