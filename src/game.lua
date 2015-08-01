@@ -238,6 +238,7 @@ function game:load()
 	
 	self.radarRadius = 5000
 	self.marker = love.graphics.newImage("assets/img/marker.png")
+	self.markerCenter = self.marker:getWidth()/2
 	
 	self.death = {}
 	
@@ -460,8 +461,13 @@ function game:draw()
 			local dir = planet.pos - player.pos
 			local dis = dir:len()
 			local pos = center+(dir:norm()*200)
-			local a = remap(dis, self.radarRadius, 500, 100, 255, true)
-			local r,g,b = 255,255,255
+			--local a = remap(dis, 500, self.radarRadius, 255, 0, true)
+
+			local scale = remap(dis, 500, self.radarRadius, 1.45, 1, true)
+			if scale >= 1.44 then scale = 1.5 end
+			print("scale = "..scale)
+			--scale = 1
+			local r,g,b,a = 255,255,255,100
 			
 			if planet.quest then
 				if planet.quest.send then
@@ -471,7 +477,7 @@ function game:draw()
 				end
 			end
 			love.graphics.setColor(r,g,b,a)
-			love.graphics.draw(self.marker, pos.x, pos.y, math.atan2(dir.y, dir.x))
+			love.graphics.draw(self.marker, pos.x, pos.y, math.atan2(dir.y, dir.x), scale, scale, self.markerCenter)
 		end
 	end
 	

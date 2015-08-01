@@ -47,14 +47,10 @@ end
 
 function remap(value, low1, high1, low2, high2, lock)
 	
-	if lock then 
-		
-		if value > high1 then
-			
-			value = high1
-			
-		end
-		
+	if lock then
+
+		value = math.max(low1, math.min(high1, value))
+
 	end
 	
 	return (value * ((high2-low2)/(high1-low1))) + low2

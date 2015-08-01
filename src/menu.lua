@@ -15,13 +15,13 @@ function menu:load()
 	  :center()
 	startbutton.texts.default="Start"
 	
-	local frame = self.frame:add(
+	--[[local frame = (
 		Frame(Vector2(0,-90), Vector2(250,100))
 		:centerX()
 	)
 	frame.colours.default = {0, 100, 30}
-	frame.startPos = frame.rPos:clone()
-	frame.offPos = frame.rPos + Vector2(0,90)
+	--frame.startPos = frame.rPos:clone()
+	--frame.offPos = frame.rPos + Vector2(0,90)
 	frame.onDefault = function(self)
 		print("entering frame.onDefault")
 		if self.transition then EndLerp(self.transition) end
@@ -51,8 +51,9 @@ function menu:load()
 	function otherFrame:show()
 		StartLerp(self.rPos, "x", self.rPos.x, self.rPos.x+100, 0.5)
 	end
-	
-	self.gui = List({self.frame, unpack(frame.children.items), unpack(self.frame.children.items)})
+	--]]
+	self.gui = List{self.frame}
+	self.gui:add(self.frame.children)
 	table.sort(self.gui.items,
 	function(i, j)
 		return (i.z or 1) < (j.z or 1)
