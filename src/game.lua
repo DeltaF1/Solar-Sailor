@@ -666,4 +666,10 @@ function game:collisions(colliders1, colliders2)
 	end
 end
 
+function parralax(layer1, layer2, layer3, parralaxfactor, layeroffset)
+	for i, img in ipairs(layer1) do
+		img.pos = player.pos * parallaxfactor;
+	end
+end
+
 return game
