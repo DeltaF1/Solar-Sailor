@@ -13,4 +13,6 @@ love.window.setMode(1024,768)
 -- Compatibility with some drivers/graphics cards
 love.graphics.setPointStyle("rough")
 
+love.graphics.setFilter("nearest", "nearest")
+
 return t

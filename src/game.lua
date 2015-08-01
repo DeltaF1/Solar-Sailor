@@ -44,6 +44,15 @@ function Asteroid:init(pos, vel, accel)
 	self.radius = 20
 end
 
+function Asteroid:update(dt)
+	Entity.update(self, dt)
+	
+	local dis = (self.pos - player.pos):len()
+	if dis >= game.asteroidRadius + game.asteroidBuffer then
+		game.asteroids:remove(self)
+	end
+end
+
 function Asteroid:draw()
 	love.graphics.setColor(100,100,100)
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 8)
@@ -51,6 +60,9 @@ end
 
 function Asteroid:onCollide(obj)
 	if getmetatable(obj) ~= Asteroid then
+		if obj == player then
+			player:damage(1)
+		end
 		game.asteroids:remove(self)
 	end
 end
@@ -227,6 +239,10 @@ end
 
 function game:load()
 	self.asteroids = List()
+	
+	asteroidRate = 2
+	asteroidDt = asteroidRate
+	
 	self.planets = {}
 	self.sectors = {[0]={},[1] = {}}
 	self.secSize = 10
@@ -263,6 +279,11 @@ function game:load()
 	self:updateCamera()
 	
 	self.camera:setScale(self.camera:getScale()*(1/2))
+	self.camera:setPosition(player.pos.x, player.pos.y)
+	
+	local l,t = self.camera:getVisible()
+	self.asteroidRadius = math.max(player.pos.x-l, player.pos.y-t) + 100
+	self.asteroidBuffer = 200
 end
 
 function game:onStart(p)
@@ -393,8 +414,15 @@ end
 dubgdraw = false
 function game:update(dt)
 	-- FPS limiter
-	dt = math.min(dt, 0.07)
+	dt = math.min(dt, 1/3)
 	sun.radius = sun.radius + sunSpeed * dt
+	
+	asteroidDt = asteroidDt + dt
+	
+	if asteroidDt >= asteroidRate then
+		self.asteroids:add(Asteroid(player.pos+(Vector2:rand()*self.asteroidRadius), Vector2:rand()*25))
+		asteroidDt = 0
+	end
 	
 	local affected = {player, unpack(self.asteroids.items)}
 	--affected = {player}
@@ -465,7 +493,7 @@ function game:draw()
 
 			local scale = remap(dis, 500, self.radarRadius, 1.45, 1, true)
 			if scale >= 1.44 then scale = 1.5 end
-			print("scale = "..scale)
+			--print("scale = "..scale)
 			--scale = 1
 			local r,g,b,a = 255,255,255,100
 			

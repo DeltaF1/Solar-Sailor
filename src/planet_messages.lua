@@ -36,7 +36,7 @@ messages.receive =
 	'"It\'s a good thing our message made it through to {origin}, we had almost given up"',
 	'"{origin} sent this? Never thought we\'d be depending on them for survival..."',
 	'"This {resource} should let us get up from the surface to you."',
-	"The smoking wreck of a cruiser hails you. \"I don't think we can make it without some {resource} got any?\"",
+	"The smoking wreck of a cruiser hails you. \"I don't think we can make it without some {resource}. Got any?\"",
 }
 
 messages.survivors =
