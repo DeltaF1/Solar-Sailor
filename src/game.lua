@@ -142,19 +142,33 @@ function game:eulogy()
 	return s
 end
 
+
+
 player = Entity(Vector2.rand()*500)
 player.dir = Vector2()
 player.rot = 0
 
 player.rotSpeed = 4
 
+player.lives = 3
+
 player.maxVel = 400
 
 player.radius = 10
 
-weights = {fuel=100, passengers=0.1}
 
+
+resources = {"fuel", "spare parts", "rations"}
+
+
+
+weights = {fuel=100, passengers=0.1}
 player.resources = {fuel=10, passengers=0}
+
+for k, v in pairs(resources) do
+	if not player.resources[v] then player.resources[v] = 0 end
+	if not weights[v] then weights[v] = 1 end
+end
 
 player.burnRate = 10
 player.burnDt = 0
@@ -237,6 +251,8 @@ function player:onCollide(obj)
 	end
 end
 
+function player:damage(dmg)
+end
 function game:load()
 	self.asteroids = List()
 	
@@ -253,6 +269,8 @@ function game:load()
 	self.renderDistance = 5
 	
 	self.radarRadius = 5000
+	self.radarDrawRadius = 200
+	
 	self.marker = love.graphics.newImage("assets/img/marker.png")
 	self.markerCenter = self.marker:getWidth()/2
 	
@@ -374,7 +392,7 @@ function game:generateSector(sector)
 					end
 					if not name then
 							if math.random() < 0.1 then
-								quest = {send={name=markov.generate(planet_chain, math.random(4,9)),resource="fuel",quantity=math.random(1,4)}}
+								quest = {send={name=markov.generate(planet_chain, math.random(4,9)),resource=randomSelect(resources),quantity=math.random(1,4)}}
 								colour = {255,0,0}
 								--name=markov.generate(planet_chain, math.random(4,9))
 								
@@ -389,7 +407,7 @@ function game:generateSector(sector)
 					table.insert(self.sectors[sector], p)
 					if p.quest then
 						if p.quest.send then
-							p.quest.send.passengers = math.random(0, 11)
+							p.quest.send.passengers = math.random(1, 11)
 						elseif p.quest.receive then
 							table.insert(player.quests, p)
 							p.quest.receive.passengers = math.random(10,20)
@@ -488,7 +506,7 @@ function game:draw()
 			
 			local dir = planet.pos - player.pos
 			local dis = dir:len()
-			local pos = center+(dir:norm()*200)
+			local pos = center+(dir:norm()*self.radarDrawRadius)
 			--local a = remap(dis, 500, self.radarRadius, 255, 0, true)
 
 			local scale = remap(dis, 500, self.radarRadius, 1.45, 1, true)
@@ -561,6 +579,10 @@ end
 function game:keypressed(key)
 	if key == "e" then
 		print(self:eulogy())
+	elseif key == "-" then
+		self.radarDrawRadius = self.radarDrawRadius - 10
+	elseif key == "=" then
+		self.radarDrawRadius = self.radarDrawRadius + 10
 	end
 end
 

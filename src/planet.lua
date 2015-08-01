@@ -245,7 +245,11 @@ function planet:onStart(p)
 end
 
 function planet:keypressed(key)
-	if key == "escape" then EndState("game") end
+	if key == "escape" then
+		self.declineButton.onClick()
+	elseif key == "return" then
+		self.acceptButton.onClick()
+	end
 end
 
 return planet

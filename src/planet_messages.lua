@@ -1,7 +1,10 @@
 local messages = {}
 
 messages.replaces = {
-	adj = {"lush", "beautiful", "harsh",""},
+	adj = {"lush", "beautiful",},
+	negadj = {"harsh","terrible"},
+	negemotion = {"terror", "fear"},
+	posemotion={"hope","trust"},
 	noun = {"alien life", "strange wonders", "breathtaking landscapes","sweet song"},
 	posverbed = {"renowned", "applauded", "recognized", "celebrated"},
 	god = {"God", "Allah", "the Lord","Jehova"},
@@ -20,7 +23,9 @@ messages.desc =
 {
 	"{name} is a {adj} world, full of {noun}.",
 	"A {adj} world, {name} is famous for its {noun}",
-	"{name} is {posverbed} the galaxy over for its {noun}."
+	"{name} is {posverbed} the galaxy over for its {noun}.",
+	("Full of {negadj} {noun}, {name} was once a beacon of {negemotion} for the galaxy."),
+	("Full of {adj} {noun}, {name} was once a beacon of {posemotion} for the galaxy."),
 }
 
 messages.send =
@@ -45,7 +50,6 @@ messages.survivors =
 	"Most of us decided to stay on {name} till the end, but a few of us have decided to explore life elsewhere in the galaxy. Do you have room for a few more?",
 	"After sending several messages on the IGSO-3398 standard hailing frequencies, a hoarse voice answers. \"Hello? Thank {god} {name} won't be our grave.\"",
 	"\"We only have a few shuttles left. We're sending as many as we can, but we need your help to bring the rest.\"",
-	""
 }
 
 messages.none =
@@ -53,7 +57,8 @@ messages.none =
 	"You hear nothing but the dull hiss of the subspace radio.", "The main broadcast station seems to be sending out an evacuation message on loop. No one responds to your hailing.",
 	"The only sign of life on {name} is the twisted hulk of a space station in orbit.",
 	"{name} doesn't seem to be emitting any radio signals. If there are people on the ground, they aren't hailing you.",
-	"A {name}ian song starts playing from the subspace radio, the swan song of a dying world."
+	"A {name}ian song starts playing from the subspace radio, the swan song of a dying world.",
+	"An eerie silence greets your ears.",
 }
 
 local colours = {
