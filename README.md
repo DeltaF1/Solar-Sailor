@@ -13,10 +13,10 @@ jam of July 2015, theme "Solar". It's set in space. Yup.
   - [x] HUD marker
   - [x] Send/receive
   - [x] "Survivors"
-- [ ] Physics
+- [x] Physics
   - [x] Gravity
   - [x] Collision
-  - [ ] Asteroid spawning
+  - [x] Asteroid spawning
   - [x] Planet destruction
   - [x] Fuel consumption
   - [x] take weight into account with thrusting
@@ -24,6 +24,8 @@ jam of July 2015, theme "Solar". It's set in space. Yup.
   - [x] GUI system
   - [x] Planet HUD Markers
   - [x] Ship's manifest (still needs some formatting)
+  - [ ] Resource list
+  - [ ] Sun marker
 - [ ] Menus
   - [ ] Ship naming screen
   - [ ] Our own splash
