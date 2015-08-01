@@ -26,7 +26,8 @@ messages.desc =
 messages.send =
 {
 	"The planet {name} is in desperate need of some {resource}!",
-	"We've just received word from {name} that they need some {resource}. If they don't get some quick, they might not make it."
+	"We've just received word from {name} that they need some {resource}. If they don't get some quick, they might not make it.",
+	"The planets surface appears to be empty, but a passing cruiser hails you. \"We have some extra {resource} that could be better spent on {name}. Could you deliver it?\""
 }
 
 messages.receive =
@@ -34,7 +35,8 @@ messages.receive =
 	'"We on {name} thank you for the much needed {resource} from {origin}"',
 	'"It\'s a good thing our message made it through to {origin}, we had almost given up"',
 	'"{origin} sent this? Never thought we\'d be depending on them for survival..."',
-	'"This {resource} should let us get up from the surface to you."'
+	'"This {resource} should let us get up from the surface to you."',
+	"The smoking wreck of a cruiser hails you. \"I don't think we can make it without some {resource} got any?\"",
 }
 
 messages.survivors =
@@ -42,7 +44,8 @@ messages.survivors =
 	"Thank {god} you came by, we thought we were going to die with {name}!",
 	"Most of us decided to stay on {name} till the end, but a few of us have decided to explore life elsewhere in the galaxy. Do you have room for a few more?",
 	"After sending several messages on the IGSO-3398 standard hailing frequencies, a hoarse voice answers. \"Hello? Thank {god} {name} won't be our grave.\"",
-	"\"We only have a few shuttles left. We're sending as many as we can, but we need your help to bring the rest.\""
+	"\"We only have a few shuttles left. We're sending as many as we can, but we need your help to bring the rest.\"",
+	""
 }
 
 messages.none =
