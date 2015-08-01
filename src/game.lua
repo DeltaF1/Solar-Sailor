@@ -280,7 +280,9 @@ function game:load()
 	
 	player:setWeight()
 	
-	sunSpeed = 40
+	sunSpeed = 200
+	
+	player.pos = Vector2:rand() * (sun.radius+(sunSpeed*3))
 	
 	quests = {}
 	QUEST_OFF = math.rad(15)
@@ -438,7 +440,7 @@ function game:update(dt)
 	asteroidDt = asteroidDt + dt
 	
 	if asteroidDt >= asteroidRate then
-		self.asteroids:add(Asteroid(player.pos+(Vector2:rand()*self.asteroidRadius), Vector2:rand()*25))
+		self.asteroids:add(Asteroid(player.pos+(Vector2:rand()*self.asteroidRadius), player.vel+(Vector2:rand()*25)))
 		asteroidDt = 0
 	end
 	
