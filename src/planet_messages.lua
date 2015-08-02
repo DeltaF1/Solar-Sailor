@@ -63,13 +63,12 @@ messages.none =
 
 local colours = {
 	name = {255,20,0},
-	resource = {0,50,200},
-	origin = {0,200,50}
+	--resource = {0,50,200},
+	--origin = {0,200,50}
 }
 
 f = function(str)
 	local k = str:sub(2,#str-1)
-	print("k = "..k)
 	if colours[k] then
 		local c = colours[k]
 		return "["..str.."](colour: "..c[1]..","..c[2]..","..c[3]..")"

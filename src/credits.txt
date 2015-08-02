@@ -1,0 +1,14 @@
+credits = "
+Data for Markov Chains
+Planet Names - Wikipedia
+Place Names - PCG Wiki
+First Names - US Census
+Images
+Twitter Icon - TyTy21
+Code
+Serialization - ser.lua
+Serialization - Tserial
+Camera - gamera
+Class - hump.class
+
+"

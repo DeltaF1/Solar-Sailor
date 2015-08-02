@@ -15,45 +15,39 @@ function menu:load()
 	  :center()
 	startbutton.texts.default="Start"
 	
-	--[[local frame = (
-		Frame(Vector2(0,-90), Vector2(250,100))
-		:centerX()
+	local socialFrame = self.frame:add(
+		Frame(Vector2(), Vector2(150,200))
 	)
-	frame.colours.default = {0, 100, 30}
-	--frame.startPos = frame.rPos:clone()
-	--frame.offPos = frame.rPos + Vector2(0,90)
-	frame.onDefault = function(self)
+	socialFrame.rPos.x = self.frame.scale.x - 30
+	socialFrame:centerY()
+	socialFrame.colours.default = {0, 100, 30}
+	socialFrame.startPos = socialFrame.rPos:clone()
+	socialFrame.offPos = socialFrame.rPos - Vector2(90,0)
+	socialFrame.img = love.graphics.newImage("assets/img/social_tab.png")
+	function socialFrame:draw()
+		love.graphics.draw(self.img, self.pos.x, self.pos.y)
+	end
+	
+	local socialFadeTime = 0.2
+	
+	socialFrame.onDefault = function(self)
 		print("entering frame.onDefault")
 		if self.transition then EndLerp(self.transition) end
 	
-		self.transition = StartLerp(self.rPos, "y", self.rPos.y, self.startPos.y, 0.5)
+		self.transition = StartLerp(self.rPos, "x", self.rPos.x, self.startPos.x, socialFadeTime)
 	end
 	
-	frame.onOver = function(self)
+	socialFrame.onOver = function(self)
 		print("entering frame.onOver")
 		if self.transition then EndLerp(self.transition) end
 		
-		self.transition = StartLerp(self.rPos, "y", self.rPos.y, self.offPos.y, 0.5)
+		self.transition = StartLerp(self.rPos, "x", self.rPos.x, self.offPos.x, socialFadeTime)
 	end
 	
-	local showOtherButton = frame:add(Button(Vector2(), Vector2(50,20)), Vector2(0,10))
-	showOtherButton:centerX()
-	showOtherButton.texts = {}
-	showOtherButton.colours.default = {255,255,255}
-	showOtherButton.onClick = function()
-		otherFrame:show()
-	end
-	otherFrame = self.frame:add(
-		Frame(Vector2(-100,0), Vector2(100,100))
-	):centerY()
-	otherFrame.colours.default = {0,0,100}
-	
-	function otherFrame:show()
-		StartLerp(self.rPos, "x", self.rPos.x, self.rPos.x+100, 0.5)
-	end
 	--]]
 	self.gui = List{self.frame}
 	self.gui:add(self.frame.children)
+	self.gui:add(socialFrame.children)
 	table.sort(self.gui.items,
 	function(i, j)
 		return (i.z or 1) < (j.z or 1)

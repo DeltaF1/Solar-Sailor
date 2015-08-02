@@ -302,7 +302,7 @@ function game:load()
 	self.camera:setPosition(player.pos.x, player.pos.y)
 	
 	local l,t = self.camera:getVisible()
-	self.asteroidRadius = math.max(player.pos.x-l, player.pos.y-t) + 100
+	self.asteroidRadius = Vector2(player.pos.x-l, player.pos.y-t):len() + 100
 	self.asteroidBuffer = 200
 end
 
@@ -440,7 +440,7 @@ function game:update(dt)
 	asteroidDt = asteroidDt + dt
 	
 	if asteroidDt >= asteroidRate then
-		self.asteroids:add(Asteroid(player.pos+(Vector2:rand()*self.asteroidRadius), player.vel+(Vector2:rand()*25)))
+		self.asteroids:add(Asteroid(player.pos+(Vector2:rand()*self.asteroidRadius),(Vector2:rand()*50)))
 		asteroidDt = 0
 	end
 	

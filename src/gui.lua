@@ -193,7 +193,7 @@ end
 
 function Frame:centerX(element)
 	if not element then
-		self.pos.x = (love.window.getWidth()/2) - (self.scale.x/2)
+		Gui.centerX(self)
 		return self
 	else
 		element.rPos.x = (self.scale.x/2) - (element.scale.x/2)
@@ -203,7 +203,7 @@ end
 
 function Frame:centerY(element)
 	if not element then
-		self.pos.y = (love.window.getHeight()/2) - (self.scale.y/2)
+		Gui.centerY(self)
 		return self
 	else
 		element.rPos.y = (self.scale.y/2) - (element.scale.y/2)

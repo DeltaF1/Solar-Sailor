@@ -80,7 +80,7 @@ function planet:load()
 	self.frame.name = "Main Frame"
 	
 	self.nameLabel = self.frame:add(planetLabel("planet"), Vector2(10,10))
-	self.descLabel = self.frame:add(planetLabel("desc"), Vector2(10, 40))
+	self.descLabel = self.frame:add(planetTextBox("desc", nil, Vector2(self.frame.scale.x-20, 50)), Vector2(10, 40))
 	self.descLabel.font = love.graphics.newFont(12)
 	
 	self.sectorLabel = self.frame:add(planetLabel("Sector: "), Vector2(400, 10))
