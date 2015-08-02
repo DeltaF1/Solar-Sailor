@@ -96,7 +96,7 @@ end
 sun = {
 	pos = Vector2(),
 	radius = 100,
-	gravityForce = 1000000
+	gravityForce = 5000
 }
 
 function sun:draw()
@@ -404,7 +404,7 @@ function game:generateSector(sector)
 							end
 						end
 					
-					local p = (Planet{pos=pos, radius=math.random(50,60), gravityForce=math.random(10000,1000000), name=name, colour=colour, quest=quest})
+					local p = (Planet{pos=pos, radius=math.random(50,60), gravityForce=math.random(100,1000), name=name, colour=colour, quest=quest})
 					table.insert(self.planets, p)
 					table.insert(self.sectors[sector], p)
 					if p.quest then
@@ -617,10 +617,10 @@ function game:gravity(affectedByGravity, constantAffectors, dt)
 		for x, affector in ipairs(gravityAffectors) do
 			delta = affector.pos - affected.pos
 			dis = delta:len()
-			if dis < 1000 then
+			if dis < affector.radius+1000 then
 				dis = dis * dis
 			--falloff = (affector.radius / dis)
-				netForce = netForce + ((delta:norm() * affector.gravityForce)/dis)*dt*100
+				netForce = netForce + ((delta:norm() * affector.gravityForce)/dis)*100
 			end
 		end
 		affected:applyForce(netForce)
