@@ -18,12 +18,12 @@ function menu:load()
 	local socialFrame = self.frame:add(
 		Frame(Vector2(), Vector2(150,200))
 	)
-	socialFrame.rPos.x = self.frame.scale.x - 30
+	socialFrame.rPos.x = self.frame.scale.x - 48
 	socialFrame:centerY()
 	socialFrame.colours.default = {0, 100, 30}
 	socialFrame.startPos = socialFrame.rPos:clone()
 	socialFrame.offPos = socialFrame.rPos - Vector2(90,0)
-	socialFrame.img = love.graphics.newImage("assets/img/social_tab.png")
+	socialFrame.img = love.graphics.newImage("assets/img/social_tab2.png")
 	function socialFrame:draw()
 		love.graphics.draw(self.img, self.pos.x, self.pos.y)
 	end
