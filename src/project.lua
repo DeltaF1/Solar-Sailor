@@ -7,6 +7,8 @@ local t = {
 	states = {"game","menu","planet","console"}
 }
 
+love.filesystem.setIdentity("Solar_Sailor")
+
 -- 1024 x 768 should be supported by everyone
 love.window.setMode(1024,768)
 
