@@ -240,6 +240,7 @@ end
 
 function table.merge(a,b)
 	table.foreach(b,function(i,v)table.insert(a,v)end)
+	return a
 end
 
 function math.randomf(min, max)

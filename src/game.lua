@@ -124,9 +124,11 @@ function game:removePlanet(p)
 end
 
 function sun:onCollide(obj)
-	if getmetatable(obj) == Planet then
+	if obj == player then
+		EndState("death", "sun")
+	elseif getmetatable(obj) == Planet then
 		print("Collided with planet")
-		game:removePlanet(obj)
+		game:removePlanet(obj)	
 	end
 end
 
@@ -258,6 +260,9 @@ function game:load()
 	
 	asteroidRate = 2
 	asteroidDt = asteroidRate
+	self.time = 0
+	
+	sunZone = 1000
 	
 	self.planets = {}
 	self.sectors = {[0]={},[1] = {}}
@@ -437,6 +442,8 @@ function game:update(dt)
 	dt = math.min(dt, 1/3)
 	sun.radius = sun.radius + sunSpeed * dt
 	
+	self.time = self.time + dt
+	
 	asteroidDt = asteroidDt + dt
 	
 	if asteroidDt >= asteroidRate then
@@ -463,6 +470,8 @@ function game:update(dt)
 		
 	end
 	
+	
+	
 	-- Camera
 	self:updateCamera()
 	self.camera:setPosition(player.pos.x, player.pos.y)
@@ -483,9 +492,12 @@ function game:draw()
 	player:draw()
 	end)
 	
+	local dir = (player.pos-sun.pos)
+	local dis = dir:len()
+	
 	-- Draw radar HUD
 	local seen = {}
-	local sector = self:sector((player.pos-sun.pos):len())
+	local sector = self:sector(dis)
 	for i = -3, 3 do
 		local planets = self.sectors[sector+i]
 		if planets then
@@ -545,6 +557,15 @@ function game:draw()
 		i = i + 1
 	end
 	love.graphics.print("Weight: "..player.weight, 0,  150+(i*25))
+	
+	local dir = (player.pos-sun.pos)
+	local dis = dir:len()
+	dis = dis - sun.radius
+	if dis <= (sunZone) then
+		local a = math.max(remap(dis, 0, sunZone, 255, 0 ,true), 0)
+		love.graphics.setColor(255,50,0,a)
+		love.graphics.rectangle("fill", 0,0, width,height)
+	end
 end
 
 function game:mousepressed(x, y, button)
