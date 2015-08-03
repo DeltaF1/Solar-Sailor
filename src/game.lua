@@ -247,6 +247,10 @@ function player:onCollide(obj)
 end
 
 function player:damage(dmg)
+	self.lives = self.lives - 1
+	if self.lives <= 0 then
+		EndState("death", "asteroid")
+	end
 end
 function game:load()
 	--self.asteroids = List()

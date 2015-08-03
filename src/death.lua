@@ -1,7 +1,8 @@
 local death = {}
 
 local messages = {
-	sun = "{fuelS}, you plummeted towards the surface of the great star. {passengerS}, the end came swiftly."
+	sun = "{fuelS}, you plummeted towards the surface of the great star. {passengerS}, the end came swiftly.",
+	asteroid = "{speedS}. The last vestiges of oxygen slipping into space, {passengerS}."
 }
 
 function death:onStart(type)
@@ -15,7 +16,7 @@ function death:onStart(type)
 		elseif player.resources.fuel < 1 then
 			t.fuelS = "Your engines running out of fuel"
 		else
-			t.fuelS = "Despite the plentiful amounts of fuel"
+			t.fuelS = "Despite the plentiful amounts of fuel in your engines"
 		end
 		
 		if player.resources.passengers == 0 then
@@ -25,9 +26,33 @@ function death:onStart(type)
 		else
 			t.passengerS = "Carrying {passengers} brave souls into the inferno with you"
 		end
+	elseif type == "asteroid" then
+		
+		print("death by asteroid")
+		
+		local vel = player.vel:len()
+		
+		if vel < 10 then
+			t.speedS = "Drifting listlessly through space, a stray asteroid smashed into the side of your vessel"
+		elseif vel <= player.maxVel / 2 then
+			t.speedS = "Cruising through the system, your reflexes failed you for a moment, and a massive asteroid slammed into the ship"
+		else
+			t.speedS = "Hurtling through the cosmos at ludicrous speeds, your split second reaction wasn't enough"
+		end
+		
+		local passengers = player.resources.passengers
+		
+		if passengers == 0 then
+			t.passengerS = "you died alone on the vessel you once called home"
+		elseif passengers == 1 then
+			t.passengerS = "your one passenger was flung from the craft, leaving you to your fate"
+		else
+			t.passengerS = "{passengers} people huddle together in the cargo hold, awaiting the void deeper than space"
+		end
+		
 	end
 	
-	s = string.replace(messages.sun, t)
+	s = string.replace(messages[type], t)
 	
 	local dis = (player.pos-sun.pos):len()
 	
@@ -40,8 +65,8 @@ function death:onStart(type)
 	
 	self.timers = Sequence{
 		[function() StartLerp(self.text.colours.default, 4, 0, 255, 3) end] = 0,
-		[function() StartLerp(self.text.colours.default, 4, 255, 0, 3) end] = 6,
-		[function() EndState("menu") end] = 9
+		[function() StartLerp(self.text.colours.default, 4, 255, 0, 3) end] = 7,
+		[function() EndState("menu") end] = 10
 	}:start()
 	
 end
