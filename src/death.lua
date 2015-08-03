@@ -2,7 +2,8 @@ local death = {}
 
 local messages = {
 	sun = "{fuelS}, you plummeted towards the surface of the great star. {passengerS}, the end came swiftly.",
-	asteroid = "{speedS}. The last vestiges of oxygen slipping into space, {passengerS}."
+	asteroid = "{speedS}. The last vestiges of oxygen slipping into space, {passengerS}.",
+	win = "{speedS}, you made it out of the system. The great star's expansion slowing, you made it to the nearest warp gate, {passengerS}."
 }
 
 function death:onStart(type)
@@ -32,9 +33,9 @@ function death:onStart(type)
 		
 		local vel = player.vel:len()
 		
-		if vel < 10 then
+		if vel <=player.maxVel/2 then
 			t.speedS = "Drifting listlessly through space, a stray asteroid smashed into the side of your vessel"
-		elseif vel <= player.maxVel / 2 then
+		elseif vel <= player.maxVel * (3/4) then
 			t.speedS = "Cruising through the system, your reflexes failed you for a moment, and a massive asteroid slammed into the ship"
 		else
 			t.speedS = "Hurtling through the cosmos at ludicrous speeds, your split second reaction wasn't enough"
@@ -50,6 +51,26 @@ function death:onStart(type)
 			t.passengerS = "{passengers} people huddle together in the cargo hold, awaiting the void deeper than space"
 		end
 		
+	elseif type == "win" then
+		print("you won!")
+		
+		local vel = player.vel:len()
+		
+		if vel <= player.maxVel/2 then
+			t.speedS = "Your engines sputtering, and your fuel dwindling"
+		else
+			t.speedS = "Racing to escape the star's approach"
+		end
+		
+		local passengers = player.resources.passengers
+		
+		if passengers == 0 then
+			s.passengerS = "guilt at the lives you left behind weighing heavily on your mind"
+		elseif passengers == 1 then
+			s.passengerS = "with but one companion by your side"
+		else
+			s.passengerS = "{passengers} grateful souls in tow"
+		end
 	end
 	
 	s = string.replace(messages[type], t)
