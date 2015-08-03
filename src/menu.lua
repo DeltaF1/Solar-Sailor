@@ -11,7 +11,7 @@ function menu:load()
 	
 	self.frame = Frame(Vector2(), Vector2(width,height))
 	
-	local startbutton = self.frame:add(Button(Vector2(), Vector2(200,50), {onClick = function() EndState("game") end}))
+	local startbutton = self.frame:add(Button(Vector2(), Vector2(200,50), {onClick = function() EndState("game", "new") end}))
 	  :center()
 	startbutton.texts.default="Start"
 	

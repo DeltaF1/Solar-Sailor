@@ -153,7 +153,7 @@ function planet:update(dt)
 	self.gui:update(dt)
 end
 
-messages = require "planet_messages"
+local messages = require "planet_messages"
 
 function planet:onStart(p)
 	print("got "..Tserial.pack(p, tostring).." as an argument")

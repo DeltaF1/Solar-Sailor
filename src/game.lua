@@ -147,16 +147,7 @@ end
 
 
 player = Entity(Vector2.rand()*500)
-player.dir = Vector2()
-player.rot = 0
 
-player.rotSpeed = 4
-
-player.lives = 3
-
-player.maxVel = 400
-
-player.radius = 10
 
 
 
@@ -167,16 +158,18 @@ resources = {"fuel", "spare parts", "rations"}
 weights = {fuel=100, passengers=0.1}
 player.resources = {fuel=10, passengers=0}
 
+startingFuel = 10
+
 for k, v in pairs(resources) do
 	if not player.resources[v] then player.resources[v] = 0 end
 	if not weights[v] then weights[v] = 1 end
 end
 
-player.burnRate = 10
-player.burnDt = 0
+--player.burnRate = 10
+--player.burnDt = 0
 
 -- Tracking quests for HUD?
-player.quests = {}
+--player.quests = {}
 
 function player:update(dt)
 
@@ -256,16 +249,16 @@ end
 function player:damage(dmg)
 end
 function game:load()
-	self.asteroids = List()
+	--self.asteroids = List()
 	
 	asteroidRate = 2
-	asteroidDt = asteroidRate
-	self.time = 0
+	--asteroidDt = asteroidRate
+	--self.time = 0
 	
 	sunZone = 1000
 	
 	self.planets = {}
-	self.sectors = {[0]={},[1] = {}}
+	--self.sectors = {[0]={},[1] = {}}
 	self.secSize = 10
 	self.orbitSize = 100
 	self.densityFactor = 10
@@ -279,15 +272,19 @@ function game:load()
 	self.marker = love.graphics.newImage("assets/img/marker.png")
 	self.markerCenter = self.marker:getWidth()/2
 	
-	self.death = {}
+	--self.death = {}
 	
 	center = Vector2(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
 	
-	player:setWeight()
+	--for k, key in resources do
+	--	player:addResources(key, -(player.resources[key]))
+	
+	--end
+	--player:setWeight()
 	
 	sunSpeed = 200
 	
-	player.pos = Vector2:rand() * (sun.radius+sunZone+(sunSpeed))
+	--player.pos = Vector2:rand() * (sun.radius+sunZone+(sunSpeed))
 	
 	quests = {}
 	QUEST_OFF = math.rad(15)
@@ -301,21 +298,78 @@ function game:load()
 	
 	
 	
+end
+
+function game:setup()
+	sun.radius = 100
+	
+	player.dir = Vector2()
+	player.rot = 0
+
+	player.rotSpeed = 4
+
+	player.lives = 3
+
+	player.maxVel = 400
+
+	player.radius = 10
+	
+	player.burnRate = 10
+	player.burnDt = 0
+
+	self.sectors = {[0]={},[1] = {}}
+	
+	-- Tracking quests for HUD?
+	player.quests = {}
+
+	self.asteroids = List()
+	asteroidDt = asteroidRate
+	self.time = 0
+
+	self.death = {}
+	quests = {}
+	
+	self.planets = {}
+	self.sectors = {[0]={},[1] = {}}
+	
+
+	for k, key in ipairs(resources) do
+		player:addResources(key, -(player.resources[key]))	
+	end
+	player:addResources("fuel", startingFuel)
+	
+	
+	player.pos = Vector2:rand() * (sun.radius+sunZone+(sunSpeed))
+	
+	print("player.pos = "..tostring(player.pos))
+	
 	self:updateCamera()
 	
-	self.camera:setScale(self.camera:getScale()*(1/2))
-	self.camera:setPosition(player.pos.x, player.pos.y)
 	
-	local l,t = self.camera:getVisible()
+	self.camera:setPosition(player.pos.x, player.pos.y)
+	self.camera:setScale(1/2)
+	local l,t,w,h = self.camera:getVisible()
+	
+	print("l,t,w,h = "..l..","..t..","..w..","..h)
+	
 	self.asteroidRadius = Vector2(player.pos.x-l, player.pos.y-t):len() + 100
 	self.asteroidBuffer = 200
+	
+	
 end
 
 function game:onStart(p)
 	if p then
-		delta = p.pos - player.pos
-		player.pos = p.pos + delta:norm()*(p.radius+(player.radius*2)+10)
-		--player.vel = delta:norm()*150*player.vel:len()
+		if type(p) == "table" then
+			delta = p.pos - player.pos
+			player.pos = p.pos + delta:norm()*(p.radius+(player.radius*2)+10)
+			--player.vel = delta:norm()*150*player.vel:len()
+		elseif type(p) == "string" then
+			if p == "new" then
+				self:setup()
+				-- show tutorial thingy?
+			end
+		end
 	end
 end
 

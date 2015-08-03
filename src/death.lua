@@ -1,7 +1,7 @@
 local death = {}
 
-messages = {
-	sun = "{fuelS}, you plummeted towards the surface of the great star. {passengerS}, the end came swiftly"
+local messages = {
+	sun = "{fuelS}, you plummeted towards the surface of the great star. {passengerS}, the end came swiftly."
 }
 
 function death:onStart(type)
@@ -31,17 +31,17 @@ function death:onStart(type)
 	
 	local dis = (player.pos-sun.pos):len()
 	
-	local info = table.merge({dis=dis, rDis=math.floor(dis),sector=states.game:sector(dis)}, player.resources)
+	local info = update({dis=dis, rDis=math.floor(dis),sector=states.game:sector(dis)},player.resources)
 	
 	s = string.replace(s, info)
 	
 	self.text = TextBox(s, nil, Vector2(800,100), {align="center"}):center()
 	self.text.colours.default[4] = 0
 	
-	Sequence{
+	self.timers = Sequence{
 		[function() StartLerp(self.text.colours.default, 4, 0, 255, 3) end] = 0,
-		[function() StartLerp(self.text.colours.default, 4, 255, 0, 3) end] = 8,
-		[function() EndState("menu") end] = 13
+		[function() StartLerp(self.text.colours.default, 4, 255, 0, 3) end] = 6,
+		[function() EndState("menu") end] = 9
 	}:start()
 	
 end
