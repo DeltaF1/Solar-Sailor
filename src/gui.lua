@@ -285,10 +285,19 @@ TextBox.defaultOptions =
 	backgrounds = {
 		default = {0,0,0,0}
 	},
+	align = "left"
 }
 
 function TextBox:init(text, pos, scale, options)
 	Gui.init(self, pos, scale, options)
+	
+	for _, i in ipairs({"images", "colours", "texts"}) do
+	
+		if self.options[i] then
+			self[i] = self.options[i]
+		end
+		
+	end
 	
 	self.text = text
 	
@@ -302,7 +311,7 @@ end
 function TextBox:draw()
 	love.graphics.setColor(self.options.colours.default)
 	love.graphics.setFont(self.font)
-	love.graphics.printf(self.text, self.pos.x, self.pos.y, self.scale.x)
+	love.graphics.printf(self.text, self.pos.x, self.pos.y, self.scale.x, self.options.align)
 end
 
 -- Button class

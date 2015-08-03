@@ -35,12 +35,20 @@ function death:onStart(type)
 	
 	s = string.replace(s, info)
 	
+	self.text = TextBox(s, nil, Vector2(800,100), {align="center"}):center()
+	self.text.colours.default[4] = 0
+	
+	Sequence{
+		[function() StartLerp(self.text.colours.default, 4, 0, 255, 3) end] = 0,
+		[function() StartLerp(self.text.colours.default, 4, 255, 0, 3) end] = 8,
+		[function() EndState("menu") end] = 13
+	}:start()
 	
 end
 
 function death:draw()
 	--love.graphics.set
-	love.graphics.printf(s, 10,10, 1000)
+	self.text:draw()
 end
 
 return death

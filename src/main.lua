@@ -108,7 +108,7 @@ end
 
 function DelTimer(t)
 	
-	timers[STATE]:remove(t)
+	timers[_state or STATE]:remove(t)
 	
 end
 
@@ -186,7 +186,7 @@ function love.load()
 end
 
 function love.update(dt)
-	local _state = STATE
+	_state = STATE
 	--main updating
 	if(timers[_state]) then
 		timers[_state]:update(dt)

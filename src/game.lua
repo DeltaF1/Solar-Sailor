@@ -287,7 +287,7 @@ function game:load()
 	
 	sunSpeed = 200
 	
-	player.pos = Vector2:rand() * (sun.radius+(sunSpeed*3))
+	player.pos = Vector2:rand() * (sun.radius+sunZone+(sunSpeed))
 	
 	quests = {}
 	QUEST_OFF = math.rad(15)
