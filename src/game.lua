@@ -144,16 +144,15 @@ function game:eulogy()
 	return s
 end
 
-
-
 player = Entity(Vector2.rand()*500)
 
+player.radius = 30
 
+player.img = love.graphics.newImage("assets/img/player.png")
 
+player.ox, player.oy = player.img:getWidth()/2, player.img:getHeight()/2
 
 resources = {"fuel", "spare parts", "rations"}
-
-
 
 weights = {fuel=100, passengers=0.1}
 player.resources = {fuel=10, passengers=0}
@@ -235,9 +234,14 @@ end
 
 function player:draw()
 	love.graphics.setColor(255,255,255)
+	love.graphics.draw(self.img, self.pos.x, self.pos.y, self.rot+(math.pi/2), 1.5, nil, self.ox, self.oy)
+	
+	--[[
+	love.graphics.setColor(255,255,255)
 	love.graphics.line(self.pos.x, self.pos.y, self.pos.x+self.dir.x*10, self.pos.y+self.dir.y*10)
 	love.graphics.setPointSize(5)
 	love.graphics.point(self.pos.x, self.pos.y)
+	]]--
 end
 
 function player:onCollide(obj)
@@ -319,7 +323,6 @@ function game:setup()
 
 	player.maxVel = 400
 
-	player.radius = 10
 	
 	player.burnRate = 10
 	player.burnDt = 0
