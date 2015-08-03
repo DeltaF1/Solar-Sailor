@@ -112,6 +112,14 @@ function DelTimer(t)
 	
 end
 
+function StartTimer(...)
+	return RegTimer(...)
+end
+
+function EndTimer(...)
+	return DelTimer(...)
+end
+
 function ClearTimers()
 	timers[STATE] = List()
 end
@@ -141,7 +149,7 @@ end
 
 function DelLerper(l)
 	
-	lerpers[STATE]:remove(l)
+	lerpers[_state or STATE]:remove(l)
 	
 end
 

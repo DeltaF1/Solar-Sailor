@@ -255,7 +255,7 @@ end
 function game:load()
 	--self.asteroids = List()
 	
-	asteroidRate = 2
+	asteroidRate = 0.5
 	--asteroidDt = asteroidRate
 	--self.time = 0
 	
@@ -286,6 +286,8 @@ function game:load()
 	--end
 	--player:setWeight()
 	
+	winTime = 30
+	
 	sunSpeed = 200
 	
 	--player.pos = Vector2:rand() * (sun.radius+sunZone+(sunSpeed))
@@ -300,7 +302,8 @@ function game:load()
 	self.camSize = 300000
 	self.camera = camera.new(0,0,1,1)
 	
-	
+	oldGravity = self.gravity
+	oldCollision = self.collisions
 	
 end
 
@@ -359,7 +362,10 @@ function game:setup()
 	self.asteroidRadius = Vector2(player.pos.x-l, player.pos.y-t):len() + 100
 	self.asteroidBuffer = 200
 	
+	self.gravity = oldGravity
+	self.collisions = oldCollision
 	
+	self.winning = nil
 end
 
 function game:onStart(p)
@@ -502,6 +508,16 @@ function game:update(dt)
 	
 	self.time = self.time + dt
 	
+	if self.time > winTime then
+		print("winning!")
+		if not self.winning and player.resources.fuel > 0 and player.vel:len() > sunSpeed then
+			self.gravity = function() end
+			self.collision = function() end
+			StartLerp(self, "winning", 0,255, 3)
+			StartTimer(3, function() EndState("death", "win") end)
+		end
+	end
+	
 	asteroidDt = asteroidDt + dt
 	
 	if asteroidDt >= asteroidRate then
@@ -623,6 +639,11 @@ function game:draw()
 		local a = math.max(remap(dis, 0, sunZone, 255, 0 ,true), 0)
 		love.graphics.setColor(255,50,0,a)
 		love.graphics.rectangle("fill", 0,0, width,height)
+	end
+	
+	if self.winning then
+		love.graphics.setColor(0,0,0,self.winning)
+		love.graphics.rectangle("fill", 0,0,width, height)
 	end
 end
 

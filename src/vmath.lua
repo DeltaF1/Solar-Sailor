@@ -101,6 +101,10 @@ function Vector2:len()
 	return math.sqrt((self.x*self.x)+(self.y*self.y))
 end
 
+function Vector2:angle()
+	return math.atan2(self.y, self.x)
+end
+
 function Vector2:norm()
 
 	length = self:len()

@@ -65,11 +65,11 @@ function death:onStart(type)
 		local passengers = player.resources.passengers
 		
 		if passengers == 0 then
-			s.passengerS = "guilt at the lives you left behind weighing heavily on your mind"
+			t.passengerS = "guilt at the lives you left behind weighing heavily on your mind"
 		elseif passengers == 1 then
-			s.passengerS = "with but one companion by your side"
+			t.passengerS = "with but one companion by your side"
 		else
-			s.passengerS = "{passengers} grateful souls in tow"
+			t.passengerS = "{passengers} grateful souls in tow"
 		end
 	end
 	
