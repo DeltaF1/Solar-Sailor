@@ -234,6 +234,9 @@ function love.keypressed(key, isRepeat)
 			EndState("console", STATE)
 			return
 		end
+	elseif key == "f12" then
+		img = love.graphics.newScreenshot()
+		img:encode(os.time() .. ".png")
 	end
 	
 	control.keypressed(key, isRepeat)

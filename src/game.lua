@@ -286,7 +286,7 @@ function game:load()
 	--end
 	--player:setWeight()
 	
-	winTime = 30
+	winTime = 300
 	
 	sunSpeed = 200
 	
@@ -685,9 +685,6 @@ function game:keypressed(key)
 		self.radarDrawRadius = self.radarDrawRadius - 10
 	elseif key == "=" then
 		self.radarDrawRadius = self.radarDrawRadius + 10
-	elseif key == "f12" then
-		img = love.graphics.newScreenshot()
-		img:encode(os.time() .. ".png")
 	end
 end
 
