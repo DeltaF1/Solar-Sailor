@@ -29,3 +29,5 @@ jam of July 2015, theme "Solar". It's set in space. Yup.
 - [ ] Menus
   - [ ] Ship naming screen
   - [ ] Our own splash
+  - [x] Death screen
+  - [ ] Credits
