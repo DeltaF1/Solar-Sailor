@@ -4,7 +4,7 @@ local t = {
 
 	libs = {"class", "strong", "popo", "utils", "Tserial", "ser", "vmath", "list", "timer", "lerper", "control","TLfres","gamera","gui"},
 
-	states = {"game","menu","planet","death","console"}
+	states = {"game","menu","planet","death","credits","console"}
 }
 
 love.filesystem.setIdentity("Solar_Sailor")

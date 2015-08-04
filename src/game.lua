@@ -21,7 +21,7 @@ function Entity:applyForce(f)
 end
 
 function Entity:update(dt)
-	self.accel = self.netForce / (self.mass or 1) -- Divide by mass?
+	self.accel = self.netForce --/ (self.mass or 1) -- Divide by mass?
 	
 	self.vel = self.vel + self.accel * dt
 	
@@ -156,6 +156,12 @@ end
 player = Entity(Vector2.rand()*500)
 
 player.radius = 30
+
+player.rotSpeed = 4
+
+player.maxVel = 400
+
+player.burnRate = 10
 
 player.img = love.graphics.newImage("assets/img/player.png")
 
@@ -323,17 +329,9 @@ end
 function game:setup()
 	sun.radius = 100
 	
-	player.dir = Vector2()
-	player.rot = 0
-
-	player.rotSpeed = 4
+	
 
 	player.lives = 3
-
-	player.maxVel = 400
-
-	
-	player.burnRate = 10
 	player.burnDt = 0
 
 	self.sectors = {[0]={},[1] = {}}
@@ -353,12 +351,15 @@ function game:setup()
 	
 
 	for k, key in ipairs(resources) do
-		player:addResources(key, -(player.resources[key]))	
+		player.resources[key] = 0
 	end
 	player:addResources("fuel", startingFuel)
 	
 	
 	player.pos = Vector2:rand() * (sun.radius+sunZone+(sunSpeed))
+	
+	player.dir = player.pos:norm()
+	player.rot = player.dir:angle()
 	
 	print("player.pos = "..tostring(player.pos))
 	

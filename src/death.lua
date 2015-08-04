@@ -34,11 +34,11 @@ function death:onStart(type)
 		local vel = player.vel:len()
 		
 		if vel <=player.maxVel/2 then
-			t.speedS = "Drifting listlessly through space, a stray asteroid smashed into the side of your vessel"
+			t.speedS = "Drifting listlessly, a stray asteroid smashed into the side of your vessel"
 		elseif vel <= player.maxVel * (3/4) then
 			t.speedS = "Cruising through the system, your reflexes failed you for a moment, and a massive asteroid slammed into the ship"
 		else
-			t.speedS = "Hurtling through the cosmos at ludicrous speeds, your split second reaction wasn't enough"
+			t.speedS = "Hurtling through the cosmos at ludicrous speeds, your split second reaction wasn't enough to avoid the asteroid"
 		end
 		
 		local passengers = player.resources.passengers
