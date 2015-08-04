@@ -69,13 +69,17 @@ end
 
 Planet = Class{}
 
+Planet.font = love.graphics.newFont(20)
+
 function Planet:init(arg)
 	self.pos = arg.pos or Vector2()
 	self.radius = arg.radius or 50
 	self.gravityForce = arg.gravityForce
 	self.colour = arg.colour or {math.random(0, 255), math.random(0, 255), math.random(0, 255)}
 	self.name = arg.name or markov.generate(planet_chain, math.random(4,9))
+	--self.name = self.name:lower()
 	self.quest = arg.quest
+	self.width = self.font:getWidth(self.name)
 end
 
 function Planet:draw()
@@ -83,7 +87,12 @@ function Planet:draw()
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
 	
 	love.graphics.setColor(255,255,255)
-	love.graphics.print(self.name, self.pos.x, self.pos.y - (self.radius+25))
+	love.graphics.setFont(self.font)
+	love.graphics.print(self.name, self.pos.x-(self.width/2), self.pos.y - (self.radius+25))
+	
+	--love.graphics.setColor()
+	love.graphics.setPointStyle("smooth")
+	love.graphics.point(self.pos.x, self.pos.y)
 end
 
 function Planet:onCollide(obj)
