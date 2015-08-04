@@ -350,7 +350,7 @@ function game:setup()
 	self.sectors = {[0]={},[1] = {}}
 	
 
-	for k, key in ipairs(resources) do
+	for key, _ in pairs(player.resources) do
 		player.resources[key] = 0
 	end
 	player:addResources("fuel", startingFuel)
