@@ -243,6 +243,9 @@ function player:addResources(resource, qt)
 	end
 	self.resources[resource] = self.resources[resource] + qt
 	
+	-- Update GUI
+	passengerLabel:setText("Passengers: "..self.resources.passengers)
+	
 	self:setWeight()
 	return true
 end
@@ -317,8 +320,9 @@ function game:load()
 	QUEST_OFF = math.rad(15)
 	
 	testButton = Button(Vector2(), Vector2(200,50), {onClick = function() EndState("menu") end, texts = {default="END"}})
+	passengerLabel = Label("", Vector2(0,10), Vector2(1,1)):centerX()
 	
-	self.gui = List{testButton}
+	self.gui = List{testButton, passengerLabel}
 	
 	self.camSize = 300000
 	self.camera = camera.new(0,0,1,1)
@@ -563,7 +567,7 @@ function game:update(dt)
 		
 	end
 	
-	
+	self.gui:update(dt)
 	
 	-- Camera
 	self:updateCamera()

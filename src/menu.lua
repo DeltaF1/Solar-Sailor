@@ -68,8 +68,9 @@ function menu:load()
 	
 	self.player = love.graphics.newImage("assets/img/player.png")
 	self.playerPos = Vector2(700, 500)
+	self.time = 0
 	self.ox, self.oy = self.player:getWidth()/2, self.player:getHeight()/2
-	self.fac = 0.005
+	self.fac = 2
 	
 	self.gui = List{self.frame}
 	self.gui:add(self.frame.children)
@@ -80,7 +81,7 @@ function menu:load()
 	end
 	)
 	
-	local numStars = 10
+	local numStars = 25
 	self.stars = {}
 	self.off = 0
 	self.loop = height + 50
@@ -98,8 +99,9 @@ function menu:draw()
 		love.graphics.point(star.x, ((star.y+(self.off*star.size))%self.loop) - 25)
 	end
 	
-	local x,y = love.mouse.getX(), love.mouse.getY()
-	love.graphics.draw(self.player, self.playerPos.x+(x*self.fac), self.playerPos.y+(y*self.fac), 0, 10, nil, self.ox, self.oy)
+	
+	love.graphics.draw(self.player, self.playerPos.x, self.playerPos.y+(math.cos(self.time/3)*self.fac), 0, 10, nil, self.ox, self.oy)
+
 	self.gui:draw()
 end
 
@@ -107,6 +109,9 @@ function menu:update(dt)
 	self.gui:update(dt)
 	
 	self.off = self.off + (dt * 10)
+	self.time = self.time + dt
+	self.time = self.time + dt
+	self.time = self.time + dt
 end
 
 return menu
