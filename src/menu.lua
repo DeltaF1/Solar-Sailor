@@ -81,7 +81,7 @@ function menu:load()
 	end
 	)
 	
-	local numStars = 25
+	local numStars = 69
 	self.stars = {}
 	self.off = 0
 	self.loop = height + 50

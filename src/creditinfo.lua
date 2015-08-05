@@ -7,8 +7,8 @@ First Names - US Census
 
 Coding
 
-Lead Programmer - DeltaF1
-Programmer - FileCorrupted
+Overlord Programmer - DeltaF1
+Minor Coder - FileCorrupted
 
 Graphics
 
