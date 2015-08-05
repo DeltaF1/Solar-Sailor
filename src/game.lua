@@ -517,6 +517,8 @@ function game:generateSector(sector)
 end
 dubgdraw = false
 function game:update(dt)
+	layera = love.graphics.
+	parallax(layera, 0, 0)
 	-- FPS limiter
 	dt = math.min(dt, 1/3)
 	sun.radius = sun.radius + sunSpeed * dt
@@ -783,9 +785,20 @@ function game:collisions(colliders1, colliders2)
 	end
 end
 
-function parallax(layer1, layer2, layer3, parralaxfactor, layeroffset)
-	for i, img in ipairs(layer1) do
-		img.pos = player.pos * parallaxfactor;
+function parallax(tiles, parralaxfactor, layeroffset)
+	for z=1, depth do
+		for y=1, height do
+			for x=1, width do
+				local tile = tiles[x][y]
+				if tile.x + tile.width <= 0 + self.camera.pos then
+					local dx = tile.x + tile.width
+					tile.x = love.graphics.getWidth() - dx
+				elseif tile.x >= love.graphics.getWidth()
+					local dx = tile.x - love.graphics.getWidth()
+					tile.x = dx
+				end
+			end
+		end
 	end
 end
 
