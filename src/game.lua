@@ -361,6 +361,8 @@ function game:setup()
 	player.dir = player.pos:norm()
 	player.rot = player.dir:angle()
 	
+	player.vel = player.dir:norm() * 70
+	
 	print("player.pos = "..tostring(player.pos))
 	
 	self:updateCamera()
