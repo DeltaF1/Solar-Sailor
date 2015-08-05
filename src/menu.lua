@@ -69,7 +69,7 @@ function menu:load()
 	self.player = love.graphics.newImage("assets/img/player.png")
 	self.playerPos = Vector2(700, 500)
 	self.ox, self.oy = self.player:getWidth()/2, self.player:getHeight()/2
-	self.fac = 0.01
+	self.fac = 0.005
 	
 	self.gui = List{self.frame}
 	self.gui:add(self.frame.children)
@@ -80,10 +80,10 @@ function menu:load()
 	end
 	)
 	
-	local numStars = 100
+	local numStars = 10
 	self.stars = {}
 	self.off = 0
-	self.loop = height + 25
+	self.loop = height + 50
 	for i = 1, numStars do
 		table.insert(self.stars, {size=math.random(2,5),x=math.random(width),y=math.random(self.loop-1)})
 	end
@@ -95,7 +95,7 @@ function menu:draw()
 	love.graphics.setPointStyle "rough"
 	for _, star in ipairs(self.stars) do
 		love.graphics.setPointSize(star.size)
-		love.graphics.point(star.x, (star.y+(self.off*star.size))%self.loop)
+		love.graphics.point(star.x, ((star.y+(self.off*star.size))%self.loop) - 25)
 	end
 	
 	local x,y = love.mouse.getX(), love.mouse.getY()
