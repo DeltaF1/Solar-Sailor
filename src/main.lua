@@ -242,6 +242,15 @@ function love.keypressed(key, isRepeat)
 	
 	control.keypressed(key, isRepeat)
 	
+	if key == "m" then
+		MUTED = not MUTED
+		if MUTED and GAMEMUSIC:isPlaying() then GAMEMUSIC:pause()
+		elseif not muted and not GAMEMUSIC:isPlaying() then GAMEMUSIC:resume() end
+		
+		if MUTED and MENUMUSIC:isPlaying() then MENUMUSIC:pause()
+		elseif not muted and not MENUMUSIC:isPlaying() then MENUMUSIC:resume() end
+	end
+	
 	if states[STATE].keypressed then
 		print("Entering keypressed of "..STATE)
 		states[STATE]:keypressed(key)

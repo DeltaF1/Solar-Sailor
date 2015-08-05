@@ -24,7 +24,15 @@ Class - hump.class
 String Operations - strong
 Coloured Text - popo
 
+Sound
 
+Sting - http://www.freesfx.co.uk
+
+Music
+
+"Dark Fog"
+"On the Shore"
+Kevin Macleod
 
 
 

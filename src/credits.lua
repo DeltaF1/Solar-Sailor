@@ -8,7 +8,7 @@ function credits:load()
 	
 	self.speed = 25
 	
-	self.limit = 100
+	self.limit = -50
 end
 
 function credits:onStart()
@@ -37,10 +37,12 @@ function credits:update(dt)
 	end
 end
 
-function credits:keypressed()
-	ClearLerpers()
-	ClearTimers()
-	EndState("menu")
+function credits:keypressed(key)
+	if key ~= "m" then
+		ClearLerpers()
+		ClearTimers()
+		EndState("menu")
+	end
 end
 
 return credits

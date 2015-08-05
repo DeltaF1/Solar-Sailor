@@ -183,6 +183,7 @@ function Frame:addElement(element, rPos)
 	self.children:add(element)
 	element.parent = self
 	element.rPos = rPos or element.pos - self.pos
+	element.pos = self.pos + element.rPos
 	return element
 end
 
@@ -217,11 +218,15 @@ function Frame:center(element)
 	return element
 end
 
-function Frame:update(dt)
-	Gui.update(self)
+function Frame:updatePositions()
 	for i, child in ipairs(self.children.items) do
 		child.pos = self.pos + child.rPos
 	end
+end
+
+function Frame:update(dt)
+	Gui.update(self)
+	self:updatePositions()
 end
 
 function Frame:draw()

@@ -33,6 +33,8 @@ function menu:load()
 	local exitbutton = self.frame:add(menuButton(Vector2(0, 652), Vector2(187, 85), {onClick = function() love.event.quit() end}))
 	exitbutton.texts.default = "Exit"
 	
+	local muteLabel = self.frame:add(Label("Press 'M' to mute music",nil,nil,{font=love.graphics.newFont("assets/fonts/Minecraftia.ttf", 11)}))
+	muteLabel.rPos = Vector2(width-(muteLabel.font:getWidth(muteLabel.text)+10),height-20)
 	local socialFrame = self.frame:add(
 		Frame(Vector2(), Vector2(150,200))
 	)
@@ -93,6 +95,7 @@ function menu:onStart()
 		StartLerp(_G, "GAMEVOLUME", 1, 0, 1)
 		StartTimer(1,function()
 			MENUMUSIC:play()
+			if MUTED then MENUMUSIC:pause() end
 			StartLerp(_G, "MENUVOLUME", 0,1,1)
 			GAMEMUSIC:stop()
 		end)

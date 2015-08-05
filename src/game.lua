@@ -278,11 +278,11 @@ function game:load()
 	GAMEVOLUME = 0
 	GAMEMUSIC = love.audio.newSource("assets/music/Dark Fog.mp3")
 	
-	asteroidRate = 0.1
+	asteroidRate = 0.2
 	--asteroidDt = asteroidRate
 	--self.time = 0
 	
-	player.burnRate = 0.5
+	player.burnRate = 0.7
 	
 	sunZone = 1500
 	
@@ -313,7 +313,7 @@ function game:load()
 	
 	winTime = 300
 	
-	sunSpeed = 300
+	sunSpeed = 270
 	
 	--player.pos = Vector2:rand() * (sun.radius+sunZone+(sunSpeed))
 	
@@ -322,9 +322,13 @@ function game:load()
 	
 	testButton = Button(Vector2(), Vector2(200,50), {onClick = function() EndState("menu") end, texts = {default="END"}})
 	passengerLabel = Label("", Vector2(0,10), Vector2(1,1)):centerX()
+	speedLabel = Label("", Vector2(10, height-25), nil)
 	
-	self.gui = List{testButton, passengerLabel}
-	
+	self.gui = List{
+		testButton,
+		passengerLabel,
+		speedLabel,
+	}
 	self.camSize = 300000
 	self.camera = camera.new(0,0,1,1)
 	
@@ -408,6 +412,7 @@ function game:onStart(p)
 		StartLerp(_G, "MENUVOLUME", 1, 0, 1)
 		StartTimer(1,function()
 			GAMEMUSIC:play()
+			if MUTED then GAMEMUSIC:pause() end
 			StartLerp(_G, "GAMEVOLUME", 0,1,1)
 			MENUMUSIC:stop()
 		end)
@@ -563,6 +568,9 @@ function game:update(dt)
 	self:gravity(affected, {sun}, dt)
 	
 	player:update(dt)
+	
+	speedLabel:setText("Speed: "..math.floor(player.vel:len()).." u/s")
+	
 	self.asteroids:update(dt)
 	
 	-- Planet generation

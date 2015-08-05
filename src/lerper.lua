@@ -54,7 +54,7 @@ function Lerper:update(dt)
 	
 	self.t = self.t + dt
 	
-	if self.t >= self.max2 then
+	if self.t > self.max2 then
 		if self.lock then
 			DelLerper(self)
 		end

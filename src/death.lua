@@ -6,8 +6,15 @@ local messages = {
 	win = "{speedS}, you made it out of the system. The great star's expansion slowing, you made it to the nearest warp gate, {passengerS}."
 }
 
+function death:load()
+	self.boom = love.audio.newSource("assets/sounds/cinematic_impact.mp3", "static")
+end
+
 function death:onStart(type)
 
+	GAMEMUSIC:stop()
+	--self.boom:stop()
+	--self.boom:play()
 	t = {}
 	
 	self.time = 3
@@ -33,7 +40,7 @@ function death:onStart(type)
 		
 		print("death by asteroid")
 		
-		self.time = self.time + 1
+		self.time = self.time + 2
 		
 		local vel = player.vel:len()
 		

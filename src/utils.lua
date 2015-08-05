@@ -53,6 +53,8 @@ function remap(value, low1, high1, low2, high2, lock)
 
 	end
 	
+	if value == low1 then return low2 end
+	if value == high1 then return high1 end
 	return (value * ((high2-low2)/(high1-low1))) + low2
 	
 end
