@@ -1,7 +1,5 @@
 local menu = {}
 
-INITIAL_STATE = "menu"
-
 local menuButton = Class{__includes=Button}
 
 menuButton.defaultOptions = update(copy(Button.defaultOptions), {
@@ -87,6 +85,17 @@ function menu:load()
 	self.loop = height + 50
 	for i = 1, numStars do
 		table.insert(self.stars, {size=math.random(2,5),x=math.random(width),y=math.random(self.loop-1)})
+	end
+end
+
+function menu:onStart()
+	if not MENUMUSIC:isPlaying() then
+		StartLerp(_G, "GAMEVOLUME", 1, 0, 1)
+		StartTimer(1,function()
+			MENUMUSIC:play()
+			StartLerp(_G, "MENUVOLUME", 0,1,1)
+			GAMEMUSIC:stop()
+		end)
 	end
 end
 

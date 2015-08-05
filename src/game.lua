@@ -5,8 +5,6 @@ name_chain = require "names_chain"
 
 local game = {}
 
-INITIAL_STATE = "game"
-
 Entity = Class{}
 
 function Entity:init(pos, vel, accel)
@@ -277,6 +275,9 @@ end
 function game:load()
 	--self.asteroids = List()
 	
+	GAMEVOLUME = 0
+	GAMEMUSIC = love.audio.newSource("assets/music/Dark Fog.mp3")
+	
 	asteroidRate = 0.1
 	--asteroidDt = asteroidRate
 	--self.time = 0
@@ -401,6 +402,15 @@ function game:onStart(p)
 				-- show tutorial thingy?
 			end
 		end
+	end
+	
+	if not GAMEMUSIC:isPlaying() then
+		StartLerp(_G, "MENUVOLUME", 1, 0, 1)
+		StartTimer(1,function()
+			GAMEMUSIC:play()
+			StartLerp(_G, "GAMEVOLUME", 0,1,1)
+			MENUMUSIC:stop()
+		end)
 	end
 end
 

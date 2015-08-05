@@ -28,8 +28,8 @@ req = require("project")
 	STATE = ""
 
 	DEFAULT_STATE = ""
-	INITIAL_STATE = ""
-
+	INITIAL_STATE = "splash"
+	
 	states = {}
 
 	function RegState(state, mod)
@@ -213,7 +213,8 @@ function love.update(dt)
 		states[_state].gui:mousehover(x,y)
 	end
 	
-	--loveframes.update(dt)
+	if MENUMUSIC:isPlaying() then MENUMUSIC:setVolume(MENUVOLUME) end
+	if GAMEMUSIC:isPlaying() then GAMEMUSIC:setVolume(GAMEVOLUME) end
 	
 end
 

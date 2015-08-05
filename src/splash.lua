@@ -1,4 +1,4 @@
-splash = {}
+local splash = {}
 
 function splash:load()
 	self.images = {
@@ -13,7 +13,11 @@ function splash:load()
 	self.colour = {255,255,255,0}
 	self.t = 0
 	self.i = 1
-	self.test= 0
+	self.test = 0
+	
+	MENUMUSIC = love.audio.newSource("assets/music/On the Shore.mp3")
+	MENUVOLUME = 1
+	
 	--RegLerper(self, "test", 0, 10, 10)
 end	
 
@@ -24,6 +28,8 @@ function splash:onStart()
 	
 	self.center = Vector2(self.width/2, self.height/2)
 	
+	
+	MENUMUSIC:play()
 end
 
 function splash:update(dt)
@@ -59,6 +65,4 @@ function splash:draw()
 	love.graphics.draw(image, self.center.x, self.center.y, 0, 1,1, image:getWidth()/2, image:getHeight()/2)
 end
 
-
-RegState("splash", splash)
-RegInitialState("splash")
+return splash
