@@ -79,13 +79,24 @@ function menu:load()
 		return (i.z or 1) < (j.z or 1)
 	end
 	)
+	
+	local numStars = 100
+	self.stars = {}
+	self.off = 0
+	self.loop = height + 25
+	for i = 1, numStars do
+		table.insert(self.stars, {size=math.random(2,5),x=math.random(width),y=math.random(self.loop-1)})
+	end
 end
 
 function menu:draw()
 	
 	--draw stars
-	
-	
+	love.graphics.setPointStyle "rough"
+	for _, star in ipairs(self.stars) do
+		love.graphics.setPointSize(star.size)
+		love.graphics.point(star.x, (star.y+(self.off*star.size))%self.loop)
+	end
 	
 	local x,y = love.mouse.getX(), love.mouse.getY()
 	love.graphics.draw(self.player, self.playerPos.x+(x*self.fac), self.playerPos.y+(y*self.fac), 0, 10, nil, self.ox, self.oy)
@@ -94,6 +105,8 @@ end
 
 function menu:update(dt)
 	self.gui:update(dt)
+	
+	self.off = self.off + (dt * 10)
 end
 
 return menu

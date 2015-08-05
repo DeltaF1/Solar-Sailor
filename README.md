@@ -28,7 +28,7 @@ jam of July 2015, theme "Solar". It's set in space. Yup.
   - [ ] Sun marker
   - [ ] Star fields
     - [ ] In Game
-    - [ ] In Menu
+    - [x] In Menu
 - [ ] Menus
   - [ ] Ship naming screen
   - [ ] Our own splash

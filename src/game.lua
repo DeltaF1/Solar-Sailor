@@ -274,11 +274,13 @@ end
 function game:load()
 	--self.asteroids = List()
 	
-	asteroidRate = 0.5
+	asteroidRate = 0.1
 	--asteroidDt = asteroidRate
 	--self.time = 0
 	
-	sunZone = 1000
+	player.burnRate = 0.5
+	
+	sunZone = 1500
 	
 	self.planets = {}
 	--self.sectors = {[0]={},[1] = {}}
@@ -307,7 +309,7 @@ function game:load()
 	
 	winTime = 300
 	
-	sunSpeed = 200
+	sunSpeed = 300
 	
 	--player.pos = Vector2:rand() * (sun.radius+sunZone+(sunSpeed))
 	
