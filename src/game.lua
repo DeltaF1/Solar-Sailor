@@ -87,10 +87,6 @@ function Planet:draw()
 	love.graphics.setColor(255,255,255)
 	love.graphics.setFont(self.font)
 	love.graphics.print(self.name, self.pos.x-(self.width/2), self.pos.y - (self.radius+25))
-	
-	--love.graphics.setColor()
-	love.graphics.setPointStyle("smooth")
-	love.graphics.point(self.pos.x, self.pos.y)
 end
 
 function Planet:onCollide(obj)
@@ -295,11 +291,11 @@ function game:load()
 	GAMEVOLUME = 0
 	GAMEMUSIC = love.audio.newSource("assets/music/Dark Fog.mp3")
 	
-	asteroidRate = 0.2
+	asteroidRate = 0.7
 	--asteroidDt = asteroidRate
 	--self.time = 0
 	
-	player.burnRate = 1
+	player.burnRate = 5
 	
 	sunZone = 1500
 	
@@ -349,12 +345,18 @@ function game:load()
 	resourceText = resourceFrame:add(TextBox("nil", nil, resourceFrame.scale - Vector2(off*2,off*2))):center()
 	resourceText.font = love.graphics.newFont(18)
 	
+	compassFrame = Frame(Vector2(), Vector2(100,150)):centerY()
+	compassFrame.pos.x = width-compassFrame.scale.x
+	compassFrame.colours.default = {50,50,50,100}
+
 	self.gui = List{
 
 		passengerLabel,
 		speedLabel,
 		resourceFrame,
 		resourceText,
+		compassFrame,
+		--compassText,
 	}
 	self.camSize = 300000
 	self.camera = camera.new(0,0,1,1)
