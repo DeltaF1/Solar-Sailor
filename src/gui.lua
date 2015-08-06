@@ -215,6 +215,7 @@ end
 function Frame:center(element)
 	self:centerX(element)
 	self:centerY(element)
+	if not element then return self end
 	return element
 end
 

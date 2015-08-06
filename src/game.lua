@@ -243,6 +243,7 @@ function player:addResources(resource, qt)
 	
 	-- Update GUI
 	passengerLabel:setText("Passengers: "..self.resources.passengers)
+	passengerLabel:centerX()
 	
 	self:setWeight()
 	return true
@@ -726,6 +727,8 @@ function game:keypressed(key)
 		self.radarDrawRadius = self.radarDrawRadius - 10
 	elseif key == "=" then
 		self.radarDrawRadius = self.radarDrawRadius + 10
+	elseif key == "escape" then
+		EndState("pause")
 	end
 end
 

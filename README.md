@@ -35,3 +35,4 @@ jam of July 2015, theme "Solar". It's set in space. Yup.
   - [x] Death screen
   - [x] Credits
   - [x] Main Menu
+  - [x] Pause Menu

@@ -1,6 +1,6 @@
 local menu = {}
 
-local menuButton = Class{__includes=Button}
+menuButton = Class{__includes=Button}
 
 menuButton.defaultOptions = update(copy(Button.defaultOptions), {
 	font = love.graphics.newFont("assets/fonts/Minecraftia.ttf", 44),
@@ -102,14 +102,18 @@ function menu:onStart()
 	end
 end
 
-function menu:draw()
-	
-	--draw stars
+function menu:drawStars()
 	love.graphics.setPointStyle "rough"
 	for _, star in ipairs(self.stars) do
 		love.graphics.setPointSize(star.size)
 		love.graphics.point(star.x, ((star.y+(self.off*star.size))%self.loop) - 25)
 	end
+end
+
+function menu:draw()
+	
+	--draw stars
+	self:drawStars()
 	
 	
 	love.graphics.draw(self.player, self.playerPos.x, self.playerPos.y+(math.cos(self.time/3)*self.fac), 0, 10, nil, self.ox, self.oy)
