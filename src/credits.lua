@@ -5,7 +5,7 @@ function credits:load()
 	local info = require "creditinfo"
 	
 	self.Text = TextBox(info, nil, Vector2(love.graphics.getWidth(), 10), {align="center", font = love.graphics.newFont(18)})
-	
+	self.Text:centerX()
 	self.speed = 25
 	
 	self.limit = -50

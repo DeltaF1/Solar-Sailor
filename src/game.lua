@@ -245,7 +245,23 @@ function player:addResources(resource, qt)
 	passengerLabel:setText("Passengers: "..self.resources.passengers)
 	passengerLabel:centerX()
 	
+	
+	
 	self:setWeight()
+	-- set resourceText
+	
+	local s = ""
+	
+	for key, value in pairs(self.resources) do
+		s = s .. key:capitalize() .. " : " .. value .. "\n"
+	end
+	s = s .. "\n" .. "Weight : ".. self.weight .. "\n"
+	
+	resourceText:setText(s)
+	
+	local _, count = s:gsub("\n","")
+	resourceText.scale.y = count * resourceText.font:getHeight()
+	resourceText:center()
 	return true
 end
 
@@ -321,14 +337,24 @@ function game:load()
 	quests = {}
 	QUEST_OFF = math.rad(15)
 	
-	testButton = Button(Vector2(), Vector2(200,50), {onClick = function() EndState("menu") end, texts = {default="END"}})
-	passengerLabel = Label("", Vector2(0,10), Vector2(1,1)):centerX()
-	speedLabel = Label("", Vector2(10, height-25), nil)
+	local font = love.graphics.newFont(22)
+	
+	passengerLabel = Label("", Vector2(0,10), Vector2(1,1), {font=font}):centerX()
+	speedLabel = Label("", Vector2(10, height-25), nil, {font=font})
+	
+	resourceFrame = Frame(Vector2(0, 120), Vector2(160,135)):centerY()
+	resourceFrame.colours.default = {50,50,50,100}
+	
+	local off = 2
+	resourceText = resourceFrame:add(TextBox("nil", nil, resourceFrame.scale - Vector2(off*2,off*2))):center()
+	resourceText.font = love.graphics.newFont(18)
 	
 	self.gui = List{
-		testButton,
+
 		passengerLabel,
 		speedLabel,
+		resourceFrame,
+		resourceText,
 	}
 	self.camSize = 300000
 	self.camera = camera.new(0,0,1,1)
@@ -662,17 +688,9 @@ function game:draw()
 	
 	-- Draw debug
 	love.graphics.print("FPS:"+fps, 0, 50)
-	love.graphics.print("#asteroids:"+#self.asteroids.items, 0, 75)
-	love.graphics.print("#planets:"+#self.planets, 0, 100)
-	love.graphics.print("#planetsDrawn:"+planetsDrawn, 0, 125)
-	love.graphics.print("speed:"+player.vel:len(), 0, 150)
-	
-	local i = 1
-	for k,v in pairs(player.resources) do
-		love.graphics.print(k..": "..v, 0, 150+(i*25))
-		i = i + 1
-	end
-	love.graphics.print("Weight: "..player.weight, 0,  150+(i*25))
+	--love.graphics.print("#asteroids:"+#self.asteroids.items, 0, 75)
+	--love.graphics.print("#planets:"+#self.planets, 0, 100)
+	--love.graphics.print("#planetsDrawn:"+planetsDrawn, 0, 125)
 	
 	local dir = (player.pos-sun.pos)
 	local dis = dir:len()
