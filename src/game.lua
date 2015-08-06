@@ -167,10 +167,10 @@ player.ox, player.oy = player.img:getWidth()/2, player.img:getHeight()/2
 
 resources = {"fuel", "spare parts", "rations"}
 
-weights = {fuel=100, passengers=0.1}
-player.resources = {fuel=10, passengers=0}
+weights = {fuel=100, passengers=0.1, ["spare parts"] = 0.1, rations=1}
+player.resources = {passengers=0}
 
-startingFuel = 10
+startingFuel = 25
 
 for k, v in pairs(resources) do
 	if not player.resources[v] then player.resources[v] = 0 end
@@ -205,10 +205,10 @@ function player:update(dt)
 	--]]
 	
 	if love.keyboard.isDown(" ") then
-		self:applyForce(self.dir:norm() * 100)
+		if self.resources.fuel > 0 then self:applyForce(self.dir:norm() * 100) end
 		self.burnDt = self.burnDt + dt
 		if self.burnDt >= self.burnRate then
-			if self:addResources("fuel", -0.1) then
+			if self:addResources("fuel", -1) then
 				self.burnDt = 0
 			end
 		end
@@ -299,7 +299,7 @@ function game:load()
 	--asteroidDt = asteroidRate
 	--self.time = 0
 	
-	player.burnRate = 0.7
+	player.burnRate = 1
 	
 	sunZone = 1500
 	
