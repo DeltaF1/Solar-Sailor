@@ -348,7 +348,11 @@ function game:load()
 	compassFrame = Frame(Vector2(), Vector2(100,150)):centerY()
 	compassFrame.pos.x = width-compassFrame.scale.x
 	compassFrame.colours.default = {50,50,50,100}
-
+	
+	-- Make it an Image?
+	-- compassText = Label("Disatnce: ".." u")
+	--compass = 
+	
 	self.gui = List{
 
 		passengerLabel,
