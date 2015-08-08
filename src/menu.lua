@@ -88,6 +88,8 @@ function menu:load()
 	for i = 1, numStars do
 		table.insert(self.stars, {size=math.random(2,5),x=math.random(width),y=math.random(self.loop-1)})
 	end
+	
+	self.gui:update()
 end
 
 function menu:onStart()

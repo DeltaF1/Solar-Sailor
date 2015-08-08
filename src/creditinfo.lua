@@ -14,6 +14,8 @@ Graphics
 
 Lead Artist - DeltaF1
 Twitter Icon - TyTy21
+love-powered splash - MadByte
+FileCorrupted splash - JP
 
 Libraries
 
