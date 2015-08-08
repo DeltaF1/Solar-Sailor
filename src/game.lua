@@ -430,8 +430,9 @@ function game:setup()
 	for i = 1,numStars do
 		
 		local s = {pos = Vector2(math.randomf(l-self.starBuffer,l+w+self.starBuffer), math.randomf(t-self.starBuffer,t+h+self.starBuffer)), size = math.random(1,maxSize)}
-		s.z = 10*(maxSize - s.size)
-		table.insert(self.stars, s)
+		z = 10*(maxSize - s.size)
+		if not self.stars[z] then self.stars[z] = {} end
+		table.insert(self.stars[z], s)
 		
 	end
 	
@@ -618,9 +619,8 @@ function game:update(dt)
 	local affected = {player, unpack(self.asteroids.items)}
 	--affected = {player}
 	self:gravity(affected, {sun}, dt)
-	oldPlayerPos = player.pos:clone()
 	player:update(dt)
-	deltaPos = (oldPlayerPos - player.pos)*dt
+	
 	
 	speedLabel:setText("Speed: "..math.floor(player.vel:len()).." u/s")
 	
@@ -649,10 +649,33 @@ function game:sector(dis)
 	return math.floor(dis / (self.secSize * self.orbitSize))
 end
 
+function drawStarsLayer(z, layer)
+	love.graphics.setColor(150,150,150)
+	for _, star in ipairs(layer) do
+		
+		love.graphics.setPointSize(star.size)
+		
+		--star.pos = star.pos + deltaPos
+		
+		 star.pos = star.pos + (deltaPos * z)
+		
+		if star.pos.x > xMax then star.pos.x = xMin
+		elseif star.pos.x < xMin then star.pos.x = xMax end
+		
+		if star.pos.y > yMax then star.pos.y = yMin
+		elseif star.pos.y < yMin then star.pos.y = yMax end
+		
+		
+		
+		love.graphics.point(star.pos.x,star.pos.y)
+	end
+end
+
 function game:draw()
 	self.camera:draw(function(l,t,w,h)
 	
 	
+	deltaPos = (oldPlayerPos - player.pos)/100
 	
 	love.graphics.setColor(255,255,255)
 	love.graphics.setPointStyle("rough")
@@ -665,31 +688,20 @@ function game:draw()
 	yMin = t-buffer
 	yMax = t+h+buffer
 	
-	for _, star in ipairs(self.stars) do
+	for z,layer in spairs(self.stars) do
+		if z == 0 then
+			self:drawPlanets(l,t,w,h)
+			sun:draw()
+			
+			self.asteroids:draw()
+			
+			player:draw()
+		end
+		drawStarsLayer(z, layer)
 		
-		love.graphics.setPointSize(star.size)
-		
-		--star.pos = star.pos + deltaPos
-		
-		 star.pos = star.pos + (deltaPos * star.z)
-		
-		if star.pos.x > xMax then star.pos.x = xMin
-		elseif star.pos.x < xMin then star.pos.x = xMax end
-		
-		if star.pos.y > yMax then star.pos.y = yMin
-		elseif star.pos.y < yMin then star.pos.y = yMax end
-		
-		
-		
-		love.graphics.point(star.pos.x,star.pos.y)
 	end
 	
-	self:drawPlanets(l,t,w,h)
-	sun:draw()
 	
-	self.asteroids:draw()
-	
-	player:draw()
 	end)
 	
 	local dir = (player.pos-sun.pos)
@@ -763,6 +775,8 @@ function game:draw()
 		love.graphics.setColor(0,0,0,self.winning)
 		love.graphics.rectangle("fill", 0,0,width, height)
 	end
+	
+	oldPlayerPos = player.pos:clone()
 end
 
 function game:mousepressed(x, y, button)
