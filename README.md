@@ -24,10 +24,10 @@ jam of July 2015, theme "Solar". It's set in space. Yup.
   - [x] GUI system
   - [x] Planet HUD Markers
   - [x] Ship's manifest (still needs some formatting)
-  - [ ] Resource list
+  - [x] Resource list
   - [ ] Sun marker
-  - [ ] Star fields
-    - [ ] In Game
+  - [x] Star fields
+    - [x] In Game
     - [x] In Menu
 - [ ] Menus
   - [ ] Ship naming screen
