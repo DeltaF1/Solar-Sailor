@@ -401,6 +401,7 @@ function game:setup()
 	
 	
 	player.pos = Vector2:rand() * (sun.radius+sunZone+(sunSpeed))
+	oldPlayerPos = player.pos
 	
 	player.dir = player.pos:norm()
 	player.rot = player.dir:angle()
@@ -418,7 +419,25 @@ function game:setup()
 	
 	print("l,t,w,h = "..l..","..t..","..w..","..h)
 	
-	self.asteroidRadius = Vector2(player.pos.x-l, player.pos.y-t):len() + 100
+	local dis = Vector2(player.pos.x-l, player.pos.y-t)
+	
+	local numStars = 100
+	self.starBuffer = 200
+	self.stars = {}
+	
+	
+	local maxSize = 3
+	for i = 1,numStars do
+		
+		local s = {pos = Vector2(math.randomf(l-self.starBuffer,l+w+self.starBuffer), math.randomf(t-self.starBuffer,t+h+self.starBuffer)), size = math.random(1,maxSize)}
+		s.z = 10*(maxSize - s.size)
+		table.insert(self.stars, s)
+		
+	end
+	
+	self.starloop = math.sqrt((w*w)+(h*h))
+	
+	self.asteroidRadius =  dis:len() + 100
 	self.asteroidBuffer = 200
 	
 	self.gravity = oldGravity
@@ -599,8 +618,9 @@ function game:update(dt)
 	local affected = {player, unpack(self.asteroids.items)}
 	--affected = {player}
 	self:gravity(affected, {sun}, dt)
-	
+	oldPlayerPos = player.pos:clone()
 	player:update(dt)
+	deltaPos = (oldPlayerPos - player.pos)*dt
 	
 	speedLabel:setText("Speed: "..math.floor(player.vel:len()).." u/s")
 	
@@ -631,6 +651,38 @@ end
 
 function game:draw()
 	self.camera:draw(function(l,t,w,h)
+	
+	
+	
+	love.graphics.setColor(255,255,255)
+	love.graphics.setPointStyle("rough")
+	
+	local buffer = self.starBuffer
+	
+	xMin = l-buffer
+	xMax = l+w+buffer
+	
+	yMin = t-buffer
+	yMax = t+h+buffer
+	
+	for _, star in ipairs(self.stars) do
+		
+		love.graphics.setPointSize(star.size)
+		
+		--star.pos = star.pos + deltaPos
+		
+		 star.pos = star.pos + (deltaPos * star.z)
+		
+		if star.pos.x > xMax then star.pos.x = xMin
+		elseif star.pos.x < xMin then star.pos.x = xMax end
+		
+		if star.pos.y > yMax then star.pos.y = yMin
+		elseif star.pos.y < yMin then star.pos.y = yMax end
+		
+		
+		
+		love.graphics.point(star.pos.x,star.pos.y)
+	end
 	
 	self:drawPlanets(l,t,w,h)
 	sun:draw()
