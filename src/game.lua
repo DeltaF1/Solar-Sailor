@@ -83,10 +83,13 @@ end
 
 function Planet:draw()
 	if self.quest then
-		love.graphics.setColor(0,255,0)
+		love.graphics.setColor(0,0,100)
 		if self.quest.send then
-			love.graphics.setColor(255,0,0)
+			love.graphics.setColor(0, 100, 200)
+		elseif self.quest.receive then
+			love.graphics.setColor(0,255,100)
 		end
+		
 		local pulse = 5 + math.cos((game.time*10)+self.time) * 5
 		love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius + pulse, 100)
 	end
