@@ -265,3 +265,7 @@ function table.remove2(t, rem)
 		end
 	end
 end
+
+function math.clamp(value, min, max)
+	return math.max(min, math.min(value, max))
+end

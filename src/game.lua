@@ -158,6 +158,9 @@ player.maxVel = 400
 player.burnRate = 10
 
 player.img = love.graphics.newImage("assets/img/player.png")
+player.thruster = love.graphics.newImage("assets/img/thruster.png")
+
+player.scale = 1.5
 
 player.ox, player.oy = player.img:getWidth()/2, player.img:getHeight()/2
 
@@ -201,13 +204,18 @@ function player:update(dt)
 	--]]
 	
 	if love.keyboard.isDown(" ") then
-		if self.resources.fuel > 0 then self:applyForce(self.dir:norm() * 100) end
-		self.burnDt = self.burnDt + dt
-		if self.burnDt >= self.burnRate then
-			if self:addResources("fuel", -1) then
-				self.burnDt = 0
+		if self.resources.fuel > 0 then 
+			self:applyForce(self.dir:norm() * 100)
+			self.burnDt = self.burnDt + dt
+			if self.burnDt >= self.burnRate then
+				if self:addResources("fuel", -1) then
+					self.burnDt = 0
+				end
 			end
+			self.thrusting = true
 		end
+	else
+		self.thrusting = false
 	end
 	
 	Entity.update(self, dt)
@@ -263,7 +271,28 @@ end
 
 function player:draw()
 	love.graphics.setColor(255,255,255)
-	love.graphics.draw(self.img, self.pos.x, self.pos.y, self.rot+(math.pi/2), 1.5, nil, self.ox, self.oy)
+	
+	
+	
+	love.graphics.push()
+		
+		
+		love.graphics.translate(self.pos.x, self.pos.y)
+		--love.graphics.scale(self.scale)
+		love.graphics.rotate(self.rot+(math.pi/2))
+		
+		if self.thrusting then
+			--love.graphics.scale(self.sclae)
+			local pulse = remap((math.cos(game.time*10)), -1, 1, 0.9, 1.1)
+			love.graphics.draw(self.thruster, -self.ox*self.scale, (-self.oy+50)*self.scale, 0, self.scale, self.scale*pulse)
+		end
+		
+		love.graphics.draw(self.img, -self.ox*self.scale, -self.oy*self.scale, 0, self.scale)
+		
+		
+
+	
+	love.graphics.pop()
 	
 	--[[
 	love.graphics.setColor(255,255,255)
