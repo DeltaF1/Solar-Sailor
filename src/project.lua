@@ -17,6 +17,6 @@ love.graphics.setPointStyle("rough")
 
 love.graphics.setDefaultFilter("nearest", "nearest")
 
-INITIAL_STATE = "menu"
+INITIAL_STATE = "splash"
 
 return t
