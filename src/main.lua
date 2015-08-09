@@ -28,8 +28,7 @@ req = require("project")
 	STATE = ""
 
 	DEFAULT_STATE = ""
-	INITIAL_STATE = "splash"
-	
+
 	states = {}
 
 	function RegState(state, mod)
