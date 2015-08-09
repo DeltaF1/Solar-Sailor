@@ -3,9 +3,9 @@ local splash = {}
 function splash:load()
 	self.images = {
 		{t=-1},
-		{image=love.graphics.newImage("assets/img/starhopper-splash.png"),t=4,},
-		{image=love.graphics.newImage("assets/img/filecorrupted-splash.png"),t=3},
-		{image=love.graphics.newImage("assets/img/love-splash2.png"),t=3,sound=nil},
+		{image=love.graphics.newImage("assets/img/starhopper-splash.png"),t=1.5,},
+		{image=love.graphics.newImage("assets/img/filecorrupted-splash.png"),t=1.5},
+		{image=love.graphics.newImage("assets/img/love-splash2.png"),t=2,sound=nil},
 	}
 	for i, v in ipairs(self.images) do
 		v.t = v.t + 1 -- Account for fade times

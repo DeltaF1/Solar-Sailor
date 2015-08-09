@@ -78,9 +78,19 @@ function Planet:init(arg)
 	--self.name = self.name:lower()
 	self.quest = arg.quest
 	self.width = self.font:getWidth(self.name)
+	self.time = math.randomf(0,3)
 end
 
 function Planet:draw()
+	if self.quest then
+		love.graphics.setColor(0,255,0)
+		if self.quest.send then
+			love.graphics.setColor(255,0,0)
+		end
+		local pulse = 5 + math.cos((game.time*10)+self.time) * 5
+		love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius + pulse, 100)
+	end
+	
 	love.graphics.setColor(self.colour)
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
 	
@@ -572,7 +582,7 @@ function game:generateSector(sector)
 							if angle > planet.angle - QUEST_OFF and angle < planet.angle + QUEST_OFF then
 								table.remove(quests[sector], i)
 								name = planet.name
-								colour = {0,255,0} -- Debug
+								--colour = {0,255,0} -- Debug
 								quest = planet.quest
 								break
 							end
@@ -582,7 +592,7 @@ function game:generateSector(sector)
 					if not name then
 							if math.random() < 0.1 then
 								quest = {send={name=markov.generate(planet_chain, math.random(4,9)),resource=randomSelect(resources),quantity=math.random(1,4)}}
-								colour = {255,0,0}
+								--colour = {255,0,0}
 								--name=markov.generate(planet_chain, math.random(4,9))
 								
 							elseif math.random() < 0.4 then
@@ -785,8 +795,13 @@ function game:draw()
 	-- Draw gui
 	self.gui:draw()
 	
+	love.graphics.setColor(255,255,255)
+	
+	for i = 1, player.lives do 
+		love.graphics.draw(player.img, 15+(i-1)*50, 10, 0, 1.3)
+	end
+	
 	-- Draw debug
-	love.graphics.print("FPS:"+fps, 0, 50)
 	--love.graphics.print("#asteroids:"+#self.asteroids.items, 0, 75)
 	--love.graphics.print("#planets:"+#self.planets, 0, 100)
 	--love.graphics.print("#planetsDrawn:"+planetsDrawn, 0, 125)

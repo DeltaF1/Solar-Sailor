@@ -93,6 +93,8 @@ function menu:load()
 end
 
 function menu:onStart()
+	ClearTimers()
+	ClearLerpers()
 	if not MENUMUSIC:isPlaying() then
 		StartLerp(_G, "GAMEVOLUME", 1, 0, 1)
 		StartTimer(1,function()
