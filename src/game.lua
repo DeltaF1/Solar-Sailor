@@ -464,7 +464,7 @@ function game:setup()
 	local dis = Vector2(player.pos.x-l, player.pos.y-t)
 	
 	local numStars = 100
-	self.starBuffer = 200
+	self.starBuffer = 500
 	self.stars = {}
 	
 	
@@ -701,10 +701,10 @@ function drawStarsLayer(z, layer)
 		
 		 star.pos = star.pos + (deltaPos * z)
 		
-		if star.pos.x > xMax then star.pos.x = xMin
+		if star.pos.x >= xMax then star.pos.x = xMin
 		elseif star.pos.x < xMin then star.pos.x = xMax end
 		
-		if star.pos.y > yMax then star.pos.y = yMin
+		if star.pos.y >= yMax then star.pos.y = yMin
 		elseif star.pos.y < yMin then star.pos.y = yMax end
 		
 		

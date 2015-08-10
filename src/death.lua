@@ -7,7 +7,7 @@ local messages = {
 }
 
 function death:load()
-	self.boom = love.audio.newSource("assets/sounds/cinematic_impact.mp3", "static")
+	--self.boom = love.audio.newSource("assets/sounds/cinematic_impact.mp3", "static")
 end
 
 function death:onStart(type)
