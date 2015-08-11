@@ -36,10 +36,14 @@ end
 
 Asteroid = Class{__includes = Entity}
 
+Asteroid.images = {love.graphics.newImage("assets/img/Asteroid1.png"}
+
 function Asteroid:init(pos, vel, accel)
 	Entity.init(self, pos, vel, accel)
-	
+	self.img  = randomSelect(self.images)
 	self.radius = 20
+	self.rot = math.randomf(0, 2*math.pi)
+	self.scale = self.img:getWidth()/(self.radius*2)
 end
 
 function Asteroid:update(dt)
@@ -52,8 +56,9 @@ function Asteroid:update(dt)
 end
 
 function Asteroid:draw()
-	love.graphics.setColor(100,100,100)
-	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 8)
+	love.graphics.setColor(255,255,255)
+	--love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 8)
+	love.graphics.draw(self.img, self.pos.x, self.pos.y, self.rot, self.scale, 0, )
 end
 
 function Asteroid:onCollide(obj)

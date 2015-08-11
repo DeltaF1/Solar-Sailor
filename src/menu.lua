@@ -43,14 +43,17 @@ function menu:load()
 	
 	local muteLabel = self.frame:add(Label("Press 'M' to mute music",nil,nil,{font=love.graphics.newFont("assets/fonts/Minecraftia.ttf", 11)}))
 	muteLabel.rPos = Vector2(width-(muteLabel.font:getWidth(muteLabel.text)+10),height-20)
-	local socialFrame = self.frame:add(
+	
+	-- Either add the twitter buttons, or leave this out
+	
+	local socialFrame = --self.frame:add(
 		Frame(Vector2(), Vector2(150,200))
-	)
-	socialFrame.rPos.x = self.frame.scale.x - 48
+	--)
+	--socialFrame.rPos.x = self.frame.scale.x - 48
 	socialFrame:centerY()
 	socialFrame.colours.default = {0, 100, 30}
-	socialFrame.startPos = socialFrame.rPos:clone()
-	socialFrame.offPos = socialFrame.rPos - Vector2(90,0)
+	--socialFrame.startPos = socialFrame.rPos:clone()
+	--socialFrame.offPos = socialFrame.rPos - Vector2(90,0)
 	socialFrame.img = love.graphics.newImage("assets/img/social_tab2.png")
 	function socialFrame:draw()
 		love.graphics.draw(self.img, self.pos.x, self.pos.y)
@@ -82,7 +85,8 @@ function menu:load()
 	
 	self.gui = List{self.frame}
 	self.gui:add(self.frame.children)
-	self.gui:add(socialFrame.children)
+	self.gui:remove(socialFrame)
+	--self.gui:add(socialFrame.children)
 	table.sort(self.gui.items,
 	function(i, j)
 		return (i.z or 1) < (j.z or 1)
