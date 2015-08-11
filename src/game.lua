@@ -356,6 +356,9 @@ function game:load()
 	self.marker = love.graphics.newImage("assets/img/marker.png")
 	self.markerCenter = self.marker:getWidth()/2
 	
+	self.sunMarker = love.graphics.newImage("assets/img/sunmarker.png")
+	self.sunMarkerCenter = self.sunMarker:getWidth()/2
+	
 	--self.death = {}
 	
 	center = Vector2(love.graphics.getWidth()/2, love.graphics.getHeight()/2)
@@ -377,8 +380,10 @@ function game:load()
 	
 	local font = love.graphics.newFont(22)
 	
+	
 	passengerLabel = Label("", Vector2(0,10), Vector2(1,1), {font=font}):centerX()
 	speedLabel = Label("", Vector2(10, height-25), nil, {font=font})
+	distanceLabel = Label("", Vector2(width/2, height-25), nil, {font=font}):centerX()
 	
 	resourceFrame = Frame(Vector2(0, 120), Vector2(160,135)):centerY()
 	resourceFrame.colours.default = {50,50,50,100}
@@ -402,6 +407,7 @@ function game:load()
 		resourceFrame,
 		resourceText,
 		compassFrame,
+		distanceLabel,
 		--compassText,
 	}
 	self.camSize = 300000
@@ -790,10 +796,24 @@ function game:draw()
 					r,b = 0,0
 				end
 			end
-			love.graphics.setColor(r,g,b,a)
+
 			love.graphics.draw(self.marker, pos.x, pos.y, math.atan2(dir.y, dir.x), scale, scale, self.markerCenter)
 		end
 	end
+	
+	--Draw Sun Marker
+	local r,g,b,a = 255,0,0,100
+	love.graphics.setColor(r,g,b,a)
+	local dis = player.pos:len()
+	local pos = center+(-dir:norm()*self.radarDrawRadius)
+	local scale = remap(dis, 500, self.radarRadius, 1.45, 1, true)
+	if scale >= 1.44 then scale = 1.5 end
+	love.graphics.setColor(r,g,b,a)
+	love.graphics.draw(self.sunMarker, pos.x, pos.y, math.atan2(player.pos.y, player.pos.x), scale, scale, self.sunMarkerCenter)
+	distancefromsun = player.pos:len() - sun.radius
+	distancefromsun = math.floor(distancefromsun+0.5)
+	distanceLabel:setText("Distance: "..distancefromsun)
+	distanceLabel:centerX()
 	
 	-- Draw gui
 	self.gui:draw()
