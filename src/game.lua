@@ -531,7 +531,7 @@ function game:drawPlanets(l,t,w,h)
 	planetsDrawn = 0
 	
 	local planets = {}
-	local sector = self:sector((player.pos - sun.pos):len()) 
+	local sector = self:sector((player.pos):len()) 
 	for i = -self.renderDistance, self.renderDistance do
 		table.merge(planets, self.sectors[sector+i] or {})
 	end
@@ -669,7 +669,7 @@ function game:update(dt)
 	self.asteroids:update(dt)
 	
 	-- Planet generation
-	dir = player.pos - sun.pos
+	dir = player.pos:clone()
 	dis = dir:len()
 	
 	local sec = self:sector(dis)
@@ -910,7 +910,7 @@ function game:gravity(affectedByGravity, constantAffectors, dt)
 		end
 		affected:applyForce(netForce)
 	end
-	local dis = (player.pos - sun.pos):len()
+	local dis = (player.pos):len()
 	local sec = self:sector(dis)
 	if sec ~= sector then
 		gravityAffectors = {}
