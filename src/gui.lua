@@ -38,14 +38,11 @@ Class = libs["class"]
 
 Gui = Class{}
 
-Gui.pos = Vector2()
-Gui.scale = Vector2()
-
 Gui.defaultOptions = {}
 
 function Gui:init(pos, scale, options)
-	self.pos=pos or self.pos
-	self.scale=scale or self.scale
+	self.pos=pos or self.pos or Vector2()
+	self.scale=scale or self.scale or Vector2()
 	self.z = 0
 	
 	options = options or {}

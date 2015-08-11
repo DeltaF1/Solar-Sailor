@@ -197,9 +197,9 @@ end
 
 function player:update(dt)
 
-	if love.keyboard.isDown("d") then
+	if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
 		self.rot = self.rot + (dt * self.rotSpeed)
-	elseif love.keyboard.isDown("a") then
+	elseif love.keyboard.isDown("a") or love.keyboard.isDown("left") then
 		self.rot = self.rot - (dt * self.rotSpeed)
 	end
 	
@@ -216,7 +216,7 @@ function player:update(dt)
 	self:applyForce(self.dir:norm() * falloff * angleFalloff)
 	--]]
 	
-	if love.keyboard.isDown(" ") then
+	if love.keyboard.isDown(" ") or love.keyboard.isDown("w") or love.keyboard.isDown("up") then
 		if self.resources.fuel > 0 then 
 			self:applyForce(self.dir:norm() * 100)
 			self.burnDt = self.burnDt + dt
@@ -825,7 +825,7 @@ function game:draw()
 	
 	oldPlayerPos = player.pos:clone()
 end
-
+--[[
 function game:mousepressed(x, y, button)
 	if button == "wu" then
 		self.camera:setScale(self.camera:getScale()*2)
@@ -857,14 +857,18 @@ function game:mousepressed(x, y, button)
 	end
 end
 
-function game:keypressed(key)
-	if key == "e" then
+
+if key == "e" then
 		print(self:eulogy())
 	elseif key == "-" then
 		self.radarDrawRadius = self.radarDrawRadius - 10
 	elseif key == "=" then
 		self.radarDrawRadius = self.radarDrawRadius + 10
-	elseif key == "escape" then
+	else
+--]]
+
+function game:keypressed(key)
+	if key == "escape" then
 		EndState("pause")
 	end
 end

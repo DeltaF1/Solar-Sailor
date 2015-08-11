@@ -3,7 +3,7 @@ local death = {}
 local messages = {
 	sun = "{fuelS}, you plummeted towards the surface of the great star. {passengerS}, the end came swiftly.",
 	asteroid = "{speedS}. The last vestiges of oxygen slipping into space, {passengerS}.",
-	win = "{speedS}, you made it out of the system. The great star's expansion slowing, you made it to the nearest warp gate, {passengerS}."
+	win = "{speedS}, you made it out of the system. The great star's expansion slowing, your warp drive activated, {passengerS}."
 }
 
 function death:load()

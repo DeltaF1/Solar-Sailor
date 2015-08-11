@@ -269,3 +269,24 @@ end
 function math.clamp(value, min, max)
 	return math.max(min, math.min(value, max))
 end
+
+-- Corey@indigorose.com
+
+
+function sec2Min(secs)
+	if secs > 59 then
+		myMinutes = Math.Floor(secs/60)
+		mySeconds = secs-(Math.Floor(secs/60)*60)
+		if mySeconds < 10 then
+			mySeconds = "0"..mySeconds
+		end
+		myTime = myMinutes..":"..mySeconds
+	else
+		if secs < 10 then
+			mySeconds = "0"..secs
+		end
+		myTime = "0:"..mySeconds
+	end
+
+	return myTime
+end

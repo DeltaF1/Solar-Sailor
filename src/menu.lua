@@ -24,8 +24,16 @@ function menu:load()
 	
 	local title = self.frame:add(Label("SOLAR SAILOR", Vector2(0, 25), nil, {font=love.graphics.newFont("assets/fonts/Minecraftia.ttf", 92)})):centerX()
 	
-	local startbutton = self.frame:add(menuButton(Vector2(0,195), Vector2(400,85), {onClick = function() EndState("game", "new") end}))
+	local startbutton = self.frame:add(menuButton(Vector2(0,195), Vector2(400,85)))
 	startbutton.texts.default="Start Game"
+	
+	startbutton.onClick = function()
+		if love.filesystem.exists("startup.txt") then
+			EndState("game", "new")
+		else
+			EndState("story")
+		end
+	end
 	
 	local creditsbutton = self.frame:add(menuButton(Vector2(0, 424), Vector2(283, 85), {onClick = function() EndState("credits") end}))
 	creditsbutton.texts.default = "Credits"
