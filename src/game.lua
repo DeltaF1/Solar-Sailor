@@ -38,13 +38,16 @@ Asteroid = Class{__includes = Entity}
 
 Asteroid.images = {love.graphics.newImage("assets/img/Asteroid1.png")}
 
+Asteroid.sound = love.audio.newSource("assets/sounds/asteroid_hit.wav", "static")
+
 function Asteroid:init(pos, vel, accel)
 	Entity.init(self, pos, vel, accel)
 	self.img  = randomSelect(self.images)
-	self.radius = 20
+	self.radius = 25
 	self.rot = math.randomf(0, 2*math.pi)
 	self.scale = (self.radius*2)/self.img:getWidth()
-	self.ox = self.scale/2
+	self.ox = self.img:getWidth()/2
+	self.oy = self.img:getHeight()/2
 end
 
 function Asteroid:update(dt)
@@ -58,14 +61,17 @@ end
 
 function Asteroid:draw()
 	love.graphics.setColor(255,255,255)
-	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 8)
-	love.graphics.draw(self.img, self.pos.x, self.pos.y, self.rot, self.scale, nil, self.ox)
+	--love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 8)
+	--love.graphics.draw(self.img, self.pos.x, self.pos.y, self.rot, self.scale, nil, self.ox, self.ox)
+	love.graphics.draw(self.img, self.pos.x, self.pos.y, self.rot, self.scale, nil, self.ox, self.oy)
 end
 
 function Asteroid:onCollide(obj)
 	if getmetatable(obj) ~= Asteroid then
 		if obj == player then
 			player:damage(1)
+			self.sound:stop()
+			self.sound:play()
 		end
 		game.asteroids:remove(self)
 	end
