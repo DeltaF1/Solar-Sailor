@@ -381,7 +381,7 @@ function game:load()
 	--end
 	--player:setWeight()
 	
-	winTime = 300
+	winTime = 150
 	
 	sunSpeed = 270
 	
