@@ -148,14 +148,14 @@ function game:removePlanet(p)
 			game.death[p.name] = p.quest.survivors.passengers
 		end
 	end
-	print(Tserial.pack(game.death))
+	--print(Tserial.pack(game.death))
 end
 
 function sun:onCollide(obj)
 	if obj == player then
 		EndState("death", "sun")
 	elseif getmetatable(obj) == Planet then
-		print("Collided with planet")
+		--print("Collided with planet")
 		game:removePlanet(obj)	
 	end
 end
@@ -468,7 +468,7 @@ function game:setup()
 	
 	player.vel = player.dir:norm() * 70
 	
-	print("player.pos = "..tostring(player.pos))
+	--print("player.pos = "..tostring(player.pos))
 	
 	self:updateCamera()
 	
@@ -477,7 +477,7 @@ function game:setup()
 	self.camera:setScale(1/2)
 	local l,t,w,h = self.camera:getVisible()
 	
-	print("l,t,w,h = "..l..","..t..","..w..","..h)
+	--print("l,t,w,h = "..l..","..t..","..w..","..h)
 	
 	local dis = Vector2(player.pos.x-l, player.pos.y-t)
 	
@@ -587,10 +587,10 @@ end
 function game:generateSector(sector)
 	if sector >= 0 then
 		if not self.sectors[sector] then
-			print("Generating sector " + sector)
+			--print("Generating sector " + sector)
 			self.sectors[sector] = {}
 			local min, max = sector*(self.secSize*self.orbitSize),((sector+1)*((self.secSize)*self.orbitSize))-self.orbitSize
-			print("Generating from "+min+" to "+max+" distance from the sun")
+			--print("Generating from "+min+" to "+max+" distance from the sun")
 			for o = min,max,self.orbitSize do
 				for i = 1, math.floor(sector/self.densityFactor)+1 do
 					local pos = Vector2:rand()*o
@@ -660,7 +660,7 @@ function game:update(dt)
 	self.time = self.time + dt
 	
 	if self.time > winTime then
-		print("winning!")
+		--print("winning!")
 		if not self.winning and player.resources.fuel > 0 and player.vel:len() > sunSpeed then
 			self.gravity = function() end
 			self.collision = function() end
@@ -797,7 +797,7 @@ function game:draw()
 
 			local scale = remap(dis, 500, self.radarRadius, 1.45, 1, true)
 			if scale >= 1.44 then scale = 1.5 end
-			--print("scale = "..scale)
+			----print("scale = "..scale)
 			--scale = 1
 			local r,g,b,a = 255,255,255,100
 			
@@ -891,7 +891,7 @@ end
 
 
 if key == "e" then
-		print(self:eulogy())
+		--print(self:eulogy())
 	elseif key == "-" then
 		self.radarDrawRadius = self.radarDrawRadius - 10
 	elseif key == "=" then
@@ -968,7 +968,7 @@ function game:collisions(colliders1, colliders2)
 			if collider2 ~= collider1 then
 				local dis = (collider1.pos - collider2.pos):len()
 				if collider1.radius == nil or collider2.radius == nil then
-					print("No Radius")
+					--print("No Radius")
 					return
 				end
 				if dis <= collider1.radius + collider2.radius then
@@ -978,7 +978,8 @@ function game:collisions(colliders1, colliders2)
 					if(collider2.onCollide) then
 						collider2:onCollide(collider1)
 					end
-					love.window.setTitle("Collided")
+
+					
 				end
 			end
 		end

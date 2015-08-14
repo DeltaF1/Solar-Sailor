@@ -82,7 +82,7 @@ end
 
 function Gui:mousehover(x, y)
 	if not self.rect then
-		print(self.name)
+		--print(self.name)
 	end
 	if self.rect:contains(Vector2:new(x,y)) then
 
@@ -369,7 +369,7 @@ function Button:new(pos, mousepressed, graphics, textobj, scale)
 	o.textObj = textobj
 	o.scale = scale or Vector2:new(1,1)
 	o.type = "Button"
-	print("Scaling factors of "..o.scale.x.." and "..o.scale.y)
+	--print("Scaling factors of "..o.scale.x.." and "..o.scale.y)
 	
 
 	
@@ -383,8 +383,8 @@ function Button:new(pos, mousepressed, graphics, textobj, scale)
 		
 	end
 	
-	print("Created Button at point ")
-	print(o.pos)
+	--print("Created Button at point ")
+	--print(o.pos)
 	
 	return setmetatable(o, self)
 end

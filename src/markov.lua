@@ -1,18 +1,18 @@
 
 if love and love.filesystem then
-	print("Creating loadText for love.filesystem")
+	--print("Creating loadText for love.filesystem")
 	loadText = function(name)
 	  local s = love.filesystem.read(name)
-	  --print(s)
+	  ----print(s)
 	  s = s:gsub(".,!'\"/\\()","")--:lower()
 	  return s
 	end
 else
-	print("Creating loadText for native io")
+	--print("Creating loadText for native io")
 	loadText = function(name)
 
 	  local s = io.open(name, "r"):read("*a")
-	  --print(s)
+	  ----print(s)
 	  s = s:gsub(".,!'\"/\\()","")--:lower()
 	  return s
 	end
@@ -28,11 +28,11 @@ end
 local function get_suffix(chain, prefix)
   local t = chain[prefix]
   if not t then
-    print("invalid prefix '"..prefix.."'")
+    --print("invalid prefix '"..prefix.."'")
     return "\n"
   end
-  --print("selecting suffix from:")
-  --print(Tserial.pack(t))
+  ----print("selecting suffix from:")
+  ----print(Tserial.pack(t))
   return t[math.random(#t)]
 end
 
@@ -72,9 +72,9 @@ local function generate(chain, length)
       break
     end
     name = name .. suffix
-    --print("old prefix: '"..prefix.."' , suffix: '"..suffix.."'")
+    ----print("old prefix: '"..prefix.."' , suffix: '"..suffix.."'")
     prefix = prefix:sub(2,#prefix) .. suffix
-    --print("new prefix: '"..prefix.."'")
+    ----print("new prefix: '"..prefix.."'")
   end
   return name
 end
@@ -112,7 +112,7 @@ function generate(chain, length)
 'Gabi', 'Gallia', 'Hanna', 'Hedda', 'Jerica', 'Jetta', 'Joby', 'Kacila', 'Kagami', 'Kala', 'Kallie', 'Keelia', 'Kerry',
 'Kerry-Ann', 'Kimberly', 'Killian', 'Kory', 'Lilith', 'Lucretia', 'Lysha', 'Mercedes', 'Mia', 'Maura', 'Perdita', 'Quella',
 'Riona', 'Safiya', 'Salina', 'Severin', 'Sidonia', 'Sirena', 'Solita', 'Tempest', 'Thea', 'Treva', 'Trista', 'Vala', 'Winta'}, " ")
---print(places)
+----print(places)
 --local place_chain = feed({}, places)
 --local planets = loadText("planets_parsed.txt")
 --local planet_chain = feed(place_chain, planets)

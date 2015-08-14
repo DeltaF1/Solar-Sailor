@@ -88,14 +88,14 @@ function Text.new(x, y, text, settings)
     end
 
     --[[
-    print(self.text)
-    print()
+    --print(self.text)
+    --print()
     for _, w in ipairs(m) do
-        print(w.text, w.modifier_text)
-        print(w.init_text_delimiter, w.end_text_delimiter, w.init_modifier_delimiter, w.end_modifier_delimiter)
-        print()
+        --print(w.text, w.modifier_text)
+        --print(w.init_text_delimiter, w.end_text_delimiter, w.init_modifier_delimiter, w.end_modifier_delimiter)
+        --print()
     end
-    print()
+    --print()
     ]]--
 
     -- Assign correct modifier texts to each word in a manner that respects recursion
@@ -115,11 +115,11 @@ function Text.new(x, y, text, settings)
 
     --[[
     for _, w in ipairs(m) do
-        print(w.text, w.modifier_text)
-        print(w.init_text_delimiter, w.end_text_delimiter, w.init_modifier_delimiter, w.end_modifier_delimiter)
-        print()
+        --print(w.text, w.modifier_text)
+        --print(w.init_text_delimiter, w.end_text_delimiter, w.init_modifier_delimiter, w.end_modifier_delimiter)
+        --print()
     end
-    print()
+    --print()
     ]]--
 
     -- Remove extra spaces and @
@@ -142,8 +142,8 @@ function Text.new(x, y, text, settings)
 
     --[[
     for _, w in ipairs(m) do
-        print(w.text, w.modifier_text)
-        print()
+        --print(w.text, w.modifier_text)
+        --print()
     end
     ]]--
 
@@ -164,11 +164,11 @@ function Text.new(x, y, text, settings)
 
     --[[
     for _, w in ipairs(m) do
-        print(w.text, w.modifier_text)
+        --print(w.text, w.modifier_text)
         for _, u in ipairs(w.modifiers) do
-            print(u)
+            --print(u)
         end
-        print()
+        --print()
     end
     ]]--
 
@@ -197,22 +197,22 @@ function Text.new(x, y, text, settings)
 
     --[[
     for _, w in ipairs(m) do
-        print(w.text, w.modifier_text)
+        --print(w.text, w.modifier_text)
         for _, u in ipairs(w.modifiers) do
             if type(u) == 'table' then
                 for _, v in ipairs(u) do
-                    print(v)
+                    --print(v)
                 end
-            else print(u) end
+            else --print(u) end
         end
-        print()
+        --print()
     end
     for _, w in ipairs(m) do
-        print(w.text, w.modifier_text)
-        print(w.init_text_delimiter, w.end_text_delimiter, w.init_modifier_delimiter, w.end_modifier_delimiter)
-        print()
+        --print(w.text, w.modifier_text)
+        --print(w.init_text_delimiter, w.end_text_delimiter, w.init_modifier_delimiter, w.end_modifier_delimiter)
+        --print()
     end
-    print()
+    --print()
     ]]--
 
     -- Strip text, removing [], () and everything inside ()
@@ -404,18 +404,18 @@ function Text.new(x, y, text, settings)
     table.sort(new_line_positions, function(a, b) return a < b end)
 
     --[[
-    print(stripped_text)
-    print()
+    --print(stripped_text)
+    --print()
     for _, w in ipairs(m) do
-        print(w.text, w.modifier_text)
-        print(w.init_text_delimiter, w.end_text_delimiter, w.init_modifier_delimiter, w.end_modifier_delimiter)
-        print()
+        --print(w.text, w.modifier_text)
+        --print(w.init_text_delimiter, w.end_text_delimiter, w.init_modifier_delimiter, w.end_modifier_delimiter)
+        --print()
     end
-    print()
+    --print()
     for _, p in ipairs(new_line_positions) do
-        print(p)
+        --print(p)
     end
-    print()
+    --print()
     ]]--
 
     self.str_text = stripped_text

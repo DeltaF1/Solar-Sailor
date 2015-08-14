@@ -1,7 +1,7 @@
-print("Entering Math library!")
+--print("Entering Math library!")
 math.randomseed(os.time())
 math.random();math.random();math.random()
-print("Defining Rects...")
+--print("Defining Rects...")
 Rect = {}
 
 function Rect:new(x, y, w, h)
@@ -24,7 +24,7 @@ function Rect:contains(a, b)
 	local y
 	
 	if type(a)=="table" and a.type and a.type=="Vector2" then
-		--print("Checking to see if vector is inside Rect!")
+		----print("Checking to see if vector is inside Rect!")
 		x = a.x
 		y = a.y
 	else
@@ -67,7 +67,7 @@ function love.graphics.rectangle(mode, x, y, width, height)
 	_oldrectangle(mode, x, y, width, height)
 end
 
-print("Defining Vectors...")
+--print("Defining Vectors...")
 Vector2 = {}
 
 Vector2.__index = Vector2
@@ -193,7 +193,7 @@ function Vector2.__mod(a, b)
 end
 
 function Vector2.__eq(a,b)
-	print "Comparing vectors"	
+	--print "Comparing vectors"	
 	return a.x == b.x and a.y == b.y
 end
 
@@ -214,7 +214,7 @@ function points(r)
 
 end
 
-print("Defining intersections")
+--print("Defining intersections")
 
 function intersection(ray1, ray2)
 	dir1 = ray1[1]

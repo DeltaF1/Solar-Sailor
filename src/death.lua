@@ -20,7 +20,7 @@ function death:onStart(type)
 	self.time = 3
 	
 	if type == "sun" then
-		print("Death by sun!")
+		--print("Death by sun!")
 		if player.resources.fuel == 0 then
 			t.fuelS = "Your engines sputtering"
 		elseif player.resources.fuel <= 3.5 then
@@ -38,7 +38,7 @@ function death:onStart(type)
 		end
 	elseif type == "asteroid" then
 		
-		print("death by asteroid")
+		--print("death by asteroid")
 		
 		self.time = self.time + 2
 		
@@ -64,7 +64,7 @@ function death:onStart(type)
 		end
 		
 	elseif type == "win" then
-		print("you won!")
+		--print("you won!")
 		
 		local vel = player.vel:len()
 		

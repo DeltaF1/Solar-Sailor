@@ -214,13 +214,13 @@ end
 -- e.g.
 --[[
 
-table1 = {foo="bar", foo2="baz", func=function() print("Hello, World!") end}
+table1 = {foo="bar", foo2="baz", func=function() --print("Hello, World!") end}
 table2 = {foo="bar3"}
 
 update(table1, table2)
 
 --table1 now equals
-	{foo="bar3", foo2="baz", func=function() print("Hello, World!") end}
+	{foo="bar3", foo2="baz", func=function() --print("Hello, World!") end}
 
 --]]
 function update(table1, table2, create, recurse)

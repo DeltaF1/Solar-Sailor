@@ -37,7 +37,7 @@ end
 function splash:update(dt)
 	
 	if self.t >= self.images[self.i].t then
-		print("Advancing splash!")
+		--print("Advancing splash!")
 		self.i = self.i + 1
 		
 		if self.i > #self.images then
@@ -47,9 +47,9 @@ function splash:update(dt)
 		
 		
 		local s = Sequence({
-			[function() print("fading in image");StartLerp(self.colour, 4, 0, 255, 0.5) end]=0,
+			[function() StartLerp(self.colour, 4, 0, 255, 0.5) end]=0,
 			[function() if self.images[self.i].sound then self.images[self.i].sound:play() end end]=0.5,
-			[function() print("fading out image");StartLerp(self.colour, 4, 255, 0, 0.5) end]=(self.images[self.i].t - 0.5),
+			[function() StartLerp(self.colour, 4, 255, 0, 0.5) end]=(self.images[self.i].t - 0.5),
 		})
 		s:start()
 		self.t = 0
@@ -59,7 +59,7 @@ function splash:update(dt)
 	
 	self.t = self.t + dt
 	
-	print("[Splash] colour = "+self.colour[1]+","+self.colour[2]+","+self.colour[3]+","+self.colour[4])
+	--print("[Splash] colour = "+self.colour[1]+","+self.colour[2]+","+self.colour[3]+","+self.colour[4])
 end
 function splash:draw()
 	love.graphics.setColor(unpack(self.colour))

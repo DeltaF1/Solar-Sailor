@@ -8,7 +8,7 @@ req = require("project")
 	libraries = req.libs
 
 	for _, v in ipairs(libraries) do
-		print("Importing library \""..v.."\"")
+		--print("Importing library \""..v.."\"")
 		libs[v]=require(v)
 		if v == "class" then
 			Class = libs["class"]
@@ -32,7 +32,7 @@ req = require("project")
 	states = {}
 
 	function RegState(state, mod)
-		print("New state registered: "..state)
+		--print("New state registered: "..state)
 		states[state]=mod
 	end
 
@@ -92,7 +92,7 @@ timers = {}
 
 function RegTimer(length, f, args, loop)
 	
-	print("Registered Timer in state "..STATE)
+	--print("Registered Timer in state "..STATE)
 	
 	_t = Timer:new(length, f, args, loop)
 	
@@ -132,7 +132,7 @@ lerpers = {}
 function RegLerper(...)
 	
 	_l = Lerper:new(...)
-	--print("Starting lerper with path "+_l.path)
+	----print("Starting lerper with path "+_l.path)
 	if lerpers[STATE] then
 		lerpers[STATE]:add(_l)
 	else
@@ -173,10 +173,10 @@ function love.load()
 		
 		STATE = name
 		v = states[STATE]
-		print("Loading "..name)
+		--print("Loading "..name)
 		if v.load then
 			--loveframes.SetState(STATE)
-			--print("loveframes.state="+loveframes.GetState())
+			----print("loveframes.state="+loveframes.GetState())
 			v:load()
 		end
 	end
@@ -251,7 +251,7 @@ function love.keypressed(key, isRepeat)
 	end
 	
 	if states[STATE].keypressed then
-		print("Entering keypressed of "..STATE)
+		--print("Entering keypressed of "..STATE)
 		states[STATE]:keypressed(key)
 	end
 	

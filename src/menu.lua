@@ -62,14 +62,14 @@ function menu:load()
 	local socialFadeTime = 0.2
 	
 	socialFrame.onDefault = function(self)
-		print("entering frame.onDefault")
+		--print("entering frame.onDefault")
 		if self.transition then EndLerp(self.transition) end
 	
 		self.transition = StartLerp(self.rPos, "x", self.rPos.x, self.startPos.x, socialFadeTime)
 	end
 	
 	socialFrame.onOver = function(self)
-		print("entering frame.onOver")
+		--print("entering frame.onOver")
 		if self.transition then EndLerp(self.transition) end
 		
 		self.transition = StartLerp(self.rPos, "x", self.rPos.x, self.offPos.x, socialFadeTime)

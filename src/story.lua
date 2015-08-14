@@ -20,7 +20,7 @@ function story:load()
 	self.text = TextBox(text, nil, nil, {align="center", font=love.graphics.newFont(18)})
 	local _, lines = self.text.font:getWrap(text, width/2)
 	local height = self.text.font:getHeight()
-	print("lines, height, lines*height = "..lines..", "..height..", "..lines*height)
+	--print("lines, height, lines*height = "..lines..", "..height..", "..lines*height)
 	self.text.scale = Vector2(width/2, lines*height)
 	self.text:center()
 end

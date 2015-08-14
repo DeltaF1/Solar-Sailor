@@ -74,7 +74,7 @@ function planet:load()
 	local _update = self.frame.update
 	function self.frame:update(dt)
 		_update(self, dt)
-		print("Updated Main Frame!")
+		--print("Updated Main Frame!")
 	end
 	self.frame:center()
 	self.frame.name = "Main Frame"
@@ -149,17 +149,17 @@ function planet:draw()
 end
 
 function planet:update(dt)
-	print("Updating planet state")
+	--print("Updating planet state")
 	self.gui:update(dt)
 end
 
 local messages = require "planet_messages"
 
 function planet:onStart(p)
-	print("got "..Tserial.pack(p, tostring).." as an argument")
+	--print("got "..Tserial.pack(p, tostring).." as an argument")
 	self.planet = p
-	print("starting state planet!")
-	print("planet.name = "..self.planet.name)
+	--print("starting state planet!")
+	--print("planet.name = "..self.planet.name)
 	self.gui = List{self.frame}
 	self.gui:add(self.frame.children)
 	self.gui:add(self.messageFrame.children)

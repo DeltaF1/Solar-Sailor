@@ -19,11 +19,11 @@ function console:load()
 	
 	console.font = love.graphics.newFont(12)
 	
-	_print = print
+	--_--print = --print
 	
 	function consolePrint(...)
 		console:addOutput(tostring(...))
-		_print(tostring(...))
+		--_--print(tostring(...))
 	end
 end
 
@@ -115,9 +115,9 @@ function console:keypressed(key)
 		if console.text == "quit" then
 			love.event.quit()
 		else
-			print = consolePrint
+			--print = consolePrint
 			local status, err = pcall(loadstring(console.text))
-			print = _print
+			--print = _--print
 			
 			if not status then
 				console:addOutput(err)
@@ -141,7 +141,7 @@ end
 
 function console:keyreleased(key)
 	if key == "backspace" then
-		print("Backspace released!!!!")
+		--print("Backspace released!!!!")
 		console.backspacing = false
 		console.backrepeating = false
 		console.t = 0
