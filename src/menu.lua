@@ -48,7 +48,7 @@ function menu:load()
 	
 	local optionsbutton = self.frame:add(menuButton(Vector2(0, startY+buttonDis*2), Vector2(210, 85), {onClick = function()
 		--lerp frame
-		self.Timer.tween(1.5, self.frame.pos, {x = self.frame.pos.x+self.frame.scale.x}, "in-bounce")
+		self.Timer.tween(1, self, {frame={pos={x = self.frame.pos.x+self.frame.scale.x}}, optionsFrame={pos={x = self.optionsFrame.pos.x+self.optionsFrame.scale.x}}}, "in-out-quad")
 	end}))
 	optionsbutton.texts.default = "Options"
 	
@@ -57,9 +57,16 @@ function menu:load()
 	
 	-- Either add the twitter buttons, or leave this out
 	
-	local optionsFrame = Frame()
+	self.optionsFrame = Frame(Vector2(-width), Vector2(width,height))
 	
+	self.optionsFrame.draw = function() end
 	
+	local backButton = self.optionsFrame:add(menuButton(nil, Vector2(187, 85), {onClick = function()
+		self.Timer.tween(1, self, {frame={pos={x = self.frame.pos.x-self.frame.scale.x}}, optionsFrame={pos={x = self.optionsFrame.pos.x-self.optionsFrame.scale.x}}}, "in-out-quad")
+	end}), Vector2(self.optionsFrame.scale.x-300, startY+buttonDis*3))
+	backButton.texts.default = "Back"
+	
+	self.optionsFrame:add(Label("OPTIONS", nil, nil, {font=title.font})):centerX()
 	
 	local socialFrame = --self.frame:add(
 		Frame(Vector2(), Vector2(150,200))
@@ -101,6 +108,9 @@ function menu:load()
 	self.gui = List{self.frame}
 	self.gui:add(self.frame.children)
 	self.gui:remove(socialFrame)
+	
+	self.gui:add(self.optionsFrame)
+	self.gui:add(self.optionsFrame.children)
 	--self.gui:add(socialFrame.children)
 	table.sort(self.gui.items,
 	function(i, j)
@@ -147,7 +157,7 @@ function menu:draw()
 	self:drawStars()
 	
 	
-	love.graphics.draw(self.player, self.playerPos.x, self.playerPos.y+(math.cos(self.time/3)*self.fac), 0, 10, nil, self.ox, self.oy)
+	love.graphics.draw(self.player, self.playerPos.x, self.playerPos.y+(math.cos(self.time)*self.fac), 0, 10, nil, self.ox, self.oy)
 
 	self.gui:draw()
 end
