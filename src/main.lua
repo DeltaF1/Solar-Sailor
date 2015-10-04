@@ -227,6 +227,8 @@ function love.draw()
 	--TLfres.letterbox()
 end
 
+--libs.colourblind.simulate("protanope")
+
 function love.keypressed(key, isRepeat)
 	
 	if key == "`" then

@@ -15,6 +15,8 @@ function menu:load()
 	
 	--self.camera = 
 	
+	self.Timer = require "humptimer"
+	
 	width = love.graphics.getWidth()
 	height = love.graphics.getHeight()
 	
@@ -24,7 +26,10 @@ function menu:load()
 	
 	local title = self.frame:add(Label("SOLAR SAILOR", Vector2(0, 25), nil, {font=love.graphics.newFont("assets/fonts/Minecraftia.ttf", 92)})):centerX()
 	
-	local startbutton = self.frame:add(menuButton(Vector2(0,195), Vector2(400,85)))
+	local startY = 195
+	local buttonDis = 150
+	
+	local startbutton = self.frame:add(menuButton(Vector2(0,startY), Vector2(400,85)))
 	startbutton.texts.default="Start Game"
 	
 	startbutton.onClick = function()
@@ -35,16 +40,26 @@ function menu:load()
 		end
 	end
 	
-	local creditsbutton = self.frame:add(menuButton(Vector2(0, 424), Vector2(283, 85), {onClick = function() EndState("credits") end}))
+	local creditsbutton = self.frame:add(menuButton(Vector2(0, startY+buttonDis*1), Vector2(283, 85), {onClick = function() EndState("credits") end}))
 	creditsbutton.texts.default = "Credits"
 	
-	local exitbutton = self.frame:add(menuButton(Vector2(0, 652), Vector2(187, 85), {onClick = function() love.event.quit() end}))
+	local exitbutton = self.frame:add(menuButton(Vector2(0, startY+buttonDis*3), Vector2(187, 85), {onClick = function() love.event.quit() end}))
 	exitbutton.texts.default = "Exit"
+	
+	local optionsbutton = self.frame:add(menuButton(Vector2(0, startY+buttonDis*2), Vector2(210, 85), {onClick = function()
+		--lerp frame
+		self.Timer.tween(1.5, self.frame.pos, {x = self.frame.pos.x+self.frame.scale.x}, "in-bounce")
+	end}))
+	optionsbutton.texts.default = "Options"
 	
 	local muteLabel = self.frame:add(Label("Press 'M' to mute music",nil,nil,{font=love.graphics.newFont("assets/fonts/Minecraftia.ttf", 11)}))
 	muteLabel.rPos = Vector2(width-(muteLabel.font:getWidth(muteLabel.text)+10),height-20)
 	
 	-- Either add the twitter buttons, or leave this out
+	
+	local optionsFrame = Frame()
+	
+	
 	
 	local socialFrame = --self.frame:add(
 		Frame(Vector2(), Vector2(150,200))
@@ -140,9 +155,9 @@ end
 function menu:update(dt)
 	self.gui:update(dt)
 	
+	self.Timer.update(dt)
+	
 	self.off = self.off + (dt * 10)
-	self.time = self.time + dt
-	self.time = self.time + dt
 	self.time = self.time + dt
 end
 

@@ -87,12 +87,6 @@ function Vector2:rand()
 	return Vector2(math.cos(theta), math.sin(theta))
 end
 
-function Vector2:rand2()
-	local x = (math.random() * 2) - 1
-	local y = randomSelect({-1,1}) * math.sqrt((1 - (x*x)))
-	return Vector2(x, y)
-end
-
 function Vector2:clone()
 	return Vector2:new(self.x, self.y)
 end
