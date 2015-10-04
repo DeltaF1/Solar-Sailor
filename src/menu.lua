@@ -52,6 +52,7 @@ function menu:load()
 	end}))
 	optionsbutton.texts.default = "Options"
 	
+	
 	local muteLabel = self.frame:add(Label("Press 'M' to mute music",nil,nil,{font=love.graphics.newFont("assets/fonts/Minecraftia.ttf", 11)}))
 	muteLabel.rPos = Vector2(width-(muteLabel.font:getWidth(muteLabel.text)+10),height-20)
 	
@@ -65,6 +66,15 @@ function menu:load()
 		self.Timer.tween(1, self, {frame={pos={x = self.frame.pos.x-self.frame.scale.x}}, optionsFrame={pos={x = self.optionsFrame.pos.x-self.optionsFrame.scale.x}}}, "in-out-quad")
 	end}), Vector2(self.optionsFrame.scale.x-300, startY+buttonDis*3))
 	backButton.texts.default = "Back"
+	
+	daltonize = libs.colourblind.daltonize("protanope")
+	daltonize()
+	
+	local cbButton = self.optionsFrame:add(menuButton(nil, Vector2(300, 85), {onClick = function()
+		daltonize()
+	end}), Vector2(100, startY+buttonDis))
+	cbButton.texts.default = "Daltonize"
+	
 	
 	self.optionsFrame:add(Label("OPTIONS", nil, nil, {font=title.font})):centerX()
 	
