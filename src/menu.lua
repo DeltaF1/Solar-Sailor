@@ -67,13 +67,32 @@ function menu:load()
 	end}), Vector2(self.optionsFrame.scale.x-300, startY+buttonDis*3))
 	backButton.texts.default = "Back"
 	
-	daltonize = libs.colourblind.daltonize("protanope")
-	daltonize()
+	self.optionsFrame:add(Label("Colourblind Mode:", nil, nil, {font=love.graphics.newFont("assets/fonts/Minecraftia.ttf")}), Vector2(70, startY+buttonDis-20))
 	
-	local cbButton = self.optionsFrame:add(menuButton(nil, Vector2(300, 85), {onClick = function()
-		daltonize()
-	end}), Vector2(100, startY+buttonDis))
-	cbButton.texts.default = "Daltonize"
+	local _draw = love.draw
+	
+	local types = {"off", "protanope", "deuteranope", "tritanope"}
+	local cb = 0
+	local cbButton = self.optionsFrame:add(menuButton(nil, Vector2(360, 85)), Vector2(70, startY+buttonDis))
+	cbButton.onClick = function(self)
+		cb = cb + 1
+		if cb > #types then
+			cb = 1
+		end
+		
+		local type = types[cb]
+		
+		if type == "off" then
+			love.draw = _draw
+		else
+			libs.colourblind.daltonize(type)
+		end
+		
+		self.texts.default = type:upper()
+		self.text = self.texts.default
+	end
+	cbButton:onClick()
+	--cbButton.texts.default = "Daltonize"
 	
 	
 	self.optionsFrame:add(Label("OPTIONS", nil, nil, {font=title.font})):centerX()
