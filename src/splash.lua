@@ -61,6 +61,11 @@ function splash:update(dt)
 	
 	--print("[Splash] colour = "+self.colour[1]+","+self.colour[2]+","+self.colour[3]+","+self.colour[4])
 end
+
+function splash:keypressed()
+	EndState "menu"
+end
+
 function splash:draw()
 	love.graphics.setColor(unpack(self.colour))
 	local image = self.images[self.i].image

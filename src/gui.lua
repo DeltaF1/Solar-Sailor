@@ -317,6 +317,61 @@ function TextBox:draw()
 	love.graphics.printf(self.text, self.pos.x, self.pos.y, self.scale.x, self.options.align)
 end
 
+-- Slider Class
+----------------
+-- 
+
+Slider = Class{__includes=Gui}
+
+Slider.defaultOptions = {
+	colours = {
+		full = {0, 100, 200},
+		empty = {0, 100, 130}
+	}
+}
+
+function Slider:init(pos, scale, options)
+	Gui.init(self, pos, scale, options)
+	
+	self.min = self.options.min
+	self.max = self.options.max
+	self.value = self.options.value or self.min+((self.max-self.min)/2)
+	
+	self.colours = self.options.colours
+end
+
+function Slider:draw()
+	love.graphics.setColor(self.colours.empty)
+	love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.scale.x, self.scale.y)
+	
+	love.graphics.setColor(self.colours.full)
+	
+	local percent = (self.value - self.min) / (self.max-self.min)
+	
+	love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.scale.x*percent, self.scale.y)
+	love.graphics.setColor(255,255,255)
+	love.graphics.print("value = "..self.value, self.pos.x, self.pos.y+4)
+end
+
+function Slider:onDown()	
+	self.sliding = true
+end
+
+function Slider:update(dt)
+
+	Gui.update(self, dt)
+	
+	if self.sliding then
+	local pos = Vector2(love.mouse.getPosition())
+	
+	local percent = (pos.x-self.pos.x)/(self.scale.x)
+	self.value = math.clamp(self.min + (percent * (self.max-self.min)), self.min, self.max)
+	end
+	
+	if not love.mouse.isDown("l") then self.sliding = false end
+	
+end
+
 -- Button class
 ----------------
 -- Has a .onClick callback, called when mouse is released over button

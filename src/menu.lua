@@ -73,7 +73,8 @@ function menu:load()
 	
 	local types = {"off", "protanope", "deuteranope", "tritanope"}
 	local cb = 0
-	local cbButton = self.optionsFrame:add(menuButton(nil, Vector2(360, 85)), Vector2(70, startY+buttonDis))
+	local cbButton = self.optionsFrame:add(menuButton(nil, Vector2(370, 85)), Vector2(70, startY+buttonDis))
+	
 	cbButton.onClick = function(self)
 		cb = cb + 1
 		if cb > #types then
@@ -94,6 +95,7 @@ function menu:load()
 	cbButton:onClick()
 	--cbButton.texts.default = "Daltonize"
 	
+	self.optionsFrame:add(Slider(nil, Vector2(250, 20), {min = 30, max = 50}), Vector2(50,200))
 	
 	self.optionsFrame:add(Label("OPTIONS", nil, nil, {font=title.font})):centerX()
 	
