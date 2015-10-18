@@ -349,6 +349,8 @@ function Slider:draw()
 	local percent = (self.value - self.min) / (self.max-self.min)
 	
 	love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.scale.x*percent, self.scale.y)
+	
+	--Debugging
 	love.graphics.setColor(255,255,255)
 	love.graphics.print("value = "..self.value, self.pos.x, self.pos.y+4)
 end
