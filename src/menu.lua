@@ -95,7 +95,8 @@ function menu:load()
 	cbButton:onClick()
 	--cbButton.texts.default = "Daltonize"
 	
-	self.optionsFrame:add(Slider(nil, Vector2(250, 20), {min = 30, max = 50}), Vector2(50,200))
+	musicVolumeSlider = Slider(nil, Vector2(250, 20), {min = 0, max = 1})
+	self.optionsFrame:add(musicVolumeSlider, Vector2(50,200))
 	
 	self.optionsFrame:add(Label("OPTIONS", nil, nil, {font=title.font})):centerX()
 	
@@ -163,15 +164,7 @@ end
 function menu:onStart()
 	ClearTimers()
 	ClearLerpers()
-	if not MENUMUSIC:isPlaying() then
-		StartLerp(_G, "GAMEVOLUME", 1, 0, 1)
-		StartTimer(1,function()
-			MENUMUSIC:play()
-			if MUTED then MENUMUSIC:pause() end
-			StartLerp(_G, "MENUVOLUME", 0,1,1)
-			GAMEMUSIC:stop()
-		end)
-	end
+	if music.playing ~= music.songs.menu then music:fadeTo("menu") end
 end
 
 function menu:drawStars()
@@ -200,6 +193,8 @@ function menu:update(dt)
 	
 	self.off = self.off + (dt * 10)
 	self.time = self.time + dt
+	
+	music.volume = musicVolumeSlider.value
 end
 
 return menu

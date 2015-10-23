@@ -12,7 +12,7 @@ end
 
 function death:onStart(type)
 
-	GAMEMUSIC:stop()
+	music:stop()
 	--self.boom:stop()
 	--self.boom:play()
 	t = {}

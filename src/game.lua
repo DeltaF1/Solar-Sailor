@@ -342,8 +342,54 @@ end
 function game:load()
 	--self.asteroids = List()
 	
-	GAMEVOLUME = 0
-	GAMEMUSIC = love.audio.newSource("assets/music/Dark Fog.mp3")
+	music =
+	{
+		volume = 1,
+		songs = {},
+		tweenVolume = 1,
+		timer = require("humptimer")
+	}
+	
+	music.songs.menu = love.audio.newSource("assets/music/On the Shore.mp3")
+	music.songs.game = love.audio.newSource("assets/music/Dark Fog.mp3")
+	
+	function music:stop()
+		self.playing:stop()
+	end
+	
+	function music:play()
+		self.playing:play()
+	end
+	
+	function music:switchTo(name)
+		local newPlaying = self.songs[name]
+		if not newPlaying then return end
+		
+		if self.playing then self.playing:stop() end
+		
+		self.playing = newPlaying
+		self.playing:play()
+	end
+	
+	function music:fadeTo(name, length)
+		local newPlaying = self.songs[name]
+		
+		if not newPlaying then return end
+		local length = length or 1
+		self.timer.tween(length, self, {tweenVolume = 0}, nil, function()
+			self.playing:stop()
+			self.playing = newPlaying
+			self.playing:play()
+			
+			self.timer.tween(length, self, {tweenVolume=1})
+		end)
+	end
+	
+	function music:update(dt)
+		print ("self.timer = "..tostring(self.timer))
+		self.timer.update(dt)
+		self.playing:setVolume(self.volume*self.tweenVolume)
+	end
 	
 	asteroidRate = 0.7
 	--asteroidDt = asteroidRate
@@ -418,7 +464,6 @@ function game:load()
 		speedLabel,
 		resourceFrame,
 		resourceText,
-		compassFrame,
 		distanceLabel,
 		--compassText,
 	}
@@ -521,15 +566,7 @@ function game:onStart(p)
 		end
 	end
 	
-	if not GAMEMUSIC:isPlaying() then
-		StartLerp(_G, "MENUVOLUME", 1, 0, 1)
-		StartTimer(1,function()
-			GAMEMUSIC:play()
-			if MUTED then GAMEMUSIC:pause() end
-			StartLerp(_G, "GAMEVOLUME", 0,1,1)
-			MENUMUSIC:stop()
-		end)
-	end
+	if music.playing ~= music.songs.game then music:fadeTo("game") end
 end
 
 function game:updateCamera()

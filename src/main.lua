@@ -189,6 +189,7 @@ function love.load()
 		states[STATE]:onStart()
 	end
 	
+	mute = nil
 	
 end
 
@@ -212,8 +213,7 @@ function love.update(dt)
 		states[_state].gui:mousehover(x,y)
 	end
 	
-	if MENUMUSIC:isPlaying() then MENUMUSIC:setVolume(MENUVOLUME) end
-	if GAMEMUSIC:isPlaying() then GAMEMUSIC:setVolume(GAMEVOLUME) end
+	music:update(dt)
 	
 end
 
@@ -244,12 +244,16 @@ function love.keypressed(key, isRepeat)
 	control.keypressed(key, isRepeat)
 	
 	if key == "m" then
-		MUTED = not MUTED
-		if MUTED and GAMEMUSIC:isPlaying() then GAMEMUSIC:pause()
-		elseif not muted and not GAMEMUSIC:isPlaying() then GAMEMUSIC:resume() end
-		
-		if MUTED and MENUMUSIC:isPlaying() then MENUMUSIC:pause()
-		elseif not muted and not MENUMUSIC:isPlaying() then MENUMUSIC:resume() end
+		--store old value
+		if round(music.volume, 2) == 0 then
+			music.volume = mute or 0
+			musicVolumeSlider.value = mute or 0
+			mute = nil
+		else
+			mute = music.volume
+			music.volume = 0
+			musicVolumeSlider.value = 0
+		end
 	end
 	
 	if states[STATE].keypressed then

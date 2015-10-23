@@ -17,9 +17,6 @@ function splash:load()
 	self.i = 1
 	self.test = 0
 	
-	MENUMUSIC = love.audio.newSource("assets/music/On the Shore.mp3")
-	MENUVOLUME = 1
-	
 	--RegLerper(self, "test", 0, 10, 10)
 end	
 
@@ -31,7 +28,8 @@ function splash:onStart()
 	self.center = Vector2(self.width/2, self.height/2)
 	
 	
-	MENUMUSIC:play()
+	music:switchTo "menu"
+
 end
 
 function splash:update(dt)
