@@ -67,15 +67,17 @@ function menu:load()
 	end}), Vector2(self.optionsFrame.scale.x-300, startY+buttonDis*3))
 	backButton.texts.default = "Back"
 	
+	self.backButton = backButton
+	
 	self.optionsFrame:add(Label("Colourblind Mode:", nil, nil, {font=love.graphics.newFont("assets/fonts/Minecraftia.ttf")}), Vector2(70, startY+buttonDis-20))
 	
-	local _draw = love.draw
+	local _draw = DRAW
 	
 	local types = {"off", "protanope", "deuteranope", "tritanope"}
 	local cb = 0
 	local cbButton = self.optionsFrame:add(menuButton(nil, Vector2(370, 85)), Vector2(70, startY+buttonDis))
 	
-	cbButton.onClick = function(self)
+	--[[cbButton.onClick = function(self)
 		cb = cb + 1
 		if cb > #types then
 			cb = 1
@@ -83,16 +85,19 @@ function menu:load()
 		
 		local type = types[cb]
 		
+		
 		if type == "off" then
-			love.draw = _draw
+			DRAW = _draw
 		else
 			libs.colourblind.daltonize(type)
 		end
 		
+		
 		self.texts.default = type:upper()
 		self.text = self.texts.default
 	end
-	cbButton:onClick()
+	--cbButton:onClick()]]--
+	--libs.colourblind.daltonize("protanope")()
 	--cbButton.texts.default = "Daltonize"
 	
 	musicVolumeSlider = Slider(nil, Vector2(250, 20), {min = 0, max = 1})

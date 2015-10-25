@@ -386,7 +386,6 @@ function game:load()
 	end
 	
 	function music:update(dt)
-		print ("self.timer = "..tostring(self.timer))
 		self.timer.update(dt)
 		self.playing:setVolume(self.volume*self.tweenVolume)
 	end

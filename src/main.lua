@@ -14,7 +14,9 @@ req = require("project")
 			Class = libs["class"]
 		end
 	end
-
+	
+	--res = require "resolution"
+	require "TLfres"
 	control = libs["control"]
 	--loveframes = libs["loveframes"]
 	--UI = require("ui.UI")
@@ -169,6 +171,31 @@ function love.load()
 	
 	--UI.registerEvents()
 	
+	local x,y = love.window.getDesktopDimensions()
+	--x,y = 1000, 600
+	print("desktop is "..x..","..y)
+	print("setting screen to desktop size")
+	--love.window.setMode(x,y)
+	--x,y = love.graphics.getDimensions()
+	--y = y -50
+	TLfres.setScreen({w=x,h=y}, 1024)
+	--[[
+	local oldPos = love.mouse.getPosition
+	function love.mouse.getPosition()
+		return res.gamePosition(oldPos())
+	end
+	
+	local getX = love.mouse.getX
+	function love.mouse.getX()
+		return res.gamePosition(getX())
+	end
+	
+	local getY = love.mouse.getY
+	function love.mouse.getY()
+		return res.gamePosition(getY())
+	end
+	--]]
+	
 	for _, name in ipairs(stateOrder) do
 		
 		STATE = name
@@ -190,6 +217,8 @@ function love.load()
 	end
 	
 	mute = nil
+	
+	
 	
 end
 
@@ -218,13 +247,19 @@ function love.update(dt)
 end
 
 function love.draw()
+	TLfres.transform()
+	DRAW()
+end
+
+function DRAW()
 	--TLfres.transform()
 	if states[STATE].draw then
 		states[STATE]:draw()
 	end
-	
+		
+	love.graphics.point(love.mouse.getPosition())
 	--loveframes.draw()
-	--TLfres.letterbox()
+	TLfres.letterbox()
 end
 
 --libs.colourblind.simulate("protanope")
@@ -274,7 +309,7 @@ function love.keyreleased(key)
 end
 
 function love.mousepressed(x,y,button)
-
+	--local x,y = res.gamePosition(x,y)
 	control.mousepressed(x,y,button)
 	
 	if states[STATE].gui then
@@ -289,7 +324,7 @@ function love.mousepressed(x,y,button)
 end
 
 function love.mousereleased(x,y,button)
-
+	--local x,y = res.gamePosition(x,y)
 	if states[STATE].gui then
 		states[STATE].gui:mousereleased(x,y,button)
 	end

@@ -11,7 +11,7 @@
         specified type of color blindness can more easily differentiate colors.
 
         simulate() and daltonize() both return a function that toggles their visual
-        effect and both should only be called after love.draw() is defined.
+        effect and both should only be called after DRAW() is defined.
 
         Supported color blindness types: 'protanope', 'deuteranope', 'tritanope' ]]
     local colorblind = {}
@@ -48,11 +48,11 @@
 
     local function configure(shaderCode, colorblindType)
         assert(colorblindTypeCode[colorblindType], 'Color blindness type must be "protanope", "deuteranope", or "tritanope"')
-        assert(love.draw, "love.draw hasn't been defined yet!")
-        local oldDraw = love.draw
+        assert(DRAW, "DRAW hasn't been defined yet!")
+        local oldDraw = DRAW
         local canvas = love.graphics.newCanvas()
         local shader = love.graphics.newShader(shaderCode:format(colorblindTypeCode[colorblindType]))
-        function love.draw(...)
+        function DRAW(...)
             local oldCanvas = love.graphics.getCanvas()
             love.graphics.setCanvas(canvas)
             canvas:clear(love.graphics.getBackgroundColor())
@@ -63,7 +63,7 @@
             love.graphics.draw(canvas)
             love.graphics.setShader(oldShader)
         end
-        return function() love.draw, oldDraw = oldDraw, love.draw end
+        return function() DRAW, oldDraw = oldDraw, DRAW end
     end
 
     local simulateShaderCode = sharedCode..[[
