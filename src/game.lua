@@ -182,8 +182,14 @@ player.maxVel = 400
 
 player.burnRate = 10
 
-player.img = love.graphics.newImage("assets/img/player.png")
+player.img = love.graphics.newImage("assets/img/player_map.png")
 player.thruster = love.graphics.newImage("assets/img/thruster.png")
+
+player.shader = love.graphics.newShader("assets/shaders/palette.shader")
+
+player.shader:send("palette1", {1,0,0}, {0,1,0}, {0,0,1})
+
+livesImage = love.graphics.newImage("assets/img/player.png")
 
 player.scale = 1.5
 
@@ -297,7 +303,7 @@ end
 function player:draw()
 	love.graphics.setColor(255,255,255)
 	
-	
+	love.graphics.setShader(self.shader)
 	
 	love.graphics.push()
 		
@@ -318,7 +324,7 @@ function player:draw()
 
 	
 	love.graphics.pop()
-	
+	love.graphics.setShader()
 	--[[
 	love.graphics.setColor(255,255,255)
 	love.graphics.line(self.pos.x, self.pos.y, self.pos.x+self.dir.x*10, self.pos.y+self.dir.y*10)
@@ -498,6 +504,20 @@ function game:setup()
 	self.planets = {}
 	self.sectors = {[0]={},[1] = {}}
 	
+	local baseCol = {math.random(), math.random(), math.random()}
+
+	local offCol = {}
+	local oppCol = {}
+	local colDivergence = 1
+	for i, v in ipairs(baseCol) do
+		oppCol[i] = v/2
+		offCol[i] = v + (math.random()/colDivergence)
+	end
+	
+	--local offCol = {math.random(), math.random(), math.random()}
+	--local oppCol = {math.random(), math.random(), math.random()}
+
+	player.shader:send("palette2", baseCol, offCol, oppCol)
 
 	for key, _ in pairs(player.resources) do
 		player.resources[key] = 0
@@ -870,7 +890,7 @@ function game:draw()
 	love.graphics.setColor(255,255,255)
 	
 	for i = 1, player.lives do 
-		love.graphics.draw(player.img, 15+(i-1)*50, 10, 0, 1.3)
+		love.graphics.draw(livesImage, 15+(i-1)*50, 10, 0, 1.3)
 	end
 	
 	-- Draw debug

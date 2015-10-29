@@ -164,6 +164,7 @@ end
 function menu:onStart()
 	ClearTimers()
 	ClearLerpers()
+	if not music.playing then music:switchTo("menu") end
 	if music.playing ~= music.songs.menu then music:fadeTo("menu") end
 end
 

@@ -181,6 +181,7 @@ function love.load()
 		end
 	end
 	
+	INITIAL_STATE = "menu"
 	STATE = INITIAL_STATE
 	
 	--loveframes.SetState(STATE)
