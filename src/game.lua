@@ -300,11 +300,13 @@ function player:addResources(resource, qt)
 	return true
 end
 
+
+local aberrationShader = love.graphics.newShader("assets/shaders/aberration.shader")
 function player:draw()
 	love.graphics.setColor(255,255,255)
 	
 	love.graphics.setShader(self.shader)
-	
+	--love.graphics.setShader(aberrationShader)
 	love.graphics.push()
 		
 		
@@ -517,7 +519,7 @@ function game:setup()
 	--local offCol = {math.random(), math.random(), math.random()}
 	--local oppCol = {math.random(), math.random(), math.random()}
 
-	player.shader:send("palette2", baseCol, offCol, oppCol)
+	player.shader:send("palette2", baseCol, oppCol, offCol)
 
 	for key, _ in pairs(player.resources) do
 		player.resources[key] = 0
