@@ -115,7 +115,10 @@ function Planet:draw()
 end
 
 function Planet:onCollide(obj)
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 	if obj == player then
 		EndState("planet", self)
 	end
@@ -301,7 +304,7 @@ function player:addResources(resource, qt)
 end
 
 
-local aberrationShader = love.graphics.newShader("assets/shaders/aberration.shader")
+
 function player:draw()
 	love.graphics.setColor(255,255,255)
 	
@@ -789,7 +792,9 @@ function drawStarsLayer(z, layer)
 		love.graphics.point(star.pos.x,star.pos.y)
 	end
 end
-
+local aberrationShader = love.graphics.newShader("assets/shaders/aberration.shader")
+local guiCanvas = love.graphics.newCanvas(1024, 768)
+local aberration = 0.1
 function game:draw()
 	self.camera:draw(function(l,t,w,h)
 	
@@ -886,7 +891,13 @@ function game:draw()
 	distanceLabel:setText("Distance: "..distancefromsun)
 	distanceLabel:centerX()
 	
+	
+	
 	-- Draw gui
+	
+	love.graphics.setCanvas(guiCanvas)
+	guiCanvas:clear(255,255,255,0)
+	
 	self.gui:draw()
 	
 	love.graphics.setColor(255,255,255)
@@ -899,6 +910,19 @@ function game:draw()
 	--love.graphics.print("#asteroids:"+#self.asteroids.items, 0, 75)
 	--love.graphics.print("#planets:"+#self.planets, 0, 100)
 	--love.graphics.print("#planetsDrawn:"+planetsDrawn, 0, 125)
+	
+	love.graphics.setCanvas()
+	
+	if math.random() > 0.8 then
+		aberration = (0.5 - math.random())/100
+	end
+	
+	aberrationShader:send("_AberrationOffset", aberration)
+	love.graphics.setShader(aberrationShader)
+	
+	love.graphics.draw(guiCanvas)
+	
+	love.graphics.setShader()
 	
 	local dir = (player.pos-sun.pos)
 	local dis = dir:len()
@@ -1019,10 +1043,19 @@ function game:gravity(affectedByGravity, constantAffectors, dt)
 end
 
 function game:collisions(colliders1, colliders2)
+	colliders1 = {unpack(colliders1)}
+	colliders2 = {unpack(colliders2)}
+	
 	table.merge(colliders1, colliders2)
+<<<<<<< Updated upstream
 	for i = 1,#colliders1-1 do
 		collider1 = colliders1[i]
 		for j = i+1, #colliders1 do
+=======
+	for i = 1, #colliders1-1 do
+		collider1 = colliders1[i]
+		for j=i+1, #colliders1 do
+>>>>>>> Stashed changes
 			collider2 = colliders1[j]
 			if collider2 ~= collider1 then
 				local dis = (collider1.pos - collider2.pos):len()
