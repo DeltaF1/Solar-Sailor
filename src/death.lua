@@ -97,8 +97,8 @@ function death:onStart(type)
 	self.text.colours.default[4] = 0
 	
 	self.timers = Sequence{
-		[function() StartLerp(self.text.colours.default, 4, 0, 255, 3) end] = 0,
-		[function() StartLerp(self.text.colours.default, 4, 255, 0, 3) end] = self.time+3,
+		[function() StartLerp(self.text.colours.default, 4, 0, 1, 3) end] = 0,
+		[function() StartLerp(self.text.colours.default, 4, 1, 0, 3) end] = self.time+3,
 		[function() EndState("menu") end] = self.time+6
 	}:start()
 	

@@ -67,11 +67,11 @@ end
 function console:draw()
 	local prevState = states[console.prevstate]:draw()
 
-	love.graphics.setColor(0,0,0,100)
+	love.graphics.setColor(0,0,0,100/255)
 	love.graphics.rectangle("fill", 0,0,console.width, console.height/4)
 	
 	love.graphics.setFont(console.font)
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1,1,1)
 	love.graphics.print(console.prompt..console.text, 50, bottom)
 	
 	for i, text in ipairs(console.output) do

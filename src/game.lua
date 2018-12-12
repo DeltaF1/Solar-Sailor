@@ -60,7 +60,7 @@ function Asteroid:update(dt)
 end
 
 function Asteroid:draw()
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1,1,1)
 	--love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 8)
 	--love.graphics.draw(self.img, self.pos.x, self.pos.y, self.rot, self.scale, nil, self.ox, self.ox)
 	love.graphics.draw(self.img, self.pos.x, self.pos.y, self.rot, self.scale, nil, self.ox, self.oy)
@@ -85,7 +85,7 @@ function Planet:init(arg)
 	self.pos = arg.pos or Vector2()
 	self.radius = arg.radius or 50
 	self.gravityForce = arg.gravityForce
-	self.colour = arg.colour or {math.random(0, 255), math.random(0, 255), math.random(0, 255)}
+	self.colour = arg.colour or {math.random(0, 1), math.random(0, 1), math.random(0, 1)}
 	self.name = arg.name or markov.generate(planet_chain, math.random(4,9))
 	--self.name = self.name:lower()
 	self.quest = arg.quest
@@ -95,11 +95,11 @@ end
 
 function Planet:draw()
 	if self.quest then
-		love.graphics.setColor(0,0,100)
+		love.graphics.setColor(0,0,100/255)
 		if self.quest.send then
-			love.graphics.setColor(0, 100, 200)
+			love.graphics.setColor(0, 100/255, 200/255)
 		elseif self.quest.receive then
-			love.graphics.setColor(0,255,100)
+			love.graphics.setColor(0,1,100/255)
 		end
 		
 		local pulse = 5 + math.cos((game.time*10)+self.time) * 5
@@ -109,7 +109,7 @@ function Planet:draw()
 	love.graphics.setColor(self.colour)
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
 	
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1,1,1)
 	love.graphics.setFont(self.font)
 	love.graphics.print(self.name, self.pos.x-(self.width/2), self.pos.y - (self.radius+25))
 end
@@ -128,7 +128,7 @@ sun = {
 }
 
 function sun:draw()
-	love.graphics.setColor(200,112,0)
+	love.graphics.setColor(200/255,112/255,0)
 	love.graphics.circle("fill", self.pos.x, self.pos.y, self.radius, 100)
 end
 
@@ -234,7 +234,7 @@ function player:update(dt)
 	self:applyForce(self.dir:norm() * falloff * angleFalloff)
 	--]]
 	
-	if love.keyboard.isDown(" ") or love.keyboard.isDown("w") or love.keyboard.isDown("up") then
+	if love.keyboard.isDown("space") or love.keyboard.isDown("w") or love.keyboard.isDown("up") then
 		if self.resources.fuel > 0 then 
 			self:applyForce(self.dir:norm() * 100)
 			self.burnDt = self.burnDt + dt
@@ -303,7 +303,7 @@ end
 
 local aberrationShader = love.graphics.newShader("assets/shaders/aberration.shader")
 function player:draw()
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1,1,1)
 	
 	love.graphics.setShader(self.shader)
 	--love.graphics.setShader(aberrationShader)
@@ -358,8 +358,8 @@ function game:load()
 		timer = require("humptimer")
 	}
 	
-	music.songs.menu = love.audio.newSource("assets/music/On the Shore.mp3")
-	music.songs.game = love.audio.newSource("assets/music/Dark Fog.mp3")
+	music.songs.menu = love.audio.newSource("assets/music/On the Shore.mp3", "stream")
+	music.songs.game = love.audio.newSource("assets/music/Dark Fog.mp3", "stream")
 	
 	function music:stop()
 		self.playing:stop()
@@ -452,7 +452,7 @@ function game:load()
 	distanceLabel = Label("", Vector2(width/2, height-25), nil, {font=font}):centerX()
 	
 	resourceFrame = Frame(Vector2(0, 120), Vector2(160,135)):centerY()
-	resourceFrame.colours.default = {50,50,50,100}
+	resourceFrame.colours.default = {50/255,50/255,50/255,100/255}
 	
 	local off = 2
 	resourceText = resourceFrame:add(TextBox("nil", nil, resourceFrame.scale - Vector2(off*2,off*2))):center()
@@ -460,7 +460,7 @@ function game:load()
 	
 	compassFrame = Frame(Vector2(), Vector2(100,150)):centerY()
 	compassFrame.pos.x = width-compassFrame.scale.x
-	compassFrame.colours.default = {50,50,50,100}
+	compassFrame.colours.default = {50/255,50/255,50/255,100/255}
 	
 	-- Make it an Image?
 	-- compassText = Label("Disatnce: ".." u")
@@ -723,7 +723,7 @@ function game:update(dt)
 		if not self.winning and player.resources.fuel > 0 and player.vel:len() > sunSpeed then
 			self.gravity = function() end
 			self.collision = function() end
-			StartLerp(self, "winning", 0,255, 3)
+			StartLerp(self, "winning", 0,1, 3)
 			StartTimer(3, function() EndState("death", "win") end)
 		end
 	end
@@ -786,7 +786,7 @@ function drawStarsLayer(z, layer)
 		
 		
 		
-		love.graphics.point(star.pos.x,star.pos.y)
+		love.graphics.points(star.pos.x,star.pos.y)
 	end
 end
 
@@ -796,8 +796,7 @@ function game:draw()
 	
 	deltaPos = (oldPlayerPos - player.pos)/100
 	
-	love.graphics.setColor(255,255,255)
-	love.graphics.setPointStyle("rough")
+	love.graphics.setColor(1,1,1)
 	
 	local buffer = self.starBuffer
 	
@@ -858,7 +857,7 @@ function game:draw()
 			if scale >= 1.44 then scale = 1.5 end
 			----print("scale = "..scale)
 			--scale = 1
-			local r,g,b,a = 255,255,255,100
+			local r,g,b,a = 1,1,1,100/255
 			
 			if planet.quest then
 				if planet.quest.send then
@@ -873,7 +872,7 @@ function game:draw()
 	end
 	
 	--Draw Sun Marker
-	local r,g,b,a = 255,0,0,100
+	local r,g,b,a = 1,0,0,100/255
 	love.graphics.setColor(r,g,b,a)
 	local dis = player.pos:len()
 	local pos = center+(-dir:norm()*self.radarDrawRadius)
@@ -889,7 +888,7 @@ function game:draw()
 	-- Draw gui
 	self.gui:draw()
 	
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1,1,1)
 	
 	for i = 1, player.lives do 
 		love.graphics.draw(livesImage, 15+(i-1)*50, 10, 0, 1.3)
@@ -904,8 +903,8 @@ function game:draw()
 	local dis = dir:len()
 	dis = dis - sun.radius
 	if dis <= (sunZone) then
-		local a = math.max(remap(dis, 0, sunZone, 255, 0 ,true), 0)
-		love.graphics.setColor(255,50,0,a)
+		local a = math.max(remap(dis, 0, sunZone, 1, 0 ,true), 0)
+		love.graphics.setColor(1,50/255,0,a)
 		love.graphics.rectangle("fill", 0,0, width,height)
 	end
 	

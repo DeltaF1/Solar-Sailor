@@ -132,7 +132,7 @@ function Gui:centerX()
 	if self.parent then
 		self.parent:centerX(self)
 	else
-		self.pos.x = (love.window.getWidth()/2) - (self.scale.x/2)
+		self.pos.x = (love.graphics.getWidth()/2) - (self.scale.x/2)
 	end
 	return self
 end
@@ -141,7 +141,7 @@ function Gui:centerY()
 	if self.parent then
 		self.parent:centerY(self)
 	else
-		self.pos.y = (love.window.getHeight()/2) - (self.scale.y/2)
+		self.pos.y = (love.graphics.getHeight()/2) - (self.scale.y/2)
 	end
 	return self
 end
@@ -160,7 +160,7 @@ Frame.defaultOptions =
 {
 	children = {},
 	colours = {
-		default = {50,50,50}
+		default = {50/255,50/255,50/255}
 	}
 }
 
@@ -243,7 +243,7 @@ Label.defaultOptions =
 {
 	font = love.graphics.newFont(12),
 	colours = {
-		default={255,255,255}
+		default={1,1,1}
 	}
 }
 
@@ -283,7 +283,7 @@ TextBox.defaultOptions =
 {
 	font = love.graphics.newFont(12),
 	colours = {
-		default={255,255,255}
+		default={1,1,1}
 	},
 	backgrounds = {
 		default = {0,0,0,0}
@@ -325,8 +325,8 @@ Slider = Class{__includes=Gui}
 
 Slider.defaultOptions = {
 	colours = {
-		full = {0, 100, 200},
-		empty = {0, 100, 130}
+		full = {0, 100/255, 200/255},
+		empty = {0, 100/255, 130/255}
 	}
 }
 
@@ -351,7 +351,7 @@ function Slider:draw()
 	love.graphics.rectangle("fill", self.pos.x, self.pos.y, self.scale.x*percent, self.scale.y)
 	
 	--Debugging
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1,1,1)
 	love.graphics.print("value = "..self.value, self.pos.x, self.pos.y+4)
 end
 
@@ -370,7 +370,7 @@ function Slider:update(dt)
 	self.value = math.clamp(self.min + (percent * (self.max-self.min)), self.min, self.max)
 	end
 	
-	if not love.mouse.isDown("l") then self.sliding = false end
+	if not love.mouse.isDown(1) then self.sliding = false end
 	
 end
 
@@ -384,9 +384,9 @@ Button.defaultOptions =
 {
 	colours=
 	{
-		default={100,0,100},
-		over={100,0,120},
-		down={90,0,90}
+		default={100/255,0,100/255},
+		over={100/255,0,120/255},
+		down={90/255,0,90/255}
 	},
 	texts={
 		default="blah"
@@ -457,7 +457,7 @@ function Button:draw()
 	end
 	
 	if self.image then
-		love.graphics.setColor(255,255,255)
+		love.graphics.setColor(1,1,1)
 		
 		local pos = center
 		local off = Vector2(self.image:getWidth(), self.image:getHeight())/2
@@ -474,7 +474,7 @@ function Button:draw()
 		
 		love.graphics.setFont(self.font)
 		--replace with font colouring
-		love.graphics.setColor(255,255,255)
+		love.graphics.setColor(1,1,1)
 		
 		love.graphics.print(self.text, center.x, center.y, 0, 1,1, width/2, height/2)
 	end

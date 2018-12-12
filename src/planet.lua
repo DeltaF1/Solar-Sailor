@@ -7,7 +7,7 @@ local planetLabel = Class{__includes=Label}
 planetLabel.defaultOptions = 
 {
 	font = love.graphics.newFont(18),
-	colours = {default={222,239,215}}
+	colours = {default={222/255,239/255,215/255}}
 }
 
 local planetButton = Class{__includes=Button}
@@ -19,7 +19,7 @@ update(copy(Button.defaultOptions),
 	{
 		colours = 
 		{
-			default = {75,102,64}
+			default = {75/255,102/255,64/255}
 		}
 	}
 )
@@ -67,7 +67,7 @@ function planet:load()
 	self.frame = Frame(Vector2(), Vector2(500,600),
 	{
 		colours={
-			default = {107,126,99}
+			default = {107/255,126/255,99/255}
 			}
 	}
 	)
@@ -142,7 +142,7 @@ end
 
 function planet:draw()
 	states["game"]:draw()
-	love.graphics.setColor(0,0,0,100)
+	love.graphics.setColor(0,0,0,100/255)
 	love.graphics.rectangle("fill", 0,0, self.width, self.height)
 	
 	self.gui:draw()

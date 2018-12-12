@@ -12,7 +12,7 @@ function splash:load()
 		self.images[i] = v
 	end
 	
-	self.colour = {255,255,255,0}
+	self.colour = {1,1,1,0}
 	self.t = 0
 	self.i = 1
 	self.test = 0
@@ -45,9 +45,9 @@ function splash:update(dt)
 		
 		
 		local s = Sequence({
-			[function() StartLerp(self.colour, 4, 0, 255, 0.5) end]=0,
+			[function() StartLerp(self.colour, 4, 0, 1, 0.5) end]=0,
 			[function() if self.images[self.i].sound then self.images[self.i].sound:play() end end]=0.5,
-			[function() StartLerp(self.colour, 4, 255, 0, 0.5) end]=(self.images[self.i].t - 0.5),
+			[function() StartLerp(self.colour, 4, 1, 0, 0.5) end]=(self.images[self.i].t - 0.5),
 		})
 		s:start()
 		self.t = 0
@@ -65,7 +65,7 @@ function splash:keypressed()
 end
 
 function splash:draw()
-	love.graphics.setColor(unpack(self.colour))
+	love.graphics.setColor(self.colour)
 	local image = self.images[self.i].image
 	love.graphics.draw(image, self.center.x, self.center.y, 0, 1,1, image:getWidth()/2, image:getHeight()/2)
 end

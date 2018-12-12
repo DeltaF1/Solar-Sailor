@@ -21,7 +21,7 @@ function story:load()
 	local _, lines = self.text.font:getWrap(text, width/2)
 	local height = self.text.font:getHeight()
 	--print("lines, height, lines*height = "..lines..", "..height..", "..lines*height)
-	self.text.scale = Vector2(width/2, lines*height)
+	self.text.scale = Vector2(width/2, #lines*height)
 	self.text:center()
 end
 

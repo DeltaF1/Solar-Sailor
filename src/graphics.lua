@@ -2,7 +2,7 @@
 
 
 function genColor()
-	return {love.math.random(0,255),love.math.random(0,255),love.math.random(0,255)}
+	return {love.math.random(0,1),love.math.random(0,1),love.math.random(0,1)}
 end
 
 GenericDrawable = {}
@@ -19,7 +19,7 @@ function GenericDrawable:new(pos, image, scale)
 end
 
 function GenericDrawable:draw()
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(1,1,1)
 	love.graphics.draw(self.image, self.pos.x, self.pos.y, 0, self.scale.x, self.scale.y)
 	
 end
@@ -61,7 +61,7 @@ function TextObject:new(pos, text, font, wrapOptions, colour)
 	o.font=font
 	o.wrap = wrapOptions
 	
-	o.color = colour or {255,255,255}
+	o.color = colour or {1,1,1}
 	
 	o.width = o.font:getWidth(o.text)
 	o.height = o.font:getHeight()

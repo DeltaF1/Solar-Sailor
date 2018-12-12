@@ -5,9 +5,9 @@ menuButton = Class{__includes=Button}
 menuButton.defaultOptions = update(copy(Button.defaultOptions), {
 	font = love.graphics.newFont("assets/fonts/Minecraftia.ttf", 44),
 	colours = {
-		default = {54,107,100},
-		over = {68,183,168},
-		down = {35,70,65},
+		default = {54/255,107/255,100/255},
+		over = {68/255,183/255,168/255},
+		down = {35/255,70/255,65/255},
 	},
 })
 
@@ -105,7 +105,7 @@ function menu:load()
 	--)
 	--socialFrame.rPos.x = self.frame.scale.x - 48
 	socialFrame:centerY()
-	socialFrame.colours.default = {0, 100, 30}
+	socialFrame.colours.default = {0, 100/255, 30/255}
 	--socialFrame.startPos = socialFrame.rPos:clone()
 	--socialFrame.offPos = socialFrame.rPos - Vector2(90,0)
 	socialFrame.img = love.graphics.newImage("assets/img/social_tab2.png")
@@ -169,10 +169,10 @@ function menu:onStart()
 end
 
 function menu:drawStars()
-	love.graphics.setPointStyle "rough"
 	for _, star in ipairs(self.stars) do
 		love.graphics.setPointSize(star.size)
-		love.graphics.point(star.x, ((star.y+(self.off*star.size))%self.loop) - 25)
+		-- TODO: Rework to use the stars table directly
+		love.graphics.points(star.x, ((star.y+(self.off*star.size))%self.loop) - 25)
 	end
 end
 

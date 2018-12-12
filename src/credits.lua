@@ -16,7 +16,7 @@ function credits:onStart()
 	self.Text:centerX()
 	self.fading = false
 	
-	self.Text.colours.default[4] = 255
+	self.Text.colours.default[4] = 1
 end
 
 function credits:draw()
@@ -32,7 +32,7 @@ function credits:update(dt)
 	
 	if not self.fading and (self.Text.pos.y) <= self.limit then
 		self.fading = true
-		StartLerp(self.Text.colours.default, 4, 255,0,3)
+		StartLerp(self.Text.colours.default, 4, 1,0,3)
 		StartTimer(3, EndState, "menu")
 	end
 end

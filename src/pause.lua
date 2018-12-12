@@ -3,7 +3,7 @@ local pause = {}
 function pause:load()
 	
 	self.frame = Frame(nil, Vector2(500,800)):center()
-	self.frame.colours.default = {0,20,20}
+	self.frame.colours.default = {0,20/255,20/255}
 	
 	self.frame:add(Label("PAUSED", Vector2(0,50),nil, {font=love.graphics.newFont("assets/fonts/Minecraftia.ttf", 45)}):centerX())
 	

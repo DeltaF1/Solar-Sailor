@@ -14,9 +14,6 @@ love.window.setMode(1024,768)
 
 love.window.setTitle("Solar Sailor")
 
--- Compatibility with some drivers/graphics cards
-love.graphics.setPointStyle("rough")
-
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 

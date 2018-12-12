@@ -30,7 +30,7 @@ end
 
 -- Draws rectangles at the top and bottom of the screen to ensure proper aspect ratio. Call this at the end of love.draw() if you're not using stretch mode.
 function TLfres.letterbox(w,h, c)
-	local w,h,c,e = w or 4, h or 3, c or {0,0,0, 255}, TLfres.e
+	local w,h,c,e = w or 4, h or 3, c or {0,0,0, 1}, TLfres.e
 	color(c)
 	
 	local tall,de = e/w*h, e*2
