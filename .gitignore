@@ -1,6 +1,3 @@
-Thumbs.db
 *.love
-love.exe - Shortcut.lnk
-lovedist.exe
-"love.exe - Shortcut"
-build2/
+build/
+capture/
