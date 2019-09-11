@@ -55,7 +55,7 @@
         function love.draw(...)
             local oldCanvas = love.graphics.getCanvas()
             love.graphics.setCanvas(canvas)
-            canvas:clear(love.graphics.getBackgroundColor())
+            love.graphics.clear(love.graphics.getBackgroundColor())
             oldDraw(...)
             love.graphics.setCanvas(oldCanvas)
             local oldShader = love.graphics.getShader()
